@@ -1,0 +1,922 @@
+//
+//  WalletNetWorkControl.m
+//  css
+//
+//  Created by Howe on 2018/4/3.
+//  Copyright © 2018年 Howe. All rights reserved.
+//
+
+#import "WalletNetWorkControl.h"
+//#import "WalletListModel.h"
+//#import "AddressListModel.h"
+//
+//#import "HCWithdraGESTFeeModel.h"
+//
+//#import "HCBankTypeListModel.h"
+//#import "HCWithdraGESTListModel.h"
+//#import "HCBindingBankTypeListModel.h"
+#import "XHHWalletHideCoinList.h"
+#import "RecordListModel.h"
+@implementation WalletNetWorkControl
+
++ (void)requestWalletListsuccessBlock:(ChZ_SuccessBlock)successBlock
+                           errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_walletList)];
+    NSString *token = [APPControl sharedAPPControl].token;
+    if (ChZ_StringIsEmpty(token)) {
+        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+    }
+    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [self GetWithURL:newUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         NSDictionary *data = [responseDic objectForKey:@"data"];
+         if (data)
+         {
+             NSNumber *totalassets = [data objectForKey:@"totalassets"];
+             if (totalassets) {
+                 [APPControl sharedAPPControl].totalassets = [totalassets floatValue];
+             }
+             NSArray *walletArray = [data objectForKey:@"wallet"];
+             NSArray *walletObjArray = [WalletListModel mj_objectArrayWithKeyValuesArray:walletArray];
+             if (successBlock)
+             {
+                 successBlock(walletObjArray);
+                 return;
+             }
+         }
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
+
++ (void)requestRecharge:(NSString *)fid
+           successBlock:(ChZ_SuccessBlock)successBlock
+             errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_rechargeAddress)];
+    NSString *token = [APPControl sharedAPPControl].token;
+    if (ChZ_StringIsEmpty(token)) {
+        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+    }
+    if (ChZ_StringIsEmpty(fid)) {
+        [url appendString:[NSString stringWithFormat:@"&symbol=%@",fid]];
+    }
+    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [self GetWithURL:newUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         NSDictionary *data = [responseDic objectForKey:@"data"];
+         if (data)
+         {
+             if (successBlock)
+             {
+                 successBlock(data);
+                 return;
+             }
+         }
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
++ (void)requestRechargeList:(NSString *)coinId
+               successBlock:(ChZ_SuccessBlock)successBlock
+                 errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_rechargelist)];
+    NSString *token = [APPControl sharedAPPControl].token;
+    if (ChZ_StringIsEmpty(token)) {
+        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+    }
+    if (ChZ_StringIsEmpty(coinId)) {
+        [url appendString:[NSString stringWithFormat:@"&coinId=%@",coinId]];
+    }
+    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [self GetWithURL:newUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         ChZ_DebugLog(@"%@---",responseDic);
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         NSArray *data = [responseDic objectForKey:@"data"];
+         if (data == nil || data.count == 0)
+         {
+             if (successBlock)successBlock(nil);return;
+         }
+         NSArray *objArray = [RecordListModel mj_objectArrayWithKeyValuesArray:data];
+         if (successBlock)
+         {
+             successBlock(objArray);
+             return;
+         }
+         //         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+    
+}
++ (void)requestTestAuthSuccessBlock:(ChZ_SuccessBlock)successBlock
+                         errorBlock:(ErrorCodeBlock)errorBlock
+{
+    [self PostAuthWithURL:RequestURL(@"/v1/user/test.html") parameters:@{@"name":@"赵超好",@"hah":@"234332"} progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+        if (code != kv_JavaRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        NSDictionary *data = [responseDic objectForKey:@"data"];
+        if (data)
+        {
+            if (successBlock)
+            {
+                successBlock(data);
+                return;
+            }
+        }
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+}
++ (void)requestAddGoogleCode:(NSString *)code
+                   googleKey:(NSString *)totpKey
+                successBlock:(ChZ_SuccessBlock)successBlock
+                  errorBlock:(ErrorCodeBlock)errorBlock
+{
+    
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_addGoogleCode)];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (ChZ_StringIsEmpty(code))[parameters setObject:code forKey:@"code"];
+    if (ChZ_StringIsEmpty(totpKey))[parameters setObject:totpKey forKey:@"totpKey"];
+    [self PostAuthWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         if (successBlock)successBlock(nil);
+         return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+    
+}
+
+
++ (void)requestSignMsgCodeSuccessBlock:(ChZ_SuccessBlock)successBlock
+                            errorBlock:(ErrorCodeBlock)errorBlock
+{
+    
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_msgCode)];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    [parameters setObject:@"104" forKey:@"type"];
+    [self PostAuthWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         if (successBlock)successBlock(nil);
+         return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
++ (void)requestCoinAddressList:(NSString *)fid
+                  successBlock:(ChZ_SuccessBlock)successBlock
+                    errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_outCoinAddressList)];
+    NSString *token = [APPControl sharedAPPControl].token;
+    if (ChZ_StringIsEmpty(token)) {
+        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+    }
+    if (ChZ_StringIsEmpty(fid)) {
+        [url appendString:[NSString stringWithFormat:@"&symbol=%@",fid]];
+    }
+    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [self GetWithURL:newUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         
+         
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         NSDictionary *data = [responseDic objectForKey:@"data"];
+         if (data == nil || data.count == 0)
+         {
+             if (successBlock)successBlock(nil);return;
+         }
+         if (successBlock)
+         {
+             successBlock(data);
+             return;
+         }
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
++ (void)requestCoinAddressAddPhoneCode:(NSString *)phoneCode
+                            googleCode:(NSString *)googleCode
+                               address:(NSString *)address
+                              password:(NSString *)password
+                                remark:(NSString *)remark
+                              symbolId:(NSString *)symbolId
+                          successBlock:(ChZ_SuccessBlock)successBlock
+                            errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_outCoinAddressAdd)];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (ChZ_StringIsEmpty(phoneCode))[parameters setObject:phoneCode forKey:@"phoneCode"];
+    if (ChZ_StringIsEmpty(googleCode))[parameters setObject:googleCode forKey:@"totpCode"];
+    if (ChZ_StringIsEmpty(symbolId))[parameters setObject:symbolId forKey:@"symbol"];
+    if (ChZ_StringIsEmpty(address))[parameters setObject:address forKey:@"withdrawAddr"];
+    if (ChZ_StringIsEmpty(password))[parameters setObject:password forKey:@"password"];
+    if (ChZ_StringIsEmpty(remark))[parameters setObject:remark forKey:@"remark"];
+    [self PostAuthWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         if (successBlock)successBlock(nil);
+         return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
+
++ (void)requestOutCoinPhoneCode:(NSString *)phoneCode
+                     googleCode:(NSString *)googleCode
+                        address:(NSString *)address
+                       password:(NSString *)password
+                         amount:(NSString *)amout
+                      addressId:(NSString *)addressId
+                       symbolId:(NSString *)symbolId
+                   successBlock:(ChZ_SuccessBlock)successBlock
+                     errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_outCoin)];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (ChZ_StringIsEmpty(phoneCode))[parameters setObject:phoneCode forKey:@"phoneCode"];
+    if (ChZ_StringIsEmpty(googleCode))[parameters setObject:googleCode forKey:@"totpCode"];
+    if (ChZ_StringIsEmpty(symbolId))[parameters setObject:symbolId forKey:@"symbol"];
+    if (ChZ_StringIsEmpty(password))[parameters setObject:password forKey:@"tradePwd"];
+    if (ChZ_StringIsEmpty(addressId))[parameters setObject:addressId forKey:@"withdrawAddr"];
+    if (ChZ_StringIsEmpty(amout))[parameters setObject:amout forKey:@"withdrawAmount"];
+    if (ChZ_StringIsEmpty(address))[parameters setObject:address forKey:@"memo"];
+    [parameters setObject:@"0" forKey:@"btcfeesIndex"];
+    
+    
+    [self PostAuthWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         if (successBlock)successBlock(nil);
+         return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
++ (void)requestWithdrawRecord:(NSString *)fid
+           successBlock:(ChZ_SuccessBlock)successBlock
+             errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_WithdrawRecord)];
+    NSString *token = [APPControl sharedAPPControl].token;
+    if (ChZ_StringIsEmpty(token)) {
+        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+    }
+    if (ChZ_StringIsEmpty(fid)) {
+        [url appendString:[NSString stringWithFormat:@"&symbol=%@",fid]];
+    }
+    [url appendString:[NSString stringWithFormat:@"&page=%d",1]];
+
+    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [self GetWithURL:newUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         NSDictionary *dataDict = [responseDic objectForKey:@"data"];
+         if (dataDict != nil)
+         {
+           NSDictionary *page = dataDict[@"page"];
+             
+             if (page != nil) {
+                 NSArray *data = page[@"data"];
+                 if (data != nil && data.count> 0) {
+                  NSArray *dataArray = [RecordModel mj_objectArrayWithKeyValuesArray:data];
+                     successBlock(dataArray); return;
+                 }
+             }
+             successBlock(nil);return;
+         }
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
+
++ (void)requestRechargeCCNY:(NSString *)amout
+                     coinId:(NSString *)coinId
+               successBlock:(ChZ_SuccessBlock)successBlock
+                 errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_RechargeCCNY)];
+    NSString *token = [APPControl sharedAPPControl].token;
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (ChZ_StringIsEmpty(token))[parameters setObject:token forKey:@"token"];
+    if (ChZ_StringIsEmpty(amout))[parameters setObject:amout forKey:@"amount"];
+    if (ChZ_StringIsEmpty(coinId))[parameters setObject:coinId forKey:@"coinId"];
+    [self PostWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         NSDictionary *data = [responseDic objectForKey:@"data"];
+         if (data == nil || data.count == 0) {
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         NSString *seriesNumber = [data objectForKey:@"seriesNumber"];
+         if (successBlock)successBlock(seriesNumber);
+         return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+    
+}
++(void)requestHideCoinListsuccessBlock:(ChZ_SuccessBlock)successBlock errorBlock:(ErrorCodeBlock)errorBlock{
+    NSString *url = RequestURL(kURL_wallet_hideCoinList);
+    [self GetPHPWithURL:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+ 
+        if (code != kv_PHPRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        ChZ_DebugLog(@"%@--",responseDic);
+        NSArray *data = [responseDic objectForKey:@"return"];
+        if (data)
+        {
+            NSArray *emptyData = [XHHWalletHideCoinList mj_objectArrayWithKeyValuesArray:data];
+            if (successBlock)
+            {
+                successBlock(emptyData);
+                return;
+            }
+        }
+        if (successBlock)successBlock(nil);
+        return;
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+}
++(void)requestHideCoinWithName:(NSString *)coinName successBlock:(ChZ_SuccessBlock)successBlock errorBlock:(ErrorCodeBlock)errorBlock{
+    NSString *url = [NSString stringWithFormat:@"%@&coin_name=%@",RequestURL(kURL_wallet_hideCoin),coinName];
+    [self GetPHPWithURL:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+        if (code != kv_PHPRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        if (successBlock)successBlock(nil);
+        return;
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+}
+//+ (void)requestBankListSuccessBlock:(ChZ_SuccessBlock)successBlock
+//                         errorBlock:(ErrorCodeBlock)errorBlock
+//{
+//    NSMutableString *url = [NSMutableString string];
+//    [url appendString:RequestURL(kURL_bankList)];
+//    NSString *token = [AppControl sharedAppControl].token;
+//    if (ChZ_StringIsEmpty(token)) {
+//        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+//    }
+//    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//    [self GetWithURL:newUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//     {
+//         NSDictionary *responseDic = responseObject;
+//         if ([responseDic isKindOfClass:[NSNull class]])
+//         {
+//             if (errorBlock) errorBlock(0,@"请求失败"); return;
+//         }
+//         int code = [[responseDic objectForKey:@"code"]intValue];
+//         NSString *msg = [responseDic objectForKey:@"msg"];
+//         if (code != kv_JavaRequestSuccess)
+//         {
+//             if (ChZ_StringIsEmpty(msg))
+//             {
+//                 if (errorBlock) errorBlock(code,msg); return;
+//             }
+//             if (errorBlock) errorBlock(code,@"请求失败"); return;
+//         }
+//         NSDictionary *data = [responseDic objectForKey:@"data"];
+//         if (data == nil || data.count == 0)
+//         {
+//             if (successBlock)successBlock(nil);return;
+//         }
+//         NSArray *bankinfo = [data objectForKey:@"bankinfo"];
+//         NSArray *objArray = [HCBankTypeListModel mj_objectArrayWithKeyValuesArray:bankinfo];
+//         if (successBlock)
+//         {
+//             successBlock(objArray);
+//             return;
+//         }
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+//     {
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     }];
+//}
+//
+//+ (void)requestBaingMsgCodeSuccessBlock:(ChZ_SuccessBlock)successBlock
+//                             errorBlock:(ErrorCodeBlock)errorBlock
+//
+//{
+//    NSMutableString *url = [NSMutableString string];
+//    [url appendString:RequestURL(kURL_bindBankSendMsg)];
+//    NSString *token = [AppControl sharedAppControl].token;
+//    if (ChZ_StringIsEmpty(token)) {
+//        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+//    }
+//    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//    [self GetWithURL:newUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//     {
+//         NSDictionary *responseDic = responseObject;
+//         if ([responseDic isKindOfClass:[NSNull class]])
+//         {
+//             if (errorBlock) errorBlock(0,@"请求失败"); return;
+//         }
+//         int code = [[responseDic objectForKey:@"code"]intValue];
+//         NSString *msg = [responseDic objectForKey:@"msg"];
+//         if (code != kv_JavaRequestSuccess)
+//         {
+//             if (ChZ_StringIsEmpty(msg))
+//             {
+//                 if (errorBlock) errorBlock(code,msg); return;
+//             }
+//             if (errorBlock) errorBlock(code,@"请求失败"); return;
+//         }
+//         if (successBlock)successBlock(nil);return;
+//     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+//     {
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     }];
+//}
+//
+//+ (void)requestBaingMsgCodeCoinId:(NSString *)coinId
+//                     successBlock:(ChZ_SuccessBlock)successBlock
+//                       errorBlock:(ErrorCodeBlock)errorBlock
+//{
+//    NSMutableString *url = [NSMutableString string];
+//    [url appendString:RequestURL(kURL_getBindedBankList)];
+//    NSString *token = [AppControl sharedAppControl].token;
+//    if (ChZ_StringIsEmpty(token)) {
+//        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+//    }
+//    if (ChZ_StringIsEmpty(coinId)) {
+//        [url appendString:[NSString stringWithFormat:@"&symbol=%@",coinId]];
+//    }
+//    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//    [self GetWithURL:newUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//     {
+//         NSDictionary *responseDic = responseObject;
+//         if ([responseDic isKindOfClass:[NSNull class]])
+//         {
+//             if (errorBlock) errorBlock(0,@"请求失败"); return;
+//         }
+//         int code = [[responseDic objectForKey:@"code"]intValue];
+//         NSString *msg = [responseDic objectForKey:@"msg"];
+//         if (code != kv_RequestSuccess)
+//         {
+//             if (ChZ_StringIsEmpty(msg))
+//             {
+//                 if (errorBlock) errorBlock(code,msg); return;
+//             }
+//             if (errorBlock) errorBlock(code,@"请求失败"); return;
+//         }
+//         NSDictionary *data = [responseDic objectForKey:@"data"];
+//         if (data == nil || data.count == 0)
+//         {
+//             if (successBlock)successBlock(nil);return;
+//         }
+//         NSArray *bankinfo = [data objectForKey:@"bankinfo"];
+//         NSArray *objArray = [HCBindingBankTypeListModel mj_objectArrayWithKeyValuesArray:bankinfo];
+//         if (successBlock)
+//         {
+//             successBlock(objArray);
+//             return;
+//         }
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+//     {
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     }];
+//}
+//
+//+ (void)requestBindingBank:(HCBindingBankInfoModel *)model
+//              successBlock:(ChZ_SuccessBlock)successBlock
+//                errorBlock:(ErrorCodeBlock)errorBlock
+//{
+//
+//    NSMutableString *url = [NSMutableString string];
+//    [url appendString:RequestURL(kURL_bindBank)];
+//    NSString *token = [AppControl  sharedAppControl].token;
+//    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+//    if (model)
+//    {
+//        if (ChZ_StringIsEmpty(model.bankCardNumber))
+//            [parameters setObject:model.bankCardNumber forKey:@"account"];
+//
+//        if (ChZ_StringIsEmpty(model.msgCode))
+//            [parameters setObject:model.msgCode forKey:@"phoneCode"];
+//
+//        if (ChZ_StringIsEmpty(model.googleCode))
+//            [parameters setObject:model.googleCode forKey:@"totpCode"];
+//
+//        if (model.bank && ChZ_StringIsEmpty(model.bank.fid))
+//            [parameters setObject:model.bank.fid forKey:@"openBankType"];
+//
+//        if (ChZ_StringIsEmpty(model.detailAddress))
+//            [parameters setObject:model.detailAddress forKey:@"address"];
+//
+//        if (model.areaModel &&
+//            model.areaModel.selectedModel1 &&
+//            ChZ_StringIsEmpty(model.areaModel.selectedModel1.areaName)
+//            )
+//            [parameters setObject:model.areaModel.selectedModel1.areaName forKey:@"prov"];
+//
+//        if (model.areaModel &&
+//            model.areaModel.selectedModel2 &&
+//            ChZ_StringIsEmpty(model.areaModel.selectedModel2.areaName)
+//            )
+//            [parameters setObject:model.areaModel.selectedModel2.areaName forKey:@"city"];
+//
+//        if (model.areaModel &&
+//            model.areaModel.selectedModel3 &&
+//            ChZ_StringIsEmpty(model.areaModel.selectedModel3.areaName)
+//            )
+//            [parameters setObject:model.areaModel.selectedModel3.areaName forKey:@"dist"];
+//
+//        if (ChZ_StringIsEmpty(model.name))
+//            [parameters setObject:model.name forKey:@"payeeAddr"];
+//
+//        if (ChZ_StringIsEmpty(token))
+//            [parameters setObject:token forKey:@"token"];
+//    }
+//    //    if (ChZ_StringIsEmpty(phoneCode))[parameters setObject:phoneCode forKey:@"phoneCode"];
+//    [self PostWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//     {
+//         NSDictionary *responseDic = responseObject;
+//         if ([responseDic isKindOfClass:[NSNull class]])
+//         {
+//             if (errorBlock) errorBlock(0,@"请求失败"); return;
+//         }
+//         int code = [[responseDic objectForKey:@"code"]intValue];
+//         NSString *msg = [responseDic objectForKey:@"msg"];
+//         if (code != kv_RequestSuccess)
+//         {
+//             if (ChZ_StringIsEmpty(msg))
+//             {
+//                 if (errorBlock) errorBlock(code,msg); return;
+//             }
+//             if (errorBlock) errorBlock(code,@"请求失败"); return;
+//         }
+//         if (successBlock)successBlock(nil);
+//         return;
+//     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+//     {
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     }];
+//}
+//+ (void)requestWithdraGEST:(HCWithdrawGESTSubmitModel *)model
+//              successBlock:(ChZ_SuccessBlock)successBlock
+//                errorBlock:(ErrorCodeBlock)errorBlock
+//{
+//
+//    NSMutableString *url = [NSMutableString string];
+//    [url appendString:RequestURL(kURL_getRMB)];
+//    NSString *token = [APPControl sharedAPPControl].token;
+//    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+//    if (model)
+//    {
+//        if (ChZ_StringIsEmpty(model.tradePwd))
+//            [parameters setObject:model.tradePwd forKey:@"tradePwd"];
+//        if (ChZ_StringIsEmpty(model.withdrawBalance))
+//            [parameters setObject:model.withdrawBalance forKey:@"withdrawBalance"];
+//        if (ChZ_StringIsEmpty(model.totpCode))
+//            [parameters setObject:model.totpCode forKey:@"totpCode"];
+//        if (ChZ_StringIsEmpty(model.phoneCode))
+//            [parameters setObject:model.phoneCode forKey:@"phoneCode"];
+//        if (ChZ_StringIsEmpty(model.withdrawBlank))
+//            [parameters setObject:model.withdrawBlank forKey:@"withdrawBlank"];
+//        if (ChZ_StringIsEmpty(model.symbol))
+//            [parameters setObject:model.symbol forKey:@"symbol"];
+//        if (ChZ_StringIsEmpty(token))
+//            [parameters setObject:token forKey:@"token"];
+//    }
+//    [self PostWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//     {
+//         NSDictionary *responseDic = responseObject;
+//         if ([responseDic isKindOfClass:[NSNull class]])
+//         {
+//             if (errorBlock) errorBlock(0,@"请求失败"); return;
+//         }
+//         int code = [[responseDic objectForKey:@"code"]intValue];
+//         NSString *msg = [responseDic objectForKey:@"msg"];
+//         if (code != kv_RequestSuccess)
+//         {
+//             if (ChZ_StringIsEmpty(msg))
+//             {
+//                 if (errorBlock) errorBlock(code,msg); return;
+//             }
+//             if (errorBlock) errorBlock(code,@"请求失败"); return;
+//         }
+//         if (successBlock)successBlock(nil);
+//         return;
+//     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+//     {
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     }];
+//
+//
+//}
+//
+//
+//+ (void)requestWithdraGESTList:(NSString *)coinId
+//                  successBlock:(ChZ_SuccessBlock)successBlock
+//                    errorBlock:(ErrorCodeBlock)errorBlock
+//{
+//    NSMutableString *url = [NSMutableString string];
+//    [url appendString:RequestURL(kURL_getRMBList)];
+//    NSString *token = [APPControl sharedAPPControl].token;
+//    if (ChZ_StringIsEmpty(token)) {
+//        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+//    }
+//    if (ChZ_StringIsEmpty(coinId)) {
+//        [url appendString:[NSString stringWithFormat:@"&symbol=%@",coinId]];
+//    }
+//    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//    [self GetWithURL:newUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//     {
+//         NSDictionary *responseDic = responseObject;
+//         if ([responseDic isKindOfClass:[NSNull class]])
+//         {
+//             if (errorBlock) errorBlock(0,@"请求失败"); return;
+//         }
+//         int code = [[responseDic objectForKey:@"code"]intValue];
+//         NSString *msg = [responseDic objectForKey:@"msg"];
+//         if (code != kv_RequestSuccess)
+//         {
+//             if (ChZ_StringIsEmpty(msg))
+//             {
+//                 if (errorBlock) errorBlock(code,msg); return;
+//             }
+//             if (errorBlock) errorBlock(code,@"请求失败"); return;
+//         }
+//         NSArray *data = [responseDic objectForKey:@"data"];
+//         NSArray *objArray = [HCWithdraGESTListModel mj_objectArrayWithKeyValuesArray:data];
+//         if (successBlock)
+//         {
+//             successBlock(objArray);
+//             return;
+//         }
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+//     {
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     }];
+//}
+//
++ (void)requestWithdraGESTFee:(NSString *)coinId
+                 successBlock:(ChZ_SuccessBlock)successBlock
+                   errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_fee)];
+    NSString *token = [APPControl sharedAPPControl].token;
+    if (ChZ_StringIsEmpty(token)) {
+        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+    }
+    if (ChZ_StringIsEmpty(coinId)) {
+        [url appendString:[NSString stringWithFormat:@"&symbol=%@",coinId]];
+    }
+    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [self GetWithURL:newUrl parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         NSDictionary *data = [responseDic objectForKey:@"data"];
+         if (data == nil || data.count == 0)
+         {
+             if (successBlock)successBlock(nil);return;
+         }
+         NSDictionary *withdrawSetting = [data objectForKey:@"withdrawSetting"];
+         HCWithdraGESTFeeModel *model = [HCWithdraGESTFeeModel mj_objectWithKeyValues:withdrawSetting];
+         if (successBlock)
+         {
+             successBlock(model);
+             return;
+         }
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+
+}
+
+@end

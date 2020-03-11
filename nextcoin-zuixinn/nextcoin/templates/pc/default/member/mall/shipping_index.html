@@ -1,0 +1,40 @@
+{template nheader.html}
+<div class="row">
+	<div class="col-md-12">
+
+		<div class="portlet-body">
+			<div class="table-toolbar">
+				<a href="{dr_member_url(MOD_DIR.'/shipping/add')}" class="btn green btn-sm"> <i class="fa fa-plus"></i> 新增模板</a>
+			</div>
+
+			<table class="table">
+				<thead>
+				<tr>
+					<th style="width:200px;" class="algin_l">模板名称</th>
+					<th style="width:120px;" class="algin_c">计费方式</th>
+					<th class="algin_l"></th>
+				</tr>
+				</thead>
+				<tbody>
+				{loop $list $t}
+				<tr>
+					<td class="algin_l">{$t.name}</td>
+					<td class="algin_c">{if $t.valuation == 1}按数量{/if}{if $t.valuation == 2}按重量{/if}{if $t.valuation == 3}按体积{/if}</td>
+					<td class="algin_l">
+						<a class="btn green btn-xs" href="{dr_member_url(MOD_DIR.'/shipping/edit', array('id'=>$t.id))}"> <i class="fa fa-edit"></i> 修改</a>
+						<a class="btn red btn-xs" href="{dr_member_url(MOD_DIR.'/shipping/del', array('id'=>$t.id))}"> <i class="fa fa-trash"></i> 删除</a>
+					</td>
+				</tr>
+				{/list}
+				</tbody>
+			</table>
+
+
+
+		</div>
+
+
+	</div>
+</div>
+
+{template nfooter.html}

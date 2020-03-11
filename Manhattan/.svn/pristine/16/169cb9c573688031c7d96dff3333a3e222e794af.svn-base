@@ -1,0 +1,50 @@
+//
+//  XHHTrunOutView.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/17.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHTrunOutView.h"
+#import "XHHAreaListController.h"
+@interface XHHTrunOutView ()
+
+@property (weak, nonatomic) IBOutlet UITextField *area;
+
+@property (weak, nonatomic) IBOutlet UITextField *money;
+
+@property (weak, nonatomic) IBOutlet UILabel *hadMoney;
+@property (weak, nonatomic) IBOutlet UILabel *realMoney;
+
+@end
+
+@implementation XHHTrunOutView
+
+- (void)awakeFromNib{
+    [super awakeFromNib];
+    self.backgroundColor = [UIColor clearColor];
+    [_area configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+}
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+- (IBAction)areaListAction:(id)sender {
+    XHHAreaListController *vc = [[XHHAreaListController alloc] init];
+    [self.viewController.navigationController pushViewController:vc animated:YES];
+}
+
+- (IBAction)sendAction:(id)sender {
+    NSLog(@"2131");
+    
+    if (self.sendBlock) {
+        _sendBlock();
+    }
+}
+
+@end

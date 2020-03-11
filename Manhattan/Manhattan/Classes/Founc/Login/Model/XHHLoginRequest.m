@@ -1,0 +1,204 @@
+//
+//  XHHLoginRequest.m
+//  Manhattan
+//
+//  Created by Apple on 2018/9/10.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHLoginRequest.h"
+#import "UserModel.h"
+@implementation XHHLoginRequest
++ (void)requestLogin:(NSString *)username
+            password:(NSString *)password
+                type:(NSString *)type
+        successBlock:(ChZ_SuccessBlock)successBlock
+          errorBlock:(ChZ_ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_login)];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (ChZ_StringIsEmpty(username))[parameters setObject:username forKey:@"loginName"];
+    if (ChZ_StringIsEmpty(password))[parameters setObject:password forKey:@"password"];
+    if (ChZ_StringIsEmpty(type))[parameters setObject:type forKey:@"type"];
+    NSString *newUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [self PostWithURL:newUrl parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         
+         NSDictionary *data = [responseDic objectForKey:@"data"];
+         if (data)
+         {
+             NSString *secretKey = [data objectForKey:@"secretKey"];
+             NSDictionary *userinfo = [data objectForKey:@"userinfo"];
+             NSString *token = [data objectForKey:@"token"];
+             if (ChZ_StringIsEmpty(token)  && ChZ_StringIsEmpty(secretKey) && userinfo)
+             {
+                 UserModel *user  = [UserModel mj_objectWithKeyValues:userinfo];
+                 if (user) {
+                     [user chz_saveObjToKye:kv_USER_MODEL];
+                 }
+                 [APPControl sharedAPPControl].token = token;
+                 [APPControl sharedAPPControl].secretKey = secretKey;
+                 [APPControl sharedAPPControl].user = user;
+                 [APPControl sharedAPPControl].isLogin = YES;
+                 [APPControl sharedAPPControl].user.floginPwd = password;
+                 [APPControl sharedAPPControl].user.floginName = username;
+                 
+                 [username chz_saveObjToKye:kv_LOGIN_USERNAME];
+                 [password chz_saveObjToKye:kv_LOGIN_PASSWORD];
+                 [[NSNotificationCenter defaultCenter]postNotificationName:NOTIFICATION_LOGIN_SUCEESS object:token];
+                 if (successBlock)successBlock(@"登录成功");return;
+                 
+             }
+         }else
+         {
+             if (errorBlock) errorBlock(0,msg); return;
+         }
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
++ (void)requestPhoneMsg:(NSString *)areaNum
+                  phone:(NSString *)phone
+                   type:(NSString *)type
+           successBlock:(ChZ_SuccessBlock)successBlock
+             errorBlock:(ChZ_ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_phoneMsg)];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (ChZ_StringIsEmpty(areaNum))[parameters setObject:areaNum forKey:@"area"];
+    if (ChZ_StringIsEmpty(phone))[parameters setObject:phone forKey:@"phone"];
+    if (ChZ_StringIsEmpty(type))[parameters setObject:type forKey:@"type"];
+    [self PostWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,@"请求失败"); return;
+         }
+         if (successBlock)successBlock(nil);
+         return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
++ (void)requestRegister:(NSString *)phone
+                areaNum:(NSString *)areaNum
+               password:(NSString *)password
+                msgCode:(NSString *)msgCode
+            introUserId:(NSString *)introUserId
+           successBlock:(ChZ_SuccessBlock)successBlock
+             errorBlock:(ChZ_ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_phoneReg)];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    
+    if (ChZ_StringIsEmpty(phone))[parameters setObject:phone forKey:@"regName"];
+    if (ChZ_StringIsEmpty(areaNum))[parameters setObject:areaNum forKey:@"area"];
+    if (ChZ_StringIsEmpty(password))[parameters setObject:password forKey:@"password"];
+    if (ChZ_StringIsEmpty(introUserId))
+    {
+        if (introUserId.length >3 && [introUserId hasPrefix:@"200"])
+        {
+            introUserId = [introUserId substringWithRange:NSMakeRange(3, introUserId.length-3)];
+        }
+        [parameters setObject:introUserId forKey:@"intro_user"];
+    }
+    if (ChZ_StringIsEmpty(msgCode))[parameters setObject:msgCode forKey:@"pcode"];
+    [parameters setObject:@"0" forKey:@"type"];
+    [self PostWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_JavaRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,msg); return;
+         }
+         if (successBlock)successBlock(nil);
+         return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
++(void)requestRegistSuccessUserName:(NSString *)userName
+                           passWord:(NSString *)passWord
+                            surePsw:(NSString *)surePsw
+                               type:(NSString *)type
+                              invId:(NSString *)invId
+                       successBlock:(ChZ_SuccessBlock)successBlock
+                         errorBlock:(ChZ_ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_Login_registSuccess)];
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (ChZ_StringIsEmpty(userName))[parameters setObject:userName forKey:@"data[username]"];
+    if (ChZ_StringIsEmpty(passWord))[parameters setObject:passWord forKey:@"data[password]"];
+    if (ChZ_StringIsEmpty(surePsw))[parameters setObject:surePsw forKey:@"data[password2]"];
+    if (ChZ_StringIsEmpty(invId)) [parameters setObject:invId forKey:@"data[fintrouid]"];
+    if (ChZ_StringIsEmpty(type))[parameters setObject:type forKey:@"data[type]"];
+    
+    [self PostWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+     {
+         NSDictionary *responseDic = responseObject;
+         NSLog(@"%@--",responseDic);
+         if ([responseDic isKindOfClass:[NSNull class]])
+         {
+             if (errorBlock) errorBlock(0,@"请求失败"); return;
+         }
+         int code = [[responseDic objectForKey:@"code"]intValue];
+         NSString *msg = [responseDic objectForKey:@"msg"];
+         if (code != kv_PHPRequestSuccess)
+         {
+             if (ChZ_StringIsEmpty(msg))
+             {
+                 if (errorBlock) errorBlock(code,msg); return;
+             }
+             if (errorBlock) errorBlock(code,msg); return;
+         }
+         if (successBlock)successBlock(nil);
+         return;
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+     {
+         if (errorBlock) errorBlock(0,@"请求失败"); return;
+     }];
+}
+@end

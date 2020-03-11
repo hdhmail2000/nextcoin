@@ -1,0 +1,114 @@
+{template "header.html" }
+{template "top.html" }
+        <div class="container" style="min-height: 800px;padding-bottom: 60px;">
+            <div class="row">
+                <div class="col-xs-12 bind-header">
+                    <div class="col-xs-12 bind-header-tetil">
+                        <h2>{$finance.account_record}</h2>
+                    </div>
+                    <div class="col-xs-12 bind-header-nav">
+                        <ol class="breadcrumb">
+                          <li><a href="/index.php?s=exc&c=financeController">{$finance.account_center}</a></li>
+                          <li class="active">{$finance.account_record}</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 calendar">
+                    <!--<div class="col-xs-12 calendar-header">
+                        <div class="col-xs-6 calendar-header-nav">
+                            <select id="recordType" style="background: #27262E;border: 1px solid #474652;">
+                            		{loop $data.filters $filter}
+                                {if $data.select == $filter['value']}
+                                <option selected value="/index.php?s=exc&c=financeController&m=record&{$filter['canshu']}">{$filter['value']}</option>
+                                {else}
+                                <option value="/index.php?s=exc&c=financeController&m=record&{$filter['canshu']}">{$filter['value']}</option>
+                                {/if}
+                                {/loop}
+                            </select>
+                            
+                            <input type="hidden" value="1" id="recordType" />
+                            <input type="hidden" id="datetype">
+                        </div>
+                        <div class="col-xs-6 calendar-header-date">
+                             <input size="16" type="text" placeholder="{$finance.withdraw_chioce}" id="begindate" value="{$data.begindate}}" class="form_datetime"/> - 
+                             <input size="16" type="text" placeholder="{$finance.withdraw_chioce}" id="enddate"  value="{$data.enddate}}" class="form_datetime"/>
+                        </div>
+                    </div>-->
+
+                    <div class="col-xs-12 calenda-table-wrap">
+                        <table class="col-xs-12  calenda-table">
+                                <tr class=" calenda-table-header">
+                                    <th>{$finance.record_time}</th>
+                                    <th>{$finance.account_coin}</th>
+                                    <th>{$finance.record_type}</th>
+                                    <th>{$finance.record_number}</th>
+                                   <!-- <th>{$finance.record_fee}</th>-->
+                                    <th>{$finance.record_status}</th>
+                                </tr>
+                                {if $data}
+                                {loop $data $log}
+                                <tr class=" calenda-table-item">
+                                    <td>{date('Y-m-d H:i:s',intval($log['createDate']/1000))}</td>
+                                    <td>{$log['relationCoinName']}</td>
+                                    <td>{$log['operationDesc']}</td>
+                                    <td>{$log['amount']}</td>
+                                    <td>{$log['statusDesc']}</td>
+                                    <!--<td>{sprintf('%.3f',$log['famount'])}</td>
+                                    <td>{sprintf('%.3f',$log['ffees'])}</td>
+                                    <td>{$log['fstatus_s']}</td>-->
+                                </tr>
+                                {/loop}
+                                {/if}
+                        </table>
+                        <div class="pagination-wrap">
+                            <nav aria-label="Page navigation" class="pagination">
+                                <ul>
+                                    {$pagin}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+		<script src="{HOME_THEME_PATH}exc/js/bootstrap-datetimepicker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+//          $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',minView:2,autoclose: true});
+
+
+            $(".calendar-header-nav button").on({
+                click:function(){
+                    $(".calendar-header-nav button").removeClass("active");
+                    $(this).addClass("active");
+                }
+            })
+            
+            $("#type1").click(function(){
+            		$("#recordType").val(1);
+            });
+            
+            $("#type2").click(function(){
+            		$("#recordType").val(2);
+            });
+            
+            $.getUrlParam = function (name) {
+		           var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		           var r = window.location.search.substr(1).match(reg);
+		             if (r != null) return unescape(r[2]); return null;
+			}
+	        	var begindate = $.getUrlParam('begindate');
+	        	if(begindate !== "" || begindate!=="null" || begindate!==null  || begindate!== undefined){
+	        		$("#begindate").val(begindate);
+	        	}
+	        	var enddate = $.getUrlParam('enddate');
+	        	if('' != enddate || 'null' != enddate || null != enddate || undefined != enddate || 'undefined' != enddate){
+	        		$("#enddate").val(enddate);
+	        	}
+            
+        </script>
+        <script src="{HOME_THEME_PATH}exc/js/plugin/layer/bitDate.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="{HOME_THEME_PATH}exc/js/plugin/layer/skin/bitdate/bitDate.css">
+        <script src="{HOME_THEME_PATH}exc/js/finance/account.record.js" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="88" id="KGk-i7-Jjw" customClass="XHHWalletCell">
+            <rect key="frame" x="0.0" y="0.0" width="327" height="96"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="327" height="95.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M6K-2Z-UnL">
+                        <rect key="frame" x="16" y="16" width="295" height="79.5"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mine_wallet_eth" translatesAutoresizingMaskIntoConstraints="NO" id="n4n-zy-SlS">
+                                <rect key="frame" x="16" y="19" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="cwI-Nm-oyb"/>
+                                    <constraint firstAttribute="width" constant="40" id="p2v-8b-I2p"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ETH" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4q1-Y7-P6f">
+                                <rect key="frame" x="66" y="29" width="34.5" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" red="0.95686274510000002" green="0.95686274510000002" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12.983" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qU4-Eb-DZy">
+                                <rect key="frame" x="223.5" y="19" width="55.5" height="21.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" red="0.95686274510000002" green="0.95686274510000002" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="≈ ￥8，924.79" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FGR-7E-NV2">
+                                <rect key="frame" x="195.5" y="44.5" width="83.5" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.73725490196078436" green="0.74509803921568629" blue="0.76862745098039209" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.21176470588235294" green="0.21176470588235294" blue="0.44705882352941173" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="4q1-Y7-P6f" firstAttribute="centerY" secondItem="n4n-zy-SlS" secondAttribute="centerY" id="5kx-Sh-KNc"/>
+                            <constraint firstItem="4q1-Y7-P6f" firstAttribute="leading" secondItem="n4n-zy-SlS" secondAttribute="trailing" constant="10" id="74g-Le-Zx1"/>
+                            <constraint firstItem="qU4-Eb-DZy" firstAttribute="top" secondItem="n4n-zy-SlS" secondAttribute="top" id="9Oj-hF-DlG"/>
+                            <constraint firstItem="n4n-zy-SlS" firstAttribute="centerY" secondItem="M6K-2Z-UnL" secondAttribute="centerY" id="EbD-xb-vmj"/>
+                            <constraint firstItem="FGR-7E-NV2" firstAttribute="trailing" secondItem="qU4-Eb-DZy" secondAttribute="trailing" id="FyT-Nz-zF2"/>
+                            <constraint firstAttribute="trailing" secondItem="qU4-Eb-DZy" secondAttribute="trailing" constant="16" id="ghG-kI-ZND"/>
+                            <constraint firstItem="n4n-zy-SlS" firstAttribute="leading" secondItem="M6K-2Z-UnL" secondAttribute="leading" constant="16" id="jHz-JG-Ffj"/>
+                            <constraint firstItem="FGR-7E-NV2" firstAttribute="bottom" secondItem="n4n-zy-SlS" secondAttribute="bottom" id="sQa-cz-W09"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="M6K-2Z-UnL" secondAttribute="bottom" id="TSz-cn-Kqe"/>
+                    <constraint firstItem="M6K-2Z-UnL" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="16" id="Z49-c8-GcN"/>
+                    <constraint firstItem="M6K-2Z-UnL" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="jN8-wy-bQ0"/>
+                    <constraint firstAttribute="trailing" secondItem="M6K-2Z-UnL" secondAttribute="trailing" constant="16" id="yO7-km-Vei"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="aboutLable" destination="FGR-7E-NV2" id="Llf-JR-ODD"/>
+                <outlet property="moneyLable" destination="qU4-Eb-DZy" id="QDX-UE-1ZG"/>
+                <outlet property="nameLable" destination="4q1-Y7-P6f" id="IqD-wy-Ujd"/>
+                <outlet property="typeImage" destination="n4n-zy-SlS" id="kOg-pm-5O8"/>
+            </connections>
+            <point key="canvasLocation" x="16.5" y="5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="mine_wallet_eth" width="40" height="40"/>
+    </resources>
+</document>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:id="@+id/text_item_c2c_order_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/textSize14"
+        tools:text="买入ETH"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite" />
+
+    <ImageView
+        android:id="@+id/more_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_more_point" />
+
+    <TextView
+        android:id="@+id/text_item_c2c_order_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="6dp"
+        android:layout_toLeftOf="@id/more_image_view"
+        android:textColor="#FF67D2"
+        android:textSize="@dimen/textSize12"
+        tools:text="已付款" />
+
+
+    <TextView
+        android:id="@+id/text_item_c2c_order_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_item_c2c_order_title"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/colorGrayText"
+        android:textSize="@dimen/textSize12"
+        tools:text="￥343434.09" />
+
+    <TextView
+        android:id="@+id/text_item_c2c_order_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/text_item_c2c_order_title"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/colorGrayText"
+        android:textSize="@dimen/textSize12"
+        tools:text="买入 50000" />
+
+    <TextView
+        android:id="@+id/text_item_c2c_order_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_item_c2c_order_price"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/colorTextHint"
+        android:textSize="@dimen/textSize12"
+        tools:text="5000002394749" />
+
+    <TextView
+        android:id="@+id/text_item_c2c_order_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_item_c2c_order_price"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/colorTextHint"
+        android:textSize="@dimen/textSize12"
+        tools:text="2018-01-26  18:38:48" />
+</RelativeLayout>

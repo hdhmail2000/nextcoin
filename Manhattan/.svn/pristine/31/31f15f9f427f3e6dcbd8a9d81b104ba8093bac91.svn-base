@@ -1,0 +1,189 @@
+//
+//  XHHSwitchViewController.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/8/29.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHSwitchViewController.h"
+#import "XLSlideSwitch.h"
+#import "XHHSwitchDetailViewController.h"
+#import "XHHSwitchPayViewController.h"
+#import "XHHSwithExplictViewController.h"
+#import "XHHSwithPayListViewController.h"
+#import "XHHSwithTypeView.h"
+#import "HCMarketAreaModel.h"
+#import "XHHPublicNavView.h"
+@interface XHHSwitchViewController ()<XLSlideSwitchDelegate>
+@property (nonatomic, weak) XLSlideSwitch *slideSwitch;
+@property (strong, nonatomic) UIButton                    *navViewButton;
+@property (strong, nonatomic) XHHSwithTypeView        *typeChooseView;
+@property (nonatomic , strong) XHHPublicNavView           *navView;
+@property (nonatomic , copy) NSString *code;
+@end
+
+@implementation XHHSwitchViewController
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self _setupView];
+    
+    [self.typeChooseView addObserver:self forKeyPath:@"alpha" options:NSKeyValueObservingOptionNew context:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buySellAction) name:@"BUYSELLACTION" object:nil];
+    
+}
+-(void)buySellAction{
+    [self.slideSwitch setSelectedIndex:1];
+}
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context{
+    
+    
+    if ([keyPath isEqualToString:@"alpha"]) {
+        self.navViewButton.selected = self.typeChooseView.alpha == 1 ? YES : NO;
+    }
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [self.slideSwitch setSelectedIndex:0];
+}
+
+- (void)_setupView
+{
+    
+    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+    
+    [self.view addSubview:self.navView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self.view);
+        make.height.mas_equalTo(navHeight +64);
+    }];
+    
+    if (self.slideSwitch)
+    {
+        [self.slideSwitch removeFromSuperview];
+    }
+    NSArray *itemArray = @[@"详情",@"交易",@"当前委托",@"成交记录"];
+    NSMutableArray *viewControllers = [NSMutableArray array];
+    XHHSwitchDetailViewController *vc1 = [[XHHSwitchDetailViewController alloc] init];
+    [viewControllers addObject:vc1];
+    
+    XHHSwitchPayViewController *vc2 = [[XHHSwitchPayViewController alloc] init];
+    vc2.typeName = self.typeName;
+    vc2.numberTypeName = self.model.sellShortName;
+    [viewControllers addObject:vc2];
+    
+    XHHSwithExplictViewController *vc3 = [[XHHSwithExplictViewController alloc] init];
+    vc3.typeName = self.typeName;
+    vc3.numberTypeName = self.model.sellShortName;
+    [viewControllers addObject:vc3];
+    
+    XHHSwithPayListViewController *vc4 = [[XHHSwithPayListViewController alloc] init];
+    [viewControllers addObject:vc4];
+    vc1.payVc = vc2;
+    
+    vc1.model = self.model;
+    vc2.model = self.model;
+    vc3.model = self.model;
+    vc4.model = self.model;
+    
+    CGFloat viewH = ChZ_HEIGHT - 64.0f;
+    if ([ChZUtil isIphoneX])
+    {
+        viewH = ChZ_HEIGHT - 88.0f;
+    }
+    XLSlideSwitch *slideSwitch = [[XLSlideSwitch alloc] initWithFrame:CGRectMake(0, navHeight +64, self.view.bounds.size.width,viewH) lineColor:[UIColor colorWithHexString:@"308AF5"] Titles:itemArray viewControllers:viewControllers];
+    slideSwitch.delegate = self;
+    slideSwitch.itemSelectedColor = [UIColor colorWithHexString:@"308AF5"];
+    slideSwitch.itemNormalColor = [UIColor colorWithHexString:@"4B4B80"];
+    slideSwitch.customTitleSpacing = 30;
+    [self.view addSubview:slideSwitch];
+    self.slideSwitch = slideSwitch;
+
+//    NSMutableArray *tempItemArray = [NSMutableArray array];
+//    HCMarketAreaModel *model = self.areaArray[0]
+//    self.code = model.code;
+    
+}
+
+-(XHHPublicNavView *)navView{
+    if (!_navView) {
+        _navView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPublicNavView" owner:nil options:nil] lastObject];
+        [_navView setLeftButtonTitle:[NSString stringWithFormat:@"%@/%@",self.typeName,self.model.sellShortName] image:@"public_nav_leftBack"];
+    }
+    return _navView;
+}
+-(void)back{
+    [self popToVCClassName:@"TradCenterController"];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+-(void)rightNavAction{
+    
+}
+-(UIButton *)navViewButton{
+    if (!_navViewButton) {
+        _navViewButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_navViewButton setTitle:[NSString stringWithFormat:@"%@/%@",self.typeName,self.model.sellShortName] forState:UIControlStateNormal];
+        [_navViewButton setImage:[UIImage imageNamed:@"trad_explict_down"] forState:UIControlStateNormal];
+        [_navViewButton setImage:[UIImage imageNamed:@"trad_explict_up"] forState:UIControlStateSelected];
+        [_navViewButton setTitleColor:[UIColor colorWithHexString:@"202020"] forState:UIControlStateNormal];
+        [_navViewButton.titleLabel setFont:[UIFont systemFontOfSize:18.0]];
+        [_navViewButton setFrame:CGRectMake(0, 0, 120, 44)];
+        [_navViewButton layoutButtonWithEdgeInsetsStyle:LHButtonEdgeInsetsStyleRight imageTitleSpace:3];
+        @weakify(self);
+        [[_navViewButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+            @strongify(self);
+            self.navViewButton.selected = !self.navViewButton.selected;
+            
+            if (self.navViewButton.selected == YES)
+            {
+                NSLog(@"@1");
+                [self.typeChooseView showInView:self.view];
+            }else{
+                NSLog(@"@2");
+                [self.typeChooseView dismiss];
+            }
+        }];
+    }
+    return _navViewButton;
+}
+-(XHHSwithTypeView *)typeChooseView{
+    if (!_typeChooseView) {
+        _typeChooseView = [[XHHSwithTypeView alloc] init];
+        _typeChooseView.dataArray = self.areaArray;
+        @weakify(self);
+        _typeChooseView.selectedIndexBlock = ^(NSInteger index) {
+            @strongify(self);
+            XHHSwitchViewController *vc = [[XHHSwitchViewController alloc] init];
+            vc.model = self.areaArray[index];
+            vc.areaArray = self.areaArray;
+            vc.typeName = self.typeName;
+            [self.navigationController pushViewController:vc animated:YES];
+        };
+    }
+    return _typeChooseView;
+}
+-(void)dealloc{
+    [self.typeChooseView removeObserver:self forKeyPath:@"alpha"];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"BUYSELLACTION" object:nil];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

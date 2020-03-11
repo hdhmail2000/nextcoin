@@ -1,0 +1,7 @@
+https://www.nextcoin.vip/index.php?s=exc&c=financeController&m=unLockUserApp
+传参方式POST uid
+{"locklist ":[{"id":"2","uid":"3840","coin_id":"45","total":"1.0000000000","time":"1556685733","rule_id":"1","rule":"1,30,50;2,60,100","rule_level":"2","unlock_level":"1","short_name":"USDT","title":"60\u5929\u8fd4\u8fd8\u89c4\u5219"}],
+"unlocklist":[{"id":"2","uid":"3840","coin_id":"45","total":"1.0000000000","time":"1556685733","rule_id":"1","rule":"1,30,50;2,60,100","rule_level":"2","finishtime":null,"unlock_level":"1","short_name":"USDT","title":"60\u5929\u8fd4\u8fd8\u89c4\u5219"}]}
+
+locklist 还未完成的锁仓记录
+unlocklist 已解锁的列表

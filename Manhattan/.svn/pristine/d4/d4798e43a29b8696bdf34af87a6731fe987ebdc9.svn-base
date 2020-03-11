@@ -1,0 +1,161 @@
+//
+//  ChZHomeRequest.h
+//  FuturePurse
+//
+//  Created by Howe on 2018/8/8.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "ChZBaseHttpRequest.h"
+
+@interface ChZHomeRequest : ChZBaseHttpRequest
+
++ (void)requestCNYSuccessBlock:(ChZ_SuccessBlock)successBlock
+                    errorBlock:(ErrorCodeBlock)errorBlock;
+/**
+ 
+ time,open,high,low,close,vol
+ 
+ @param Fid id
+ @param date 时间
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestKLineData:(NSString *)Fid
+                    date:(double )date
+            SuccessBlock:(ChZ_SuccessBlock)successBlock
+              errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 市场列表
+ 
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestAreaSuccessBlock:(ChZ_SuccessBlock)successBlock
+                     errorBlock:(ErrorCodeBlock)errorBlock;
+
+
+/**
+ 获取实时数据
+ 
+ @param idString id 串
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestRealCoin:(NSString *)idString
+           successBlock:(ChZ_SuccessBlock)successBlock
+             errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 币列表
+ 
+ @param fid id
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestAreaList:(NSString *)fid
+           successBlock:(ChZ_SuccessBlock)successBlock
+             errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 取消订单
+ 
+ @param fid 订单id
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestCancelOrder:(NSString *)fid
+              successBlock:(ChZ_SuccessBlock)successBlock
+                errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 下单
+ 
+ @param symbolId 交易对的中文名称，下划线分隔，btc_gest
+ @param amount 数量
+ @param price 价格
+ @param type 类型 buy买 或则 sell卖
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestCreateOrder:(NSString *)symbolId
+                    number:(float )number
+                     price:(float )price
+                      type:(NSString *)type
+                  tradePwd:(NSString *)tradePwd
+              successBlock:(ChZ_SuccessBlock)successBlock
+                errorBlock:(ErrorCodeBlock)errorBlock;
+
+
+/**
+ 获取订单列表
+ 
+ @param symbol 交易对
+ @param type 类型 0全部 1当前订单 2历史订单
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestTxsOrderListWithSymbol:(NSString *)symbol
+                                 type:(NSString *)type
+                         successBlock:(ChZ_SuccessBlock)successBlock
+                           errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 盘口数据
+ 
+ @param fid id
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestDish:(NSString *)fid
+       successBlock:(ChZ_SuccessBlock)successBlock
+         errorBlock:(ErrorCodeBlock)errorBlock;
+
+
+/**
+ 用户可用资金
+ 
+ @param fid id
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestUserAssets:(NSString *)fid
+             successBlock:(ChZ_SuccessBlock)successBlock
+               errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 公告分类
+
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestNotItemsSuccessBlock:(ChZ_SuccessBlock)successBlock
+                        errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 公告列表
+
+ @param page 页数
+ @param catid 分类ID
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)rerquestNotesListPage:(NSString *)page
+                       catid:(NSString *)catid
+                successBlock:(ChZ_SuccessBlock)successBlock
+                  errorBlock:(ErrorCodeBlock)errorBlock;
+
+
+/**
+ 公告详情
+
+ @param notesId 公告ID
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestNotesDetailId:(NSString *)notesId
+               successBlock:(ChZ_SuccessBlock)successBlock
+                 errorBlock:(ErrorCodeBlock)errorBlock;
+
+@end

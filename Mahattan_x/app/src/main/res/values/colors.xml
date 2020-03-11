@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1A1560</color>
+    <color name="colorPrimaryDark">#1A1560</color>
+    <color name="colorAccent">#2E7AF1</color>
+
+    <color name="colorPageStart">#1A1560</color>
+    <color name="colorPageEnd">#0A0943</color>
+    <!--提示文字颜色-->
+    <color name="colorTextHint">#4B4B80</color>
+    <!--按钮不可点击颜色-->
+    <color name="colorNotEnabled">#CCCCCC</color>
+    <!--分割线颜色-->
+    <color name="colorDivider">#19ffffff</color>
+    <!--蓝色文字-->
+    <color name="colorBlueText">#2E7AF1</color>
+    <!--Tab默认颜色-->
+    <color name="colorTabNormal">#4B4B80</color>
+    <!--Tab选中颜色-->
+    <color name="colorTabChecked">#4EE2FE</color>
+    <!--灰色字体-->
+    <color name="colorGrayText">#BCBEC4</color>
+    <!--白色-->
+    <color name="colorWhite">#FFFFFF</color>
+    <!---->
+    <color name="colorTabTextSelected">#308AF5</color>
+    <!---->
+    <color name="colorIndicatorColor">#308AF5</color>
+    <!---->
+    <color name="colorTabTextNormal">#4B4B80</color>
+    <!---->
+    <color name="colorRiseBgLess">#FF6960</color>
+    <!---->
+    <color name="colorRiseBgAdd">#00BD9A</color>
+
+    <color name="s">#66fff30f</color>
+</resources>

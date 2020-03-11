@@ -1,0 +1,241 @@
+//
+//  CSSConstant.m
+//  css
+//
+//  Created by Howe on 2018/4/2.
+//  Copyright © 2018年 Howe. All rights reserved.
+//
+
+#import "CSSConstant.h"
+
+@implementation CSSConstant
+
+@end
+
+
+
+//*********************  值定义(kV_) ******************************/
+
+float const kV_RequestNumber = 20.0f;
+
+int  const kv_RefreshTokenExpired = 404;
+/*
+ ToKen过期
+ **/
+int  const kv_TokenExpired = 401;
+/*
+ ToKen错误
+ **/
+int  const kv_TokenEroor = 400;
+
+
+NSInteger  const kv_NeedLoginCode = 4000;
+
+/*
+ 请求成功
+ **/
+int  const kv_JavaRequestSuccess = 200;
+/*
+ 请求成功
+ **/
+int const  kv_PHPRequestSuccess = 1;
+
+//********************* Notif ******************************/
+const NSString * const NOTIFICATION_LOGIN_SUCEESS = @"NOTIFICATION_LOGIN_SUCEESS";
+
+//********************* URL(kURL_) ******************************/
+
+#ifdef DEBUG
+const NSString * const BaseURL = @"https://futureex.cc";
+const NSString * const ImageURL = @"https://futureex.cc";
+
+const NSString * const BasePHPURL = @"https://e.yooyor.com";
+#else
+const NSString * const BaseURL = @"https://futureex.cc";
+const NSString * const ImageURL = @"https://futureex.cc";
+#endif
+////商城banner
+//const NSString * const kURL_shop_banner  = @"/index.php?s=mall&c=mall_interface&m=mall_banner";
+////商城热门
+//const NSString * const kURL_shop_hot     = @"/index.php?s=mall&c=mall_interface&m=hot&type=hot";
+////商城猜你喜欢
+//const NSString * const kURL_shop_youLike = @"/index.php?s=mall&c=mall_interface&m=guess_like";
+////商城分类一级
+//const NSString * const kURL_shop_classification = @"/index.php?s=mall&c=mall_interface&m=category_list";
+////商城分类二级
+//const NSString * const kURL_shop_classificationTwoLevel = @"/index.php?s=mall&c=mall_interface&m=category_list";
+////商城商品列表
+//const NSString * const kURL_shop_shopList = @"/index.php?s=mall&c=mall_interface&m=goods_list";
+////商城商品信息
+//const NSString * const kURL_shop_shopMessage = @"/index.php?s=mall&c=mall_interface&m=goods_info";
+////商城商品详情
+//const NSString * const kURL_shop_shopDetail = @"/index.php?s=mall&c=mall_interface&m=goods_detail";
+////商城商品评论
+//const NSString * const kURL_shop_shopRecoment = @"/index.php?s=mall&c=mall_interface&m=goods_comments";
+////商城商品收藏取消
+//const NSString * const kURL_shop_shopCollection = @"/index.php?s=mall&c=mall_interface&m=mall_favorite";
+////增加收货地址
+//const NSString * const kURL_shop_shopAddAdress = @"/index.php?s=mall&c=mall_interface&m=add_address";
+////收货地址列表
+//const NSString * const kURL_shop_shopAddAdressList = @"/index.php?s=mall&c=mall_interface&m=address";
+////删除收货地址
+//const NSString * const kURL_shop_shopDelegeteAdress = @"/index.php?s=mall&c=mall_interface&m=del_address";
+////修改收货地址
+//const NSString * const kURL_shop_shopUpdateAdress = @"/index.php?s=mall&c=mall_interface&m=edit_address";
+////商店详情
+//const NSString * const kURL_shop_shopStoreDetail = @"/index.php?s=mall&c=mall_interface&m=store_detail";
+////可用支付方式
+//const NSString * const kURL_shop_shopPayType = @"/index.php?s=mall&c=mall_interface&m=goods_coin";
+////计算快递费用
+//const NSString * const kURL_shop_shopPayExpress = @"/index.php?s=order&c=api&m=price";
+//
+////理财产品首页
+//const NSString * const kURL_trad_tradHome = @"/index.php?s=financial&c=financial_interface&m=index";
+////币列表
+//const NSString * const kURL_trad_tradCoinList = @"/index.php?s=financial&c=financial_interface&m=coin_list";
+////理财产品详情
+//const NSString * const kURL_trad_tradProductDetail = @"/index.php?s=financial&c=financial_interface&m=financial_detail";
+////理财产品买入
+//const NSString * const kURL_trad_tradProductBuy = @"/index.php?s=financial&c=financial_interface&m=buy_financial";
+////理财产品卖出
+//const NSString * const kURL_trad_tradProductSell = @"/index.php?s=financial&c=financial_interface&m=take_out";
+//
+//
+//
+//
+////学院items
+//const NSString * const kURL_college_itemes = @"/index.php?s=college&c=app&m=category";
+////学院itemslist
+//const NSString * const kURL_college_itemesList = @"/index.php?s=college&c=app";
+////学院itemsdetail
+//const NSString * const kURL_college_itemesDetail = @"/index.php?s=college&c=app&m=show";
+////广场列表
+//const NSString * const kURL_square_list = @"/index.php?s=square&c=app";
+////广场详情
+//const NSString * const kURL_square_detail = @"/index.php?s=square&c=app&m=show";
+////广场图片上传
+//const NSString * const kURL_square_upPicture = @"/index.php?c=api&m=data2&param=upload";
+////广场发布
+//const NSString * const kURL_square_release = @"/index.php?s=square&c=app&m=add";
+////广场写评论
+//const NSString * const kURL_square_recomment = @"/index.php?s=square&c=app&m=addComment";
+////广场点赞
+//const NSString * const kURL_square_laud = @"/index.php?s=square&c=app&m=likes";
+
+//----------------这个往下需要修改
+
+const NSString * const kv_USER_MODEL = @"kv_USER_MODEL";
+
+const NSString * const kv_LOGIN_USERNAME = @"kv_LOGIN_USERNAME";
+
+const NSString * const kv_LOGIN_PASSWORD = @"kv_LOGIN_PASSWORD";
+
+const NSString * const kURL_kline = @"/kline/fullperiod.html";
+
+const NSString * const kURL_login = @"/v1/user/login.html";
+
+const NSString * const kURL_register = @"";
+
+const NSString * const kURL_forget = @"/v1/user/password.html";
+
+const NSString * const kURL_walletList = @"/v1/user/balance.html";
+
+const NSString * const kURL_rechargeAddress = @"/v1/deposit/coin.html";
+
+const NSString * const kURL_safeSetDetail = @"/v1/user/security.html";
+
+const NSString * const kURL_googleCode = @"/v1/user/google_device.html";
+
+const NSString * const kURL_addGoogleCode = @"/v1/user/google_auth.html";
+
+const NSString * const kURL_verified = @"/v1/user/real_auth.html";
+
+const NSString * const kURL_sendMsgCode = @"/v1/user/bind_msg.html";
+
+const NSString * const kURL_bindingPhone = @"/v1/user/bind_phone.html";
+
+const NSString * const kURL_loginLog = @"/v1/log/login.html";
+
+const NSString * const kURL_secureSetLog = @"/v1/log/setting.html";
+
+const NSString * const kURL_msgCode = @"/v1/validate/sign.html";
+
+const NSString * const kURL_outCoinAddressAdd = @"/v1/coin/address.html";
+
+const NSString * const kURL_outCoinAddressList = @"/v1/coin/list_address.html";
+
+const NSString * const kURL_outCoin = @"/v1/coin/withdraw.html";
+
+const NSString * const kURL_phoneMsg = @"/v1/validate/send.html";
+
+const NSString * const kURL_phoneReg = @"/v1/user/register.html";
+
+const NSString * const kURL_place = @"/v1/entrust/place.html";
+
+const NSString * const kURL_cancel = @"/v1/entrust/cancel.html";
+
+const NSString * const kURL_orderRecords = @"/v1/entrust/list.html";
+
+const NSString * const kURL_marketArea = @"/v1/market/area.html";
+
+const NSString * const kURL_marketList = @"/v1/market/list.html";
+
+const NSString * const kURL_dish = @"/kline/fulldepth.html";
+
+const NSString * const kURL_realCoin = @"/real/markets.html";
+
+const NSString * const kURL_userAssets = @"/v1/market/userassets.html";
+
+const NSString * const kURL_RechargeCodeRedeem = @"/v1/activity/exchange.html";
+
+const NSString * const kURL_RechargeCodeRecords = @"/v1/activity/index.html";
+
+const NSString * const kURL_emailCodeSend = @"/v1/email/send.html";
+
+const NSString * const kURL_bindingEmail = @"/v1/email/add.html";
+
+const NSString * const kURL_userInfo = @"/v1/user/info.html";
+
+const NSString * const kURL_RechargeCCNY = @"/v1/rmb/recharge.html";
+
+const NSString * const kURL_RechargeCCNYURL = @"https://pay.zgzop.com/cashier/";
+
+const NSString * const kURL_CNYURL = @"/market/rate.html";
+
+//公告分类
+const NSString * const kURL_TradCenter_notes = @"/index.php?s=appnotice&c=app&m=category";
+//公告列表
+const NSString * const kURL_TradCenter_notesList = @"/index.php?s=appnotice&c=app";
+//公告详情
+const NSString * const kURL_TradCenter_notesDetail = @"/index.php?s=appnotice&c=app&m=show";
+
+
+//c2c币种列表
+const NSString * const kURL_trad_c2cCnyList = @"/index.php?c=Copay&m=coin_list";
+//C2C购买列表
+const NSString * const kURL_trad_c2cByList = @"/index.php?s=trade&c=api&m=c2cBuy";
+//C2C出售列表
+const NSString * const kURL_trad_c2cSellList = @"/index.php?s=trade&c=api&m=c2cSell";
+//C2C出我的发布
+const NSString * const kURL_trad_c2cMyReleaseList = @"/index.php?s=trade&c=api&m=c2cReleaseList";
+//C2C发布卖出
+const NSString * const kURL_trad_c2cMyReleaseSell = @"/index.php?s=trade&c=api&m=fabu&type=1";
+//C2C发布买入
+const NSString * const kURL_trad_c2cMyReleaseBuy = @"/index.php?s=trade&c=api&m=fabu&type=2";
+//C2C查询币种余额
+const NSString * const kURL_trad_c2cMyCnyNumber = @"/index.php?s=trade&c=api&m=total_of_symbol";
+//C2C发布下线
+const NSString * const kURL_trad_c2cReleaseDownLine = @"/index.php?s=trade&c=api&m=underline";
+//C2C购买币
+const NSString * const kURL_trad_c2cBuyOherCny = @"/index.php?s=trade&c=api&m=trade_buy";
+//C2C卖出币
+const NSString * const kURL_trad_c2cSellOherCny = @"/index.php?s=trade&c=api&m=trade_sell";
+//C2C我的订单
+const NSString * const kURL_trad_c2cMyOrderList = @"/index.php?s=trade&c=api&m=c2cMyorder";
+//C2C取消订单
+const NSString * const kURL_trad_c2cCannelOrder = @"/index.php?s=trade&c=api&m=cancel_order";
+//C2C标记为已收款
+const NSString * const kURL_trad_c2cSigeHadGetMoney = @"/index.php?s=trade&c=api&m=mark_receved";
+//C2C标记为已付款
+const NSString * const kURL_trad_c2cSigeHadPayMoney = @"/index.php?s=trade&c=api&m=mark_pay";
+

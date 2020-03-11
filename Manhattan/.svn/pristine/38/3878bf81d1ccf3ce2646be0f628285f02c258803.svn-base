@@ -1,0 +1,58 @@
+//
+//  XHHEntrustBuyTypeView.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHEntrustBuyTypeView.h"
+@interface XHHEntrustBuyTypeView()
+
+@property (assign, nonatomic) NSInteger count;
+
+@end
+
+@implementation XHHEntrustBuyTypeView
+
+-(instancetype)initWithItems:(NSArray *)items{
+    self = [super init];
+    if (self) {
+        self.count = items.count;
+        for(int i = 0;i < items.count;i ++){
+            UIButton *btn = [[UIButton alloc] init];
+            [btn setTitle:items[i] forState:UIControlStateNormal];
+            [btn setTitleColor:[UIColor colorWithHexString:@"8F8F8F"] forState:UIControlStateNormal];
+            if (i== 0) {
+                [btn setTitleColor:[UIColor colorWithHexString:@"2394FE"] forState:UIControlStateNormal];
+            }
+            [btn.titleLabel setFont:[UIFont systemFontOfSize:14.0]];
+            btn.frame = CGRectMake(15 + i * 75, 0, 75, 40);
+            btn.tag = 200 + i;
+            [btn addTarget:self action:@selector(clickAcion:) forControlEvents:UIControlEventTouchUpInside];
+            [self addSubview:btn];
+        }
+    }
+    return self;
+}
+-(void)clickAcion:(UIButton *)sender{
+    for(int i= 200;i < 200 +self.count;i ++){
+        UIButton *btn = [self viewWithTag:i];
+        [btn setTitleColor:[UIColor colorWithHexString:@"8F8F8F"] forState:UIControlStateNormal];
+    }
+    [sender setTitleColor:[UIColor colorWithHexString:@"2394FE"] forState:UIControlStateNormal];
+    
+    if (_delegate && [_delegate respondsToSelector:@selector(chooseTypeIndex:)]) {
+        [_delegate chooseTypeIndex:sender.tag-200];
+    }
+    
+}
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+@end

@@ -1,0 +1,18 @@
+//
+//  XHHMyDealCell.h
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface XHHMyDealCell : UITableViewCell
+
+@property (copy, nonatomic) void (^buySellBlock)(NSInteger type);//1购买  2出售
+
+
+-(void)reloadCellWithDic:(NSDictionary *)dic;
+
+@end

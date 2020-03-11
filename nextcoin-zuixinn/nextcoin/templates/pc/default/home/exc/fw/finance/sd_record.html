@@ -1,0 +1,108 @@
+{template "header.html" }
+{template "top.html" }
+        <div class="container" style="min-height: 800px;padding-bottom: 60px;">
+            <div class="row">
+                <div class="col-xs-12 bind-header">
+                    <div class="col-xs-12 bind-header-tetil">
+                        <h2>{$finance.manual_recharge_details}</h2>
+                    </div>
+                    <div class="col-xs-12 bind-header-nav">
+                        <ol class="breadcrumb">
+                          <li><a href="/index.php?s=exc&c=financeController">{$finance.account_center}</a></li>
+                          <li class="active">{$finance.manual_recharge_details}</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 calendar">
+                    <div class="col-xs-12 calendar-header">
+                        <!--列表切换-->
+                        <div class="col-xs-6 calendar-header-nav">
+                            <!--<button id="type1" class="active">{$finance.deposit-recharge-record}</button>
+                            <button id="type2">{$finance.deposit-withdrawals-record}</button>-->
+                            
+                            <select id="recordType" style="background: #27262E;border: 1px solid #474652;">
+                            		{loop $data.filters $filter}
+                                {if $data.select == $filter['value']}
+                                <option selected value="{$filter['key']}">{$filter['value']}</option>
+                                {else}
+                                <option value="{$filter['key']}">{$filter['value']}</option>
+                                {/if}
+                                {/loop}
+                            </select>
+                            
+                            <input type="hidden" value="1" id="recordType" />
+                            <input type="hidden" id="datetype">
+                        </div>
+                        <!--筛选-->
+                        <div class="col-xs-6 calendar-header-date">
+                             <input size="16" type="text" placeholder="{$finance.withdraw_chioce}" id="begindate" value="{$data.begindate}" class="form_datetime"/> - 
+                             <input size="16" type="text" placeholder="{$finance.withdraw_chioce}" id="enddate"  value="{$data.enddate}" class="form_datetime"/>
+                             <!--<button>确定</button>-->
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 calenda-table-wrap">
+                        <table class="col-xs-12  calenda-table">
+                                <tr class=" calenda-table-header">
+                                		<th>txid</th>
+                                    <th>{$finance.record_time}</th>
+                                    <th>{$finance.record_type}</th>
+                                    <th>{$finance.record_number}</th>
+                                    <th>{$finance.record_fee}</th>
+                                    <th>{$finance.record_status}</th>
+                                </tr>
+                                {loop $data.list['data'] $log}
+                                <tr class=" calenda-table-item">
+                                		<td><a href="###">{$log['funiquenumber']}</a></td>
+                                    <td>{date('Y-m-d H:i:s',intval(substr($log['fupdatetime'],0,10)))}</td>
+                                    <td>{$log['ftype_s']}</td>
+                                    <td>{sprintf('%.3f',$log['famount'])}</td>
+                                    <td>{sprintf('%.3f',$log['ffees'])}</td>
+                                    <td>{$log['fstatus_s']}</td>
+                                </tr>
+                                {/loop}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<script src="{HOME_THEME_PATH}exc/js/bootstrap-datetimepicker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+//          $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',minView:2,autoclose: true});
+
+
+            $(".calendar-header-nav button").on({
+                click:function(){
+                    $(".calendar-header-nav button").removeClass("active");
+                    $(this).addClass("active");
+                }
+            })
+            
+            $("#type1").click(function(){
+            		$("#recordType").val(1);
+            });
+            
+            $("#type2").click(function(){
+            		$("#recordType").val(2);
+            });
+            
+            $.getUrlParam = function (name) {
+		           var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		           var r = window.location.search.substr(1).match(reg);
+		             if (r != null) return unescape(r[2]); return null;
+			}
+	        	var begindate = $.getUrlParam('begindate');
+	        	if(begindate !== "" || begindate!=="null" || begindate!==null  || begindate!== undefined){
+	        		$("#begindate").val(begindate);
+	        	}
+	        	var enddate = $.getUrlParam('enddate');
+	        	if('' != enddate || 'null' != enddate || null != enddate || undefined != enddate || 'undefined' != enddate){
+	        		$("#enddate").val(enddate);
+	        	}
+            
+        </script>
+        <script src="/statics/exc/dota/js/plugin/layer/bitDate.js}" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="/statics/exc/dota/js/plugin/layer/skin/bitdate/bitDate.css}">
+        <script src="/statics/exc/dota/js/finance/account.record.js}" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }

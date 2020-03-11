@@ -1,0 +1,380 @@
+{template "header.html" }
+{template "top.html" }
+		<div class="container">
+            <div class="row financial-wrap">
+                <div class="col-xs-12 financial">
+                    <div class="col-xs-12 center-tetil">
+                        <h1>{$user.account_security}</h1>
+                    </div>
+                    <div class="col-xs-12 center-data">
+                        <div class="col-xs-12 center-data-tetil">
+                            <h3>{$user.essential_information}</h3>
+                        </div>
+                        <div class="col-xs-12 center-data-list"  >
+                            <div class="col-xs-12 center-data-item">
+                                <div class="col-xs-8">
+                                    <div class="center-data-left">{$user.account}</div>
+                                    <div class="center-data-num">{$data['fuser']['floginname']}</div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 center-data-item">
+                                <div class="col-xs-8">
+                                    <div class="center-data-left">{$user.security_loginPwd}</div>
+                                    <div class="center-data-num">********</div>
+                                </div>
+                                <a href="/index.php?s=exc&c=securityController&m=alterLogingPsw" class="col-xs-4 text-right">{$user.security_alter}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 center-tebel-wrap">
+                        <div class="col-xs-12 center-data-tetil">
+                            <h3>{$user.two_factor_authentication}</h3>
+                        </div>
+                        <div class="col-xs-12 center-tebel">
+                            <table class="col-xs-12">
+                            	   <tbody>
+                            	       <tr class="center-tebel-item">
+                            	           <td>{$user.security_level}：</td>
+                            	           {if $data['securityLevel']>=2}
+                            	           <td class="center-passege-box clearfix">
+                            	               <div class="center-tebel-passege">
+                            	                   <div style="width: {$jd}%;"></div>
+                            	               </div>
+                            	               <span style="margin-left: 6px; color: #F5F5F5;font-size: 12px;">{$user.security_high}</span>
+                            	           </td>
+                            	          {else}
+                            	           <td class="center-passege-box clearfix">
+                            	               <div class="center-tebel-passege">
+                            	                   <div style="width: {$jd}%;"></div>
+                            	               </div>
+                            	               <span style="margin-left: 6px; color: #F5F5F5;font-size: 12px;">{$user.security_low}</span>
+                            	           </td>
+                            	           {/if}
+                            	           <td>{$user.security_tit}</td>
+                            	           <td></td>
+                            	       </tr>
+                            	       <tr class="center-tebel-item">
+                            	       	   {if $data['fuser']['fistelephonebind']}
+                            	           <td><i class="iconfont icon-yiyanzheng success"></i>{$user.security_phone}</td>
+                            	           <td class="center-tebel-num">{$data['phoneString']}</td>
+                            	           {else}
+                            	           <td><i class="iconfont icon-weiyanzheng danger"></i>{$user.security_phone}</td>
+                            	           <td class="center-tebel-num"></td>
+                            	           {/if}
+                            	           {if $data['fuser']['fistelephonebind']}
+                            	           <td>{$user.security_phoneT}: {$data['phoneString']}</td>
+                            	           {else}
+                            	           <td></td>
+                            	           {/if}
+                            	           {if $data['fuser']['fistelephonebind']}
+                            	           <td></td>
+                            	           {else}
+                            	           <td><a href="/index.php?s=exc&c=securityController&m=phoneHtml">{$user.security_bind}</a></td>
+                            	           {/if}
+                            	           
+                            	       </tr>
+                            	       <tr class="center-tebel-item">
+                            	           	<td>
+                            	           		{if $data['fuser']['fismailbind']}
+                            	           		<i class="iconfont icon-yiyanzheng success"></i>
+                            	           		{else}
+                            	           		<i class="iconfont icon-weiyanzheng danger"></i>
+                            	           		{/if}
+                            	           		{$user.security_email}
+                            	           	</td>
+                            	           	{if $data['fuser']['fismailbind']}
+                            	           	<td class="center-tebel-num">{$data['emaString']}</td>
+                            	           	<td>{$user.security_emailT}</td>
+                            	           	<td></td>
+                            	           	{else}
+                            	           	<td class="center-tebel-num"></td>
+                            	           	<td>{$user.security_emailF}</td>
+                            	           	<td><a href="/index.php?s=exc&c=securityController&m=emailHtml">{$user.security_bind}</a></td>
+                            	           	{/if}
+                            	       </tr>
+                            	       <tr class="center-tebel-item">
+                            	           <td>
+                            	           		{if $data['fuser']['fgooglebind']}
+                            	           		<i class="iconfont icon-yiyanzheng success"></i>
+                            	           		{else}
+                            	           		<i class="iconfont icon-weiyanzheng danger"></i>
+                            	           		{/if}
+                            	           		{$user.security_topcode}
+                            	           </td>
+                            	           <td class="center-tebel-num"></td>
+                            	           {if $data['fuser']['fgooglebind']}
+                            	           <td>{$user.security_topcodeT}</td>
+                            	           {else}
+                            	           <td>{$user.security_topcodeF}</td>
+                            	           {/if}
+                            	           {if $data['fuser']['fgooglebind']}
+                            	           <td><a id="unbindgoogle" href="###">{$user.security_alter}</a></td>
+                            	           {else}
+                            	           <td><a href="/index.php?s=exc&c=securityController&m=googleHtml">{$user.security_bind}</a></td>
+                            	           {/if}
+                            	       </tr>
+                            	       <tr class="center-tebel-item">
+                            	           <td>
+                            	       			{if $data['bindTrade']}
+                            	       			<i class="iconfont icon-yiyanzheng success"></i>
+                            	       			{else}
+                            	           		<i class="iconfont icon-weiyanzheng danger"></i>
+                            	           		{/if}
+                            	           		{$user.security_tradePassword}
+                            	           </td>
+                            	           <td class="center-tebel-num"><a href="/index.php?s=exc&c=securityController&m=forgetTransPsw">{$user.security_forgetTrade}?</a></td>
+                            	           {if $data['bindTrade']}
+                            	           <td>{$user.security_tradPasswordT}</td>
+                            	           {else}
+                            	           <td>{$user.security_tradPasswordF}</td>
+                            	           {/if}
+                            	           {if $data['bindTrade']}
+                            	           <td><a href="/index.php?s=exc&c=securityController&m=transAlterPsw">{$user.security_alter}</a></td>
+                            	           {else}
+                            	           <td><a href="/index.php?s=exc&c=securityController&m=transpsw">{$user.security_set}</a></td>
+                            	           {/if}
+                            	       </tr>
+                            	       <tr class="center-tebel-item">
+                            	           <td>
+                            	           		{if $data['fuser']['fhasrealvalidate']}
+                            	           		<i class="iconfont icon-yiyanzheng success"></i>
+                            	           		{else}
+                            	           		<i class="iconfont icon-weiyanzheng danger"></i>
+                            	           		{/if}
+                            	           		{$user.security_truename}
+                            	           </td>
+                            	           <td class="center-tebel-num"></td>
+
+                            	           {if $data['fuser']['fhasrealvalidate']}
+                            	           <td>{$user.security_truenameT}</td>
+                            	           {else if $data['identity']}
+                            	           		{if $data['identity']['fstatus'] == 2}
+                            	           		<td>{$user.security_truenameB}</td>
+                            	           		<td><a href="/index.php?s=exc&c=securityController&m=namevalidate">{$user.security_author}</a></td>
+                            	           		{else if $data['identity']['fstatus'] == 0}
+                            	           		<td>{$user.security_truenameC}</td>
+                            	           		{/if}
+                            	           {else}
+                            	           <td>{$user.security_truenameF}</td>
+                            	           <td><a href="/index.php?s=exc&c=securityController&m=namevalidate">{$user.security_author}</a></td>
+                            	           {/if}
+                            	       </tr>
+                            	   </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 center-tebel-wrap" style="min-height: 331px;margin-bottom: 60px;">
+                        <div class="col-xs-12 center-nav">
+                            <button {if empty($type)}class="active"{/if} id="loging-log-btn" onclick="logingLog(1);">{$user.log_login}</button>
+                            <button id="safe-log-btn" {if !empty($type)}class="active"{/if} onclick="safeLog(1);">{$user.log_history}</button>
+                        </div>
+                        <div class="col-xs-12 center-list {if empty($type)}show{/if}">
+                            <table class="col-xs-12" id="loging-log">
+                            	
+                            </table>
+                        </div>
+                        <div class="col-xs-12 center-list {if !empty($type)}show{/if}">
+                            <table class="col-xs-12" id="safe-log">
+                            	   
+                            </table>
+                        </div>
+                        <div id="pagination" class="pagination-wrap col-xs-12 center-list-btn" style="margin-top: 0px;padding-top: 0;padding-bottom: 0;">
+                                    <nav aria-label="Page navigation" class="pagination" id="logingPage">
+                                        <ul id="pages">
+                                        		
+                                        </ul>
+                                    </nav>
+                        	</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+<!--------------------------------- 查看谷歌验证码 ------------------->
+            <div class="model" id="unbindgoogle-show-box">
+                <div class="model-body">
+                    <div class="model-form-header clearfix">
+                        <div class="model-form-tetil">
+                            <h2>{$user.security_seeTop}</h2>
+                        </div>
+                        <div class="model-hide">
+                            <button class="iconfont icon-guanbi"></button>
+                        </div>
+                    </div>
+                    <div class="model-form-body">
+                        <div class="model-form-item">
+                            <p>{$user.security_enterCode}：</p>
+                            <label for="">
+                                <input type="text" id="unbindgoogle-topcode" value=""/>
+                            </label>
+                        </div>
+                        <div class="model-form-item">
+                            <button class="model-form-btn" id="unbindgoogle-Btn">{$user.security_submit}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <div class="model" id="unbindgoogle-hide-box">
+            <div class="model-body">
+                <div class="model-form-header clearfix">
+                    <div class="model-form-tetil">
+                        <h2>{$user.security_googleSee}</h2>
+                    </div>
+                    <div class="model-hide">
+                        <button class="iconfont icon-guanbi"></button>
+                    </div>
+                </div>
+                <div class="model-form-body">
+
+                    <div class="model-form-item">
+                        <div class="clearfix model-item-imgs" style="text-align: center">
+
+                            <div class="model-item-imgs-bd" style="display: inline-block">
+                                <div id="unqrcode"  style="width: 150px;height: 150px; padding: 5px; background: white;display: inline-block">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="model-form-item">
+                        <p class="model-form-item-text js-data-goodleAccount" style="color: #000000;">{$user.security_googleAccount}：{$data['device_name']}</p>
+                        <p class="model-form-item-text" style="color: #000000;">{$user.security_googleKey}：<span id="unbindgoogle-key"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+        	       $(".center-nav button").on({
+        	           click:function(){
+        	               $(".center-nav button").removeClass("active");
+        	               console.log($(".center-list").eq(0));
+        	               $(this).addClass("active");
+        	               var i = $(this).index();
+        	               $(".center-list").removeClass("show");
+        	               $(".center-list").eq(i).addClass("show");
+        	           }
+        	       })
+        	       var currentPage = '{$currentPage}';
+        	       var type = '{$type}';
+        	       if(currentPage == '' || currentPage == undefined) {
+        	       		currentPage = 1;
+        	       }
+        	       if(type == '') {
+        	       	  logingLog(currentPage);
+        	       }else{
+        	       	  safeLog(currentPage);
+        	       }
+        	      
+        	       
+        	       //时间戳转日期
+        	       function timetrans(date){
+				    var date = new Date(date);//如果date为13位不需要乘1000
+				    var Y = date.getFullYear() + '-';
+				    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+				    var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+				    var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+				    var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+				    var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());
+				    return Y+M+D+h+m+s;
+				}
+        	       
+        	       function logingLog(num) {
+					$.ajax({
+						type: 'get',
+						url: '/index.php?s=exc&c=securityController&m=loginLog&currentPage='+num,
+						headers: {
+					        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					    },
+						// 告诉jQuery不要去处理发送的数据
+						processData: false,
+	//					 告诉jQuery不要去设置Content-Type请求头
+	//					contentType: false,
+						dataType: 'json',
+						success: function(data) {
+							
+							if(data.res.currentPage == 1){
+									$("#pages").html('');
+							} else {
+								$("#pages").html(data.res.pagin);
+							}
+							
+							if (200 == data.code) {
+								layer.msg("接口出错");
+							} else {
+								var str = 	'<tr>'+
+												"<th>{$user.log_loginTime}</th>"+
+												"<th>{$user.log_loginIp}</th>"+
+											'</tr>';
+								$.each(data.res.data, function(index, item) {
+									var time = timetrans(item.fupdatetime);
+									str += '<tr>'+
+												'<td>' + time + '</td>'+
+												'<td>'+ item.fip + '</td>'+
+											'</tr>';
+									
+								});
+								$("#loging-log").html(str);
+								$("#pages").html(data.res.pagin);
+							}
+						}
+					});
+				}
+				
+				function safeLog(num) {
+					$.ajax({
+						type: 'get',
+						url: '/index.php?s=exc&c=securityController&m=settingLog&currentPage='+num,
+						headers: {
+					        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					    },
+						// 告诉jQuery不要去处理发送的数据
+						processData: false,
+	//					 告诉jQuery不要去设置Content-Type请求头
+	//					contentType: false,
+						dataType: 'json',
+						success: function(data) {
+							
+							if(data.res.currentPage == 1){
+									$("#pages").html('');
+							} else {
+								$("#pages").html(data.res.pagin);
+							}
+							
+							if (200 == data.code) {
+								layer.msg("接口出错");
+							} else {
+								var str = 	'<tr>'+
+												"<th>{$user.log_loginTime}</th>"+
+												"<th>{$user.log_security}</th>"+
+												"<th>{$user.log-loginIp}</th>"+
+											'</tr>';
+								$.each(data.res.data, function(index, item) {
+									var time = timetrans(item.fupdatetime);
+									str += '<tr>'+
+												'<td>' + time + '</td>'+
+												'<td>' + item.ftype_s + '</td>'+
+												'<td>'+ item.fip + '</td>'+
+											'</tr>';
+									
+								});
+								$("#safe-log").html(str);
+							}
+						}
+					});
+				}
+        	       
+        </script>
+<script src="{HOME_THEME_PATH}exc/js/custom.js" type="text/javascript" charset="utf-8"></script>
+<script src="{HOME_THEME_PATH}exc/js/plugin/jquery.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="{HOME_THEME_PATH}exc/js/user/user.security.js" type="text/javascript" charset="utf-8"></script>
+<script src="{HOME_THEME_PATH}exc/js/comm/msg.js" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }
+
+

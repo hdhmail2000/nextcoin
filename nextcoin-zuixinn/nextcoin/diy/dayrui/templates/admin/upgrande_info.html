@@ -1,0 +1,80 @@
+{template nheader.html}
+
+
+<div class="page-bar">
+    <ul class="page-breadcrumb mylink">
+        {$menu.link}
+    </ul>
+    <ul class="page-breadcrumb myname">
+        {$menu.name}
+    </ul>
+    <div class="page-toolbar">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false" data-hover="dropdown"> {fc_lang('操作菜单')}
+                <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                {loop $menu.quick $t}
+                <li>
+                    <a href="{$t.url}">{$t.icon} {$t.name}</a>
+                </li>
+                {/loop}
+                <li class="divider"> </li>
+                <li>
+                    <a href="javascript:window.location.reload();">
+                        <i class="icon-refresh"></i> {fc_lang('刷新页面')}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<h3 class="page-title">
+    <small>POSCMS官方网站：<a href="http://www.phpkaiyuancms.com" target="_blank">www.phpkaiyuancms.com</a></small>
+</h3>
+
+<form class="form-horizontal" action="" method="post" id="myform" name="myform">
+<div class="portlet light bordered">
+    <div class="portlet-body">
+
+        <div class="form-body" style="padding: 20px 0">
+            <div class="form-group">
+                <label class="col-md-2 control-label">{fc_lang('程序名称')}：</label>
+                <div class="col-md-9">
+
+                    <div class="form-control-static"> <a href="http://www.phpkaiyuancms.com" target="_blank">POSCMS</a> </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">{fc_lang('程序版本')}：</label>
+                <div class="col-md-9">
+
+                    <div class="form-control-static">{DR_VERSION}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">{fc_lang('更新日期')}：</label>
+                <div class="col-md-9">
+                    <div class="form-control-static">{DR_UPDATE}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">{fc_lang('授权域名')}：</label>
+                <div class="col-md-9">
+                    <label><input type="text" readonly class="form-control input-large" value="{$sqdomain}"></label>
+                    <label><a href="http://www.dayrui.com/license/domain/{$sqdomain}" target="_blank" class="btn green"> {fc_lang('查询授权')}</a></label>
+                    <label><a href="http://help.poscms.net/2588.html" target="_blank" class="btn red"> {fc_lang('如何授权')}</a></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">{fc_lang('程序目录')}：</label>
+                <div class="col-md-9">
+                    <input type="text" readonly class="form-control" value="{WEBPATH}">
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div></form>
+{template nfooter.html}

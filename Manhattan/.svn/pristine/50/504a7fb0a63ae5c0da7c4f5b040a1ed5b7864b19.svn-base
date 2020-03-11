@@ -1,0 +1,24 @@
+//
+//  XHHExplictiContentView.h
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+#import "ChZMarketListModel.h"
+
+@class XHHTradBottomBuyView;
+
+@interface XHHExplictiContentView : UIView
+
+@property (strong, nonatomic) XHHTradBottomBuyView        *bottomBuyView;
+
+@property (strong, nonatomic) ChZMarketListModel *modle;
+
+- (void)configureData;
+
+-(void)reloadKlineWithArray:(NSArray *)array;
+@end

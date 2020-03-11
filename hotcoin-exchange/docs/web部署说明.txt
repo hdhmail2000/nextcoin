@@ -1,0 +1,54 @@
+交易所部署文档
+
+一、所需的阿里云服务和配置说明
+
+1.web服务器13台，系统：centos7、配置：2核4G内存、磁盘：40G。其中1一台服务器部署PHP前端代码、12台部署Java服务（具体见下面的EDAS说明）
+
+2.钱包服务器2台，一台以太坊钱包、一台BTC钱包。建议的配置是：Ubuntu16、2核 16G内存 400G SSD 主要用于部署以太坊节点，windows server 2012 2核 8G内存 500G MHD 主要用于部署BTC钱包、或者LTC BCH 钱包。
+
+3.阿里云消息队列普通版本，开通了填写Topic producer consumer 
+
+4.购买阿里云邮件服务，然后到后台填写邮件配置
+
+5.购买阿里云redis实例、建议配置：Redis 2.8、2G主从版本，填写所有的ECS服务器的ip加入白名单
+
+6.购买RDS实例、建议配置：MySQL 5.6、2核4G、50G SSD 配置可以自行升级、把java服务器的ip加入白名单
+
+7.购买EDAS服务基础版本、选择最大支持的服务20个、然后参照EDAS的文档部署java war包
+
+8.购买负载均衡服务两个、一个指向java admin服务、另外一个指向PHP服务、执行PHP的负载均衡需要建立虚拟服务器（选择java bc 服务）、把一下url加入转发规则：
+	
+
+/v1
+
+/kline/fullperiod.html
+
+/real/market.html
+
+/kline/fulldepth.html
+
+/real/markets.html
+
+/real/getEntruts.html
+
+/market/rate.html
+
+/coin/eth/recharge.html
+
+/real/userassets.html
+
+/coin/etc/recharge
+
+/real/indexmarket.html
+
+
+
+
+
+
+
+
+	
+	
+
+	

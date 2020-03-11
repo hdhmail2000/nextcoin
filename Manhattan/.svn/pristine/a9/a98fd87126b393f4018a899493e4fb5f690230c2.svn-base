@@ -1,0 +1,55 @@
+//
+//  XHHWillBuyView.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/30.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHWillBuyView.h"
+#import "XHHChoosePayTypeController.h"
+#import "XHHPTChooseController.h"
+@interface XHHWillBuyView()
+
+@property (weak, nonatomic) IBOutlet UITextField *payTypeTextFeild;
+@property (weak, nonatomic) IBOutlet UITextField *currentPriceTextFeild;
+@property (weak, nonatomic) IBOutlet UITextField *numberSellTextFeikld;
+@property (weak, nonatomic) IBOutlet UITextField *numberBuyTextFeild;
+
+@end;
+
+@implementation XHHWillBuyView
+-(void)awakeFromNib
+{
+    [super awakeFromNib];
+    [self.payTypeTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16] textColor:[UIColor colorWithHexString:@"4B4B80"]];
+    [self.currentPriceTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16] textColor:[UIColor colorWithHexString:@"4B4B80"]];
+    [self.numberSellTextFeikld configPlaceholderWithFont:[UIFont systemFontOfSize:16] textColor:[UIColor colorWithHexString:@"4B4B80"]];
+    [self.numberBuyTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16] textColor:[UIColor colorWithHexString:@"4B4B80"]];
+}
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+- (IBAction)choosePayType:(id)sender {
+    XHHChoosePayTypeController *vc = [[XHHChoosePayTypeController alloc] init];
+    [self.viewController.navigationController pushViewController:vc animated:YES];
+    NSLog(@"213");
+}
+
+- (IBAction)chooseCNYType:(id)sender {
+    XHHPTChooseController *vc = [[XHHPTChooseController alloc] init];
+    [self.viewController.navigationController pushViewController:vc animated:YES];
+}
+
+
+- (IBAction)buyAction:(id)sender {
+    
+    _payBlock();
+}
+
+
+@end

@@ -1,0 +1,91 @@
+//
+//  XHHSwithPayListViewController.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/8/29.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHSwithPayListViewController.h"
+#import "XHHTradDealContentView.h"
+@interface XHHSwithPayListViewController ()
+@property (strong, nonatomic) UIScrollView                *bgScrollView;
+@property (strong, nonatomic) XHHTradDealContentView      *dealContentView;
+@end
+
+@implementation XHHSwithPayListViewController
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self.bgScrollView.mj_header beginRefreshing];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self zh_setupUI];
+}
+-(void)zh_setupUI{
+    //背景滚动视图
+    UIScrollView *bgScrollView = [[UIScrollView alloc]init];
+    bgScrollView.showsVerticalScrollIndicator = NO;
+    [self setupRefreshWithView:bgScrollView refreshHeadAction:@selector(headRefsh) refreshFooterAction:nil];
+    [self.view addSubview:bgScrollView];
+    self.bgScrollView = bgScrollView;
+    [bgScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+    
+    [bgScrollView addSubview:self.dealContentView];
+    [self.dealContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(self.bgScrollView).insets(UIEdgeInsetsZero);
+        make.width.equalTo(self.bgScrollView);
+        make.bottom.mas_equalTo(self.dealContentView.tableView);
+    }];
+}
+-(XHHTradDealContentView *)dealContentView{
+    if (!_dealContentView) {
+        _dealContentView = [[XHHTradDealContentView alloc] init];
+    }
+    return _dealContentView;
+}
+-(void)headRefsh{
+    [self _setupData];
+}
+- (void)_setupData {
+    
+    if (self.model ==nil || !ChZ_StringIsEmpty(self.model.sellShortName) || !ChZ_StringIsEmpty(self.model.buyShortName)) {
+        return;
+    }
+    NSString *areaAndCoint = [NSString stringWithFormat:@"%@_%@",self.model.sellShortName,self.model.buyShortName];
+    NSString *name = [areaAndCoint lowercaseString];
+    ChZ_Weak
+    [ChZHomeRequest requestTxsOrderListWithSymbol:name type:@"2" successBlock:^(id dataSource) {
+        ChZ_Strong
+        NSLog(@"%@---",dataSource);
+        [self.bgScrollView.mj_header endRefreshing];
+//        _strongSelf.dataSource = dataSource;
+//        [_strongSelf.tableView reloadData];
+    } errorBlock:^(int code, NSString *error) {
+        ChZ_Strong
+        ChZ_MBError(error)
+        [self.bgScrollView.mj_header endRefreshing];
+        ChZ_DebugLog(@"code = %d error reason: %@", code, error);
+    }];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

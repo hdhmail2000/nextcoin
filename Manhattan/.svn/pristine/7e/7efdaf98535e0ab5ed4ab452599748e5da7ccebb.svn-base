@@ -1,0 +1,58 @@
+//
+//  XHHMyDealCell.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHMyDealCell.h"
+@interface XHHMyDealCell ()
+@property (weak, nonatomic) IBOutlet UILabel *nameLable;
+@property (weak, nonatomic) IBOutlet UILabel *sumLable;
+@property (weak, nonatomic) IBOutlet UILabel *priceLable;
+@property (weak, nonatomic) IBOutlet UILabel *lessLable;
+
+@property (weak, nonatomic) IBOutlet UIImageView *walletImageView;
+
+@property (weak, nonatomic) IBOutlet UIImageView *aliPayImageView;
+
+@property (weak, nonatomic) IBOutlet UIImageView *weiChatImageLable;
+
+@property (weak, nonatomic) IBOutlet UIButton *buyButton;
+
+@end
+
+
+@implementation XHHMyDealCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    self.buyButton.layer.cornerRadius = 3.0;
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+-(void)reloadCellWithDic:(NSDictionary *)dic{
+    NSString *type = [dic objectForKey:@"type"];
+    if ([type isEqualToString:@"1"]) {
+        [self.buyButton setTitle:@"出售" forState:UIControlStateNormal];
+    }else{
+        [self.buyButton setTitle:@"购买" forState:UIControlStateNormal];
+    }
+}
+- (IBAction)buySellAction:(UIButton *)sender {
+    if ([sender.titleLabel.text isEqualToString:@"购买"])
+    {
+        if (self.buySellBlock)  _buySellBlock(1);
+    }else
+    {
+        if (self.buySellBlock)  _buySellBlock(2);
+    }
+}
+@end

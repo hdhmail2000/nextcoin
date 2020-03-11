@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:id="@+id/text_quotes_detail_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="$8069.83"
+                android:textColor="#FF67D2"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/image_quotes_detail_rise_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/text_quotes_detail_price"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@id/text_quotes_detail_price"
+                android:src="@drawable/ic_rise_less" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/text_quotes_detail_rise"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="8dp"
+            android:textColor="#FF67D2"
+            android:textSize="@dimen/textSize12"
+            tools:text="-1.15%" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:id="@+id/text_quotes_detail_max_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSize14"
+                tools:text="$4855.19" />
+
+            <TextView
+                android:id="@+id/text_quotes_detail_min_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSize14"
+                tools:text="$4855.19" />
+
+            <TextView
+                android:id="@+id/text_quotes_detail_volume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSize14"
+                tools:text="$4855.19" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_quotes_detail_max_price"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:text="最高价"
+                android:textColor="@color/colorGrayText"
+                android:textSize="@dimen/textSize10" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text_quotes_detail_max_price"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:text="最低价"
+                android:textColor="@color/colorGrayText"
+                android:textSize="@dimen/textSize10" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/text_quotes_detail_max_price"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:text="成交量"
+                android:textColor="@color/colorGrayText"
+                android:textSize="@dimen/textSize10" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="#0B0841" />
+
+        <com.flyco.tablayout.CommonTabLayout
+            android:id="@+id/tab_quotes_detail_child"
+            android:layout_width="match_parent"
+            android:layout_height="26dp"
+            app:tl_divider_color="@color/colorIndicatorColor"
+            app:tl_iconVisible="false"
+            app:tl_indicator_color="@color/colorIndicatorColor"
+            app:tl_indicator_width="30dp"
+            app:tl_textSelectColor="@color/colorTabTextSelected"
+            app:tl_textUnselectColor="@color/colorTabTextNormal"
+            app:tl_textsize="@dimen/textSize10" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <com.ifenduo.mahattan_x.widget.kchartview.KLineLayout
+                android:id="@+id/k_line_layout_quotes_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:decreasingColor="#FF6960"
+                app:increasingColor="#00BD9A"
+                app:xLabelColor="#0B0841"
+                app:yLabelColor="#0B0841"
+                app:axisColor="#0B0841"
+                app:gridColor="#0B0841"
+                app:loadingTextColor="@color/colorAccent"
+                app:loadingTextSize="@dimen/textSize10">
+
+                <ImageView
+                    android:id="@+id/image_loading_quotes_detail_left"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/vector_drawable_loading_anim" />
+
+                <ImageView
+                    android:id="@+id/image_loading_quotes_detail_right"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="20dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/vector_drawable_loading_anim" />
+            </com.ifenduo.mahattan_x.widget.kchartview.KLineLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#16134C"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/button_quotes_detail_buy"
+            style="@style/SubmitButton"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/selector_transaction_button_bg"
+            android:text="买入" />
+
+        <Button
+            android:id="@+id/button_quotes_detail_sell"
+            style="@style/SubmitButton"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_login_button_bg"
+            android:text="卖出" />
+
+        <TextView
+            android:id="@+id/collect_button"
+            android:layout_width="72dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="4dp"
+            android:drawablePadding="6dp"
+            android:drawableTop="@drawable/selector_collect_drawable"
+            android:gravity="center_horizontal"
+            android:paddingBottom="8dp"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="8dp"
+            android:text="添加自选"
+            android:textColor="@color/color_transaction_action_tab"
+            android:textSize="@dimen/textSize10" />
+    </LinearLayout>
+
+</LinearLayout>

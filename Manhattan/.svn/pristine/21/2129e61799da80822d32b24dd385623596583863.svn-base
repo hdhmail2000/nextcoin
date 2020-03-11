@@ -1,0 +1,336 @@
+//
+//  XHHMiningHeadView.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/16.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHMiningHeadView.h"
+#import "XHHForseTaskController.h"
+#import "XHHShareView.h"
+#import "XHHMovePointView.h"
+@interface XHHMiningHeadView()<SDCycleScrollViewDelegate>
+@property (weak, nonatomic) IBOutlet UILabel *workNumberLable;
+
+@property (nonatomic , strong) SDCycleScrollView        *sdScrollView;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *navHeight;
+
+@property (weak, nonatomic) IBOutlet UIImageView        *bgImageView;
+
+@property (nonatomic , strong) XHHShareView              *shareView;
+
+@property (nonatomic , strong) XHHMovePointView *USDTView;
+@property (nonatomic , strong) UIView           *USDTBgView;
+
+@property (nonatomic , strong) XHHMovePointView *CANDYView;
+@property (nonatomic , strong) UIView           *CANDYBgView;
+
+@property (nonatomic , strong) XHHMovePointView *MHTView;
+
+@property (nonatomic , strong) XHHMovePointView *ADOneView;//广告1
+
+@property (nonatomic , strong) XHHMovePointView *ADTwoView;//广告2
+
+@property (nonatomic , strong) XHHMovePointView *MView;//M币
+@property (nonatomic , strong) UIView           *MBg1View;
+@property (nonatomic , strong) UIView           *MBg2View;
+
+@property (nonatomic , strong) XHHMiningHomeModel *usdtModel;
+@property (nonatomic , strong) XHHMiningHomeModel *mhxtModel;
+@end
+
+#define XHHWidthProportion ChZ_WIDTH/320.0
+#define XHHHeightProportion ChZ_HEIGHT/568.0
+
+@implementation XHHMiningHeadView
+
+-(void)awakeFromNib{
+    [super awakeFromNib];
+    
+    [self addSubview:self.sdScrollView];
+    [self.sdScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.top.equalTo(self.bgImageView.mas_bottom);
+        make.height.mas_equalTo(ChZ_WIDTH*100/ChZ_WIDTH);
+    }];
+//    [self showCANDYStarView];
+//    [self showMHTStarView];
+//    [self showUSDTStarView];
+//    [self showAdStarView];
+//    [self showMStarView];
+}
+- (IBAction)miningAreaAction:(id)sender {
+    if (self.miningAreaBlock)
+    {
+        self.miningAreaBlock();
+    }
+}
+-(void)setWorkNumber:(NSString *)workNumber
+{
+    _workNumber = workNumber;
+    self.workNumberLable.text = workNumber;
+}
+-(void)setDataArray:(NSArray *)dataArray
+{
+    _dataArray = dataArray;
+    for (XHHMiningHomeModel *model in dataArray)
+    {
+        [self handleModel:model];
+    }
+    [self setBgImageShow];
+}
+-(void)setBgImageShow
+{
+    NSInteger usdtStaus = [self.usdtModel.status integerValue];
+    CGFloat usdtNum = [self.usdtModel.num floatValue];
+    NSInteger mhtxStaus = [self.mhxtModel.status integerValue];
+    CGFloat mhtxNum = [self.mhxtModel.num floatValue];
+
+    if (usdtStaus == 0)
+    {
+        self.bgImageView.image = [UIImage imageNamed:@"image_mine_header_bg_6"];
+    }else
+    {
+        if (usdtStaus == 1)
+        {
+            if (usdtNum == 0)
+            {
+                self.bgImageView.image = [UIImage imageNamed:@"image_mine_header_bg_3"];
+            }else
+            {
+                self.bgImageView.image = [UIImage imageNamed:@"image_mine_header_bg_4"];
+            }
+        }
+    }
+    
+}
+-(void)handleModel:(XHHMiningHomeModel *)model{
+    if ([model.shortname isEqualToString:@"candyx"])//Candy-x矿池
+    {
+        if ([model.status integerValue] == 1 && [model.num floatValue] > 0)
+        {
+            [self showCANDYStarView];
+        }else
+        {
+            [self remoCANDYStarView];
+        }
+        self.CANDYView.model = model;
+    }else if ([model.shortname isEqualToString:@"mhtx"])//MHT-X矿池
+    {
+        self.mhxtModel = model;
+        if ([model.status integerValue] == 1 && [model.num floatValue] > 0)
+        {
+            [self showMHTStarView];
+        }else
+        {
+            [self removeMHTView];
+        }
+        self.MHTView.model = model;
+    }else if ([model.shortname isEqualToString:@"usdt"])//USDT矿区
+    {
+        self.usdtModel = model;
+        if ([model.status integerValue] == 1 && [model.num floatValue] > 0)
+        {
+            [self showUSDTStarView];
+        }else
+        {
+            [self remoUSDTStarView];
+        }
+        self.usdtModel = model;
+    }else if ([model.shortname isEqualToString:@"ad"])//广告矿区
+    {
+        if ([model.status integerValue] == 1 && [model.num floatValue] > 0)
+        {
+            [self showAdStarView];
+        }else
+        {
+            [self removeAdStarView];
+        }
+        self.ADOneView.model = model;
+    }else if ([model.shortname isEqualToString:@"m"])//M币
+    {
+        if ([model.status integerValue] == 1 && [model.num floatValue] > 0)
+        {
+            [self showMStarView];
+        }else
+        {
+            [self removeMStarView];
+        }
+        self.MView.model = model;
+    }else if ([model.shortname isEqualToString:@"ipo"])//IPO矿池
+    {
+        
+    }
+}
+-(void)showUSDTStarView{
+    [self addSubview:self.USDTView];
+    [self addSubview:self.USDTBgView];
+}
+-(void)showCANDYStarView{
+    [self addSubview:self.CANDYView];
+    [self addSubview:self.CANDYBgView];
+}
+-(void)showMHTStarView{
+    [self addSubview:self.MHTView];
+}
+-(void)showMStarView{
+    [self addSubview:self.MBg1View];
+    [self addSubview:self.MBg2View];
+    [self addSubview:self.MView];
+}
+-(void)showAdStarView{
+    [self addSubview:self.ADOneView];
+    [self addSubview:self.ADTwoView];
+}
+-(void)removeMStarView{
+    [self.MView removeFromSuperview];
+    [self.MBg1View removeFromSuperview];
+    [self.MBg2View removeFromSuperview];
+}
+-(void)removeAdStarView{
+    [self.ADOneView removeFromSuperview];
+    [self.ADTwoView removeFromSuperview];
+}
+-(void)remoUSDTStarView{
+    [self.USDTView removeFromSuperview];
+    [self.USDTBgView removeFromSuperview];
+}
+-(void)remoCANDYStarView{
+    [self.CANDYView removeFromSuperview];
+    [self.CANDYBgView removeFromSuperview];
+}
+-(void)removeMHTView{
+    [self.MHTView removeFromSuperview];
+}
+-(XHHMovePointView *)USDTView{
+    if (!_USDTView) {
+        CGFloat yellowY = ChZ_IsiPhoneX ? 44 : 0;
+        _USDTView = [[XHHMovePointView alloc] initWithFrame:CGRectMake(96*XHHWidthProportion, 107*XHHHeightProportion - yellowY, 43*XHHWidthProportion, 60*XHHHeightProportion)];
+        [_USDTView lightColor:[UIColor colorWithHexString:@"fff30f"]];
+        [_USDTView moddleImage:[UIImage imageNamed:@"mining_trad_yellowTT"]];
+    }
+    return _USDTView;
+}
+-(UIView *)USDTBgView{
+    if (!_USDTBgView) {
+        CGFloat yellowY = ChZ_IsiPhoneX ? 44 : 0;
+        _USDTBgView = [[UIView alloc] init];
+        _USDTBgView.frame = CGRectMake(106*XHHWidthProportion, 107*XHHHeightProportion - yellowY + 60*XHHHeightProportion,33*XHHWidthProportion, 3*XHHHeightProportion);
+        _USDTBgView.backgroundColor = [UIColor colorWithHexString:@"fff30f"];
+        _USDTBgView.alpha = 0.4;
+    }
+    return _USDTBgView;
+}
+-(XHHMovePointView *)CANDYView{
+    if (!_CANDYView) {
+        CGFloat redY = ChZ_IsiPhoneX ? 0 : 1;
+        _CANDYView = [[XHHMovePointView alloc] initWithFrame:CGRectMake(275*XHHWidthProportion, 12*redY*XHHHeightProportion, 36*XHHWidthProportion, 60*XHHHeightProportion)];
+        [_CANDYView lightColor:[UIColor colorWithHexString:@"C674B0"]];
+        [_CANDYView moddleImage:[UIImage imageNamed:@"mining_trad_redTT"]];
+    }
+    return _CANDYView;
+}
+-(UIView *)CANDYBgView{
+    if (!_CANDYBgView) {
+        CGFloat redY = ChZ_IsiPhoneX ? 0 : 1;
+        _CANDYBgView = [[UIView alloc] init];
+        _CANDYBgView.frame = CGRectMake(285*XHHWidthProportion, 12*redY*XHHHeightProportion + 60*XHHHeightProportion,26*XHHWidthProportion, 3*XHHHeightProportion);
+        [_CANDYBgView setGradientBackgroundWithColors:@[[UIColor colorWithHexString:@"ff89e0"],[UIColor clearColor]] locations:nil startPoint:CGPointMake(0, 0) endPoint:CGPointMake(1, 0)];
+        _CANDYBgView.backgroundColor = [UIColor colorWithHexString:@"ff89e0"];
+       _CANDYBgView.alpha = 0.4;
+    }
+    return _CANDYBgView;
+}
+-(XHHMovePointView *)MHTView{
+    if (!_MHTView) {
+        CGFloat redY = ChZ_IsiPhoneX ? -3.1 : 1;
+        _MHTView = [[XHHMovePointView alloc] initWithFrame:CGRectMake(113*XHHWidthProportion, 12*redY*XHHHeightProportion + 200*XHHHeightProportion, 33*XHHWidthProportion, 60*XHHHeightProportion)];
+        [_MHTView lightColor:[UIColor colorWithHexString:@"FF84DF"]];
+        [_MHTView moddleImage:[UIImage imageNamed:@"mining_trad_redTT"]];
+    }
+    return _MHTView;
+}
+-(XHHMovePointView *)ADOneView{
+    if (!_ADOneView) {
+        CGFloat iphoneHeight = ChZ_IsiPhoneX ? 34 : 0;
+        _ADOneView = [[XHHMovePointView alloc] initWithFrame:CGRectMake(146*XHHWidthProportion, 74*XHHHeightProportion - iphoneHeight, 36*XHHWidthProportion, 60*XHHHeightProportion)];
+        [_ADOneView lightColor:[UIColor colorWithHexString:@"1eddfe"]];
+        [_ADOneView moddleImage:[UIImage imageNamed:@"mining_trad_blueTT"]];
+    }
+    return _ADOneView;
+}
+- (XHHMovePointView *)ADTwoView{
+    if (!_ADTwoView) {
+        CGFloat iphoneHeight = ChZ_IsiPhoneX ? 42 : 0;
+        _ADTwoView =[[XHHMovePointView alloc] initWithFrame:CGRectMake(241*XHHWidthProportion, 100*XHHHeightProportion - iphoneHeight, 42*XHHWidthProportion, 60*XHHHeightProportion)];
+        [_ADTwoView lightColor:[UIColor colorWithHexString:@"1eddfe"]];
+        [_ADTwoView moddleImage:[UIImage imageNamed:@"mining_trad_blueTT"]];
+    }
+    return _ADTwoView;
+}
+-(XHHMovePointView *)MView{
+    if (!_MView) {
+        CGFloat goldViewY = ChZ_IsiPhoneX ? 54 : 0;
+        _MView = [[XHHMovePointView alloc] initWithFrame:CGRectMake(225*XHHWidthProportion, 168*XHHHeightProportion - goldViewY, 12*XHHWidthProportion, 40*XHHHeightProportion)];
+        [_MView lightColor:[UIColor colorWithHexString:@"1eddfe"]];
+        [_MView moddleImage:[UIImage imageNamed:@"mining_home_gold_cyn"]];
+        [_MView topImage:[UIImage imageNamed:@"mining_home_gold_cyn2"]];
+    }
+    return _MView;
+}
+-(UIView *)MBg1View{
+    if (!_MBg1View) {
+        CGFloat goldViewY = ChZ_IsiPhoneX ? 54 : 0;
+        CGFloat v2X = ChZ_IsiPhoneX ?217 :218;
+        _MBg1View = [[UIView alloc] init];
+        _MBg1View.frame = CGRectMake(v2X*XHHWidthProportion, 170*XHHHeightProportion - goldViewY, 12*XHHWidthProportion, 40*XHHHeightProportion);
+        _MBg1View.transform = CGAffineTransformMakeRotation(- M_PI * 0.1);
+        [_MBg1View setGradientBackgroundWithColors:@[[UIColor colorWithHexString:@"1eddfe"],[UIColor clearColor]] locations:nil startPoint:CGPointMake(0, 1) endPoint:CGPointMake(0, 0)];
+        _MBg1View.alpha = 0.5;
+    }
+    return _MBg1View;
+}
+-(UIView *)MBg2View{
+    if (!_MBg2View) {
+        CGFloat goldViewY = ChZ_IsiPhoneX ? 54 : 0;
+        CGFloat v3X = ChZ_IsiPhoneX ?233 :231;
+        _MBg2View = [[UIView alloc] init];
+        _MBg2View.frame = CGRectMake(v3X*XHHWidthProportion, 170*XHHHeightProportion - goldViewY, 12*XHHWidthProportion, 40*XHHHeightProportion);
+        _MBg2View.transform = CGAffineTransformMakeRotation( M_PI * 0.1);
+        [_MBg2View setGradientBackgroundWithColors:@[[UIColor colorWithHexString:@"1eddfe"],[UIColor clearColor]] locations:nil startPoint:CGPointMake(0, 1) endPoint:CGPointMake(0, 0)];
+        _MBg2View.alpha = 0.5;
+    }
+    return _MBg2View;
+}
+
+
+-(SDCycleScrollView *)sdScrollView{
+    if (!_sdScrollView) {
+        _sdScrollView = [[SDCycleScrollView alloc] init];
+        _sdScrollView.delegate = self;
+        _sdScrollView.localizationImageNamesGroup = @[@"mining_home_demoBanner",];
+        _sdScrollView.pageDotColor = [UIColor colorWithHexString:@"FFFFFF"];
+        _sdScrollView.currentPageDotColor = [UIColor colorWithHexString:@"2395FF"];
+        _sdScrollView.backgroundColor = [UIColor whiteColor];
+        _sdScrollView.autoScrollTimeInterval = 5;
+    }
+    return _sdScrollView;
+}
+- (IBAction)taskAction:(id)sender {
+    XHHForseTaskController *vc = [[XHHForseTaskController alloc] init];
+    [self.viewController.navigationController pushViewController:vc animated:YES];
+}
+- (IBAction)shareAction:(id)sender {
+    [self.shareView showInView:self.viewController.view.window];
+}
+
+-(XHHShareView *)shareView{
+    if (!_shareView) {
+        _shareView = [[[NSBundle mainBundle] loadNibNamed:@"XHHShareView" owner:nil options:nil] lastObject];
+    }
+    return _shareView;
+}
+
+@end

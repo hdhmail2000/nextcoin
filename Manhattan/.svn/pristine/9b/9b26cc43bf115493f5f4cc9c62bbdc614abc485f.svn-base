@@ -1,0 +1,48 @@
+//
+//  XHHPayRedordCell.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/17.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHPayRedordCell.h"
+
+@interface XHHPayRedordCell ()
+
+@property (weak, nonatomic) IBOutlet UIImageView *img;
+
+@property (weak, nonatomic) IBOutlet UILabel *title;
+
+@property (weak, nonatomic) IBOutlet UILabel *detail;
+
+@property (weak, nonatomic) IBOutlet UILabel *time;
+
+@property (weak, nonatomic) IBOutlet UILabel *money;
+
+@property (weak, nonatomic) IBOutlet UILabel *type;
+
+@end
+
+
+@implementation XHHPayRedordCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    self.backgroundColor = [UIColor clearColor];
+    
+    //转入moneycolor  4EE2FE  image：
+    //转出moneycolor  FF67D2  image：
+    
+    
+    
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

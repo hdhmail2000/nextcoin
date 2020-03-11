@@ -1,0 +1,363 @@
+//
+//  XHHKLineController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/20.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHKLineController.h"
+
+#import "XHHPublicNavView.h"
+
+#import "ZXAssemblyView.h"
+
+#import "XHHPublicItemsView.h"
+
+@interface XHHKLineController ()<AssemblyViewDelegate,ZXSocketDataReformerDelegate,XHHPublicItemsViewProtocol>
+/**
+ *k线实例对象
+ */
+@property (nonatomic,strong) ZXAssemblyView *assenblyView;
+/**
+ *横竖屏方向
+ */
+@property (nonatomic,assign) UIInterfaceOrientation orientation;
+/**
+ *当前绘制的指标名
+ */
+@property (nonatomic,strong) NSString *currentDrawQuotaName;
+/**
+ *所有的指标名数组
+ */
+@property (nonatomic,strong) NSArray *quotaNameArr;
+
+/**
+ *所有数据模型
+ */
+@property (nonatomic,strong) NSMutableArray *dataArray;
+
+/**
+ *
+ */
+@property (nonatomic,assign) ZXTopChartType topChartType;
+
+@property (nonatomic,strong) NSTimer  *timer;
+
+@property (strong, nonatomic) UISegmentedControl          *segmentControl;
+
+@property (nonatomic , strong) XHHPublicItemsView *itemsView;
+
+//时间
+@property (nonatomic, assign) double  requestDate;
+
+@property (nonatomic , strong) XHHPublicNavView           *navView;
+
+@end
+
+@implementation XHHKLineController
+
+-(void)viewWillDisappear:(BOOL)animated{
+    if([[UIDevice currentDevice]respondsToSelector:@selector(setOrientation:)]) {
+        
+        SEL selector = NSSelectorFromString(@"setOrientation:");
+        
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        int val = UIDeviceOrientationPortrait;//竖屏
+        [invocation setArgument:&val atIndex:2];
+        [invocation invoke];
+    }
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    if([[UIDevice currentDevice]respondsToSelector:@selector(setOrientation:)]) {
+        
+        SEL selector = NSSelectorFromString(@"setOrientation:");
+        
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+        [invocation setSelector:selector];
+        [invocation setTarget:[UIDevice currentDevice]];
+        int val = UIInterfaceOrientationLandscapeRight;//横屏
+        [invocation setArgument:&val atIndex:2];
+        [invocation invoke];
+    }
+    //监测旋转:用于适配横竖屏
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(statusBarOrientationChange:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+    
+    self.requestDate = 60;
+    
+    [self zh_setupUI];
+    
+    self.topChartType = ZXTopChartTypeCandle;
+    
+    self.currentDrawQuotaName = self.quotaNameArr[0];
+    
+    [self configureData];
+}
+-(void)zh_setupUI{
+    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+    [self.view addSubview:self.navView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.right.equalTo(self.view);
+        make.left.equalTo(self.view).offset(navHeight);
+        make.height.mas_equalTo(64);
+    }];
+    
+    [self.view addSubview:self.itemsView];
+    [self.itemsView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view).offset(navHeight);
+        make.width.mas_equalTo(ChZ_WIDTH);
+        make.top.equalTo(self.navView.mas_bottom);
+        make.height.mas_equalTo(47);
+    }];
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] init];
+    scrollView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:scrollView];
+    [scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.bottom.equalTo(self.view);
+        make.left.equalTo(self.view).offset(navHeight);
+        make.top.equalTo(self.itemsView.mas_bottom);
+    }];
+    
+    [scrollView addSubview:self.assenblyView];
+    [self.assenblyView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(scrollView);
+        make.left.equalTo(scrollView);
+        make.width.mas_equalTo(TotalWidth);
+        make.height.mas_equalTo(TotalHeight);
+    }];
+    scrollView.contentSize = CGSizeMake(TotalWidth, TotalHeight);
+}
+-(XHHPublicNavView *)navView{
+    if (!_navView) {
+        _navView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPublicNavView" owner:nil options:nil] lastObject];
+        [_navView setLeftButtonTitle:@"BTC" image:@"public_nav_leftBack"];
+    }
+    return _navView;
+}
+-(XHHPublicItemsView *)itemsView{
+    if (!_itemsView) {
+        _itemsView = [[XHHPublicItemsView alloc] init];
+        [_itemsView zh_setupUIWithItems:@[@"1分",@"5分",@"15分",@"30分",@"1小时",@"1天",@"1周",@"1月",]];
+        _itemsView.delegate = self;
+    }
+    return _itemsView;
+}
+-(void)itemsClickIndex:(NSInteger)index{
+    
+    switch (index) {
+        case 0:
+            self.requestDate = 60;
+            break;
+        case 1:
+            self.requestDate = 60 * 5;
+            break;
+        case 2:
+            self.requestDate = 60 * 15;
+            break;
+        case 3:
+            self.requestDate = 60 * 30;
+            break;
+        case 4:
+            self.requestDate = 60 * 60;
+            break;
+        case 5:
+            self.requestDate = 60 * 60 * 24;
+            break;
+        case 6:
+            self.requestDate = 60 * 60 * 24 * 7;
+            break;
+        case 7:
+            self.requestDate = 60 * 60 * 24 * 30;
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self configureData];
+}
+- (void)configureData
+{
+    @weakify(self);
+    [ChZHomeRequest requestKLineData:self.symblId date:self.requestDate SuccessBlock:^(id dataSource)
+     {
+         @strongify(self);
+         dispatch_main_async_safe(^{
+             [self reloadKlineWithArray:dataSource];
+         });
+     } errorBlock:^(int code, NSString *error)
+     {
+         NSLog(@"%@",error);
+     }];
+    
+}
+
+-(void)reloadKlineWithArray:(NSArray *)array{
+    NSMutableArray *tempArray = [NSMutableArray array];
+    for (int i = 0; i<array.count
+         ; i++) {
+        NSArray *arr = array[i];
+        if (arr && arr.count > 0) {
+            [tempArray addObject:[NSString stringWithFormat:@"%@,%@,%@,%@,%@,%@",arr[0],arr[1],arr[2],arr[3],arr[4],arr[5]]];
+        }
+    }
+    NSArray *transformedDataArray =  [[ZXDataReformer sharedInstance] transformDataWithOriginalDataArray:tempArray currentRequestType:@"M1"];
+    [self.dataArray addObjectsFromArray:transformedDataArray];
+    //====绘制k线图
+    [self.assenblyView drawHistoryCandleWithDataArr:self.dataArray precision:2 stackName:@"股票名" needDrawQuota:self.currentDrawQuotaName];
+    [ZXSocketDataReformer sharedInstance].delegate = self;
+    
+}
+#pragma mark - 屏幕旋转通知事件
+- (void)statusBarOrientationChange:(NSNotification *)notification
+{
+    self.view.superview.backgroundColor = bgColor;
+    [self.assenblyView removeFromSuperview];
+    [self popToVCClassName:@"XHHMyDealController"];
+}
+#pragma mark -  计算精度
+- (NSInteger)calculatePrecisionWithOriginalDataArray:(NSArray *)dataArray
+{
+    NSString *dataString = dataArray.lastObject;
+    NSArray *strArr = [dataString componentsSeparatedByString:@","];
+    //取的最高值
+    NSInteger maxPrecision = [self calculatePrecisionWithPrice:strArr[3]];
+    return maxPrecision;
+}
+- (NSInteger)calculatePrecisionWithPrice:(NSString *)price
+{
+    //计算精度
+    NSInteger dig = 0;
+    if ([price containsString:@"."]) {
+        NSArray *com = [price componentsSeparatedByString:@"."];
+        dig = ((NSString *)com.lastObject).length;
+    }
+    return dig;
+}
+#pragma mark - AssemblyViewDelegate
+- (void)tapActionActOnQuotaArea
+{
+    if (self.topChartType==ZXTopChartTypeTimeLine) {
+        return;
+    }
+    //这里可以进行quota图的切换
+    NSInteger index = [self.quotaNameArr indexOfObject:self.currentDrawQuotaName];
+    if (index<self.quotaNameArr.count-1) {
+        
+        self.currentDrawQuotaName = self.quotaNameArr[index+1];
+    }else{
+        self.currentDrawQuotaName = self.quotaNameArr[0];
+    }
+    [self drawQuotaWithCurrentDrawQuotaName:self.currentDrawQuotaName];
+}
+
+- (void)tapActionActOnCandleArea
+{
+    
+}
+#pragma mark - 画指标
+//在返回的数据里面。可以调用预置的指标接口绘制指标，也可以根据返回的数据自己计算数据，然后调用绘制接口进行绘制
+- (void)drawQuotaWithCurrentDrawQuotaName:(NSString *)currentDrawQuotaName
+{
+    
+    if ([currentDrawQuotaName isEqualToString:self.quotaNameArr[0]])
+    {
+        //macd绘制
+        [self.assenblyView drawPresetQuotaWithQuotaName:PresetQuotaNameWithMACD];
+    }else if ([currentDrawQuotaName isEqualToString:self.quotaNameArr[1]])
+    {
+        
+        //KDJ绘制
+        [self.assenblyView drawPresetQuotaWithQuotaName:PresetQuotaNameWithKDJ];
+    }else if ([currentDrawQuotaName isEqualToString:self.quotaNameArr[2]])
+    {
+        
+        //BOLL绘制
+        [self.assenblyView drawPresetQuotaWithQuotaName:PresetQuotaNameWithBOLL];
+    }else if ([currentDrawQuotaName isEqualToString:self.quotaNameArr[3]])
+    {
+        
+        //RSI绘制
+        [self.assenblyView drawPresetQuotaWithQuotaName:PresetQuotaNameWithRSI];
+    }else if ([currentDrawQuotaName isEqualToString:self.quotaNameArr[4]])
+    {
+        
+        //Vol绘制
+        [self.assenblyView drawPresetQuotaWithQuotaName:PresetQuotaNameWithVOL];
+    }
+    
+}
+#pragma mark - ZXSocketDataReformerDelegate
+- (void)bulidSuccessWithNewKlineModel:(KlineModel *)newKlineModel
+{
+    //维护控制器数据源
+    if (newKlineModel.isNew) {
+        
+        [self.dataArray addObject:newKlineModel];
+        [[ZXQuotaDataReformer sharedInstance] handleQuotaDataWithDataArr:self.dataArray model:newKlineModel index:self.dataArray.count-1];
+        [self.dataArray replaceObjectAtIndex:self.dataArray.count-1 withObject:newKlineModel];
+        
+    }else{
+        [self.dataArray replaceObjectAtIndex:self.dataArray.count-1 withObject:newKlineModel];
+        
+        [[ZXQuotaDataReformer alloc] handleQuotaDataWithDataArr:self.dataArray model:newKlineModel index:self.dataArray.count-1];
+        
+        [self.dataArray replaceObjectAtIndex:self.dataArray.count-1 withObject:newKlineModel];
+    }
+    //绘制最后一个蜡烛
+    [self.assenblyView drawLastKlineWithNewKlineModel:newKlineModel];
+}
+#pragma mark - Getters & Setters
+- (ZXAssemblyView *)assenblyView
+{
+    if (!_assenblyView) {
+        //仅仅只有k线的初始化方法
+        //        _assenblyView = [[ZXAssemblyView alloc] initWithDrawJustKline:YES];
+        //带指标的初始化
+        _assenblyView = [[ZXAssemblyView alloc] init];
+        _assenblyView.backgroundColor = bgColor;
+        _assenblyView.delegate = self;
+    }
+    return _assenblyView;
+}
+- (UIInterfaceOrientation)orientation
+{
+    return [[UIApplication sharedApplication] statusBarOrientation];
+}
+- (NSArray *)quotaNameArr
+{
+    if (!_quotaNameArr) {
+        _quotaNameArr = @[@"MACD",@"KDJ",@"BOLL",@"RSI",@"VOL"];
+    }
+    return _quotaNameArr;
+}
+- (NSMutableArray *)dataArray
+{
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

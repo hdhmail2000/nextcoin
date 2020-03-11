@@ -1,0 +1,255 @@
+													<input type="hidden" id="userBankId" value="0">
+													<form action="post" class="financial-form" id="tx_form">
+	                                                    <div class="col-xs-12 account-form-item">
+	                                                        <p class="col-xs-12 account-form-text">{$finance.withdraw_cnyaddress}
+	                                                            <a href="/index.php?s=exc&c=financeController&m=addCode&symbol={$data.symbol}" class="text-right">+{$finance.withdraw_new}</a>
+	                                                        </p>
+	                                                        <div class="col-xs-12 account-form-select">
+	                                                            <div class="menu">
+	                                                                <select id="withdrawBlank" class="clearfix menu-text" style="width: 100%;">
+	                                                                		{loop $data.fbankinfoWithdraw $addressItem)}
+	                                                                		 	<option  data-fid="{$addressItem['fid']}" data-banknumber="{$addressItem['fbanknumber']}" data-bankinfo="{$addressItem['fbanktype']}" value="{$addressItem['fid']}" >{$addressItem['fname']} 尾号{substr($addressItem['fbanknumber'],-6)}</option>
+                                                       					{/loop}
+	                                                                </select>
+	                                                            </div>
+	                                                        </div>
+	                                                    </div>
+	                                                    <div class="col-xs-6 account-form-item account-form-left">
+	                                                        <p>{$finance.withdraw_number}</p>
+	                                                        <input type="text" id="withdrawBalance" value="" />
+	                                                    </div>
+	                                                    <div class="col-xs-6 account-form-item account-form-right">
+	                                                        <p>{$finance.withdraw_smsCode}</p>
+	                                                        <input type="text" id="withdrawPhoneCode"  />
+	                                                        <span id="send-msg" class="send-msg msg-button-inline" style="position: absolute;right:10px; top: 39px;cursor: pointer;">{$finance.withdraw_getSms}</span>
+	                                                    </div>
+	                                                    <div class="col-xs-6 account-form-item account-form-left">
+	                                                        <p>{$finance.account_tradPassword}</p>
+	                                                        <input type="password"  id="tradePwd" value="" />
+	                                                    </div>
+	                                                    <div class="col-xs-6 account-form-item account-form-right">
+	                                                        <p>{$finance.account_googleCode}</p>
+	                                                        <input type="text" id="withdrawTotpCode" value="" />
+	                                                    </div>
+	                                                    <div class="col-xs-12 account-form-footer">
+	                                                        <div class="text-left account-form-num">
+	                                                            <p>{$finance.withdraw_fees}： <span id="free">0.0000USDT</span></p>
+	                                                            <p>{$finance.withdraw_trueget}：<span id="amount">0.0000USDT</span></p>
+	                                                        </div>
+	                                                        <div class="text-right account-form-btn">
+	                                                            <button type="button" id="withdrawCnyButton" class="account-form-btn">{$finance.withdraw_submit}</button>
+	                                                        </div>
+	                                                    </div>
+	                                                    <div class="col-xs-12 account-form-hint">
+	                                                        <p>1、{$finance.withdraw_cnyNotice1}</p>
+							                                <!--<p>2、{$finance.withdraw-cnyNotice2}</p>-->
+							                                <p>2、{$finance.withdraw_cnyNotice3}</p>
+							                                <p style="color:red">3、{$finance.withdraw_cnyNotice4}</p>
+	                                                    </div>
+                                                    </form>
+        <input id="feesRate" type="hidden" value="{$data.withdrawSetting['withdrawFee']}">
+        <input type="hidden" id="max_double" value="{$data.withdrawSetting['withdrawMax']}">
+        <input type="hidden" id="min_double" value="{$data.withdrawSetting['withdrawMin']}">
+        <input type="hidden" id="symbol" value="{$data.symbol}">
+        <input type="hidden" id="city-data" value="/statics/exc/dota/js/finance/city.min.js">
+        	
+        	<script type="text/javascript">
+        		$('#send-msg').click(function(){
+		        var obj = this;
+		        var url = "/index.php?s=exc&c=financeController&m=smsBank";
+		        var param = {
+		
+		        };
+		        var callback = function(data) {
+		            if( data.code ==200){
+		                util.counter(obj,120,'重新发送');
+		               util.layerAlert('','发送成功',1,function(){})
+		            } else{
+		                util.layerAlert('',data.msg,2,function(){})
+		            }
+		        };
+		        util.network({url : url,
+		            param : param,
+		            success : callback});
+		    });
+		    
+//		    $("#withdrawCnyButton").on("click", function() {
+//      			
+//	            var selectOptaion = $("#withdrawBlank").find("option:selected").data();
+//	            if(selectOptaion.bankmodify === 1 || selectOptaion.bankmodify === "1"){
+//	                withdraw.cny.modifyCnyAddressModifyInfo(selectOptaion);
+//	                return false;
+//	            }
+//	            var withdrawBlank = $("#withdrawBlank").val();
+//	            var balance = util.trim($("#withdrawBalance").val());
+//	            var tradePwd = util.trim($("#tradePwd").val());
+//	            var symbol = $("#symbol").val();
+//	            var totpCode = 0;
+//	            var phoneCode = 0;
+//	            var min = $("#min_double").val();
+//	            var max = $("#max_double").val();
+//	            var reg = new RegExp("^[0-9]+\.{0,1}[0-9]{0,8}$");
+//	            if (!reg.test(balance)) {
+//	                layer.msg(util.getLan("finance.tips.25"));
+//	                return;
+//	            }
+//	            if (parseFloat(balance) < parseFloat(min) && parseFloat(min) != 0) {
+//	                layer.msg(util.getLan("finance.tips.30", min));
+//	                return;
+//	            }
+//	            if (parseFloat(balance) > parseFloat(max) && parseFloat(max) != 0) {
+//	                layer.msg(util.getLan("finance.tips.31", max));
+//	                return;
+//	            }
+//	            if (tradePwd == "" || tradePwd.length > 200) {
+//	                layer.msg(util.getLan("comm.tips.8"));
+//	                return;
+//	            }
+//	            if ($("#withdrawTotpCode").length > 0) {
+//	                totpCode = util.trim($("#withdrawTotpCode").val());
+//	                if (!/^[0-9]{6}$/.test(totpCode)) {
+//	                    layer.msg(util.getLan("comm.tips.2"));
+//	                    return;
+//	                }
+//	            }
+//	            if ($("#withdrawPhoneCode").length > 0) {
+//	                phoneCode = util.trim($("#withdrawPhoneCode").val());
+//	                if (!/^[0-9]{6}$/.test(phoneCode)) {
+//	                    layer.msg(util.getLan("comm.tips.3"));
+//	                    return;
+//	                }
+//	            }
+//	            if (totpCode == 0 && phoneCode == 0) {
+//	                layer.msg(util.getLan("comm.tips.1"));
+//	                return;
+//	            }
+//	            util.hideerrortips("withdrawerrortips");
+//	            var url = "/withdraw/cny_manual.html";
+//	            var param = {
+//	                tradePwd : tradePwd,
+//	                withdrawBalance : balance,
+//	                phoneCode : phoneCode,
+//	                totpCode : totpCode,
+//	                withdrawBlank : withdrawBlank,
+//	                symbol : symbol
+//	            };
+//	            var callback = function(result) {
+//	                if (result.code == 200) {
+//	                    util.layerAlert("", util.getLan("finance.tips.28"), 1);
+//	                } else {
+//	                    layer.msg(result.msg);
+//	                }
+//	            };
+//	            util.network({
+//	                             btn : ele,
+//	                             url : url,
+//	                             param : param,
+//	                             success : callback,
+//	                         });
+//      
+//		    });
+
+			var withdraw = {
+			    cny : {
+			        saveCnyWithdraw : function(ele) {
+			            var selectOptaion = $("#withdrawBlank").find("option:selected").data();
+			            if(selectOptaion.bankmodify === 1 || selectOptaion.bankmodify === "1"){
+			                withdraw.cny.modifyCnyAddressModifyInfo(selectOptaion);
+			                return false;
+			            }
+			            var withdrawBlank = $("#withdrawBlank").val();
+			            var balance = util.trim($("#withdrawBalance").val());
+			            var tradePwd = util.trim($("#tradePwd").val());
+			            var symbol = $("#symbol").val();
+			            var totpCode = 0;
+			            var phoneCode = 0;
+			            var min = $("#min_double").val();
+			            var max = $("#max_double").val();
+			            var reg = new RegExp("^[0-9]+\.{0,1}[0-9]{0,8}$");
+			            if (!reg.test(balance)) {
+			                layer.msg(util.getLan("finance.tips.25"));
+			                return;
+			            }
+			            if (parseFloat(balance) < parseFloat(min) && parseFloat(min) != 0) {
+			                layer.msg(util.getLan("finance.tips.30", min));
+			                return;
+			            }
+			            if (parseFloat(balance) > parseFloat(max) && parseFloat(max) != 0) {
+			                layer.msg(util.getLan("finance.tips.31", max));
+			                return;
+			            }
+			            if (tradePwd == "" || tradePwd.length > 200) {
+			                layer.msg(util.getLan("comm.tips.8"));
+			                return;
+			            }
+			            if ($("#withdrawTotpCode").length > 0) {
+			                totpCode = util.trim($("#withdrawTotpCode").val());
+			                if (!/^[0-9]{6}$/.test(totpCode)) {
+			                    layer.msg(util.getLan("comm.tips.2"));
+			                    return;
+			                }
+			            }
+			            if ($("#withdrawPhoneCode").length > 0) {
+			                phoneCode = util.trim($("#withdrawPhoneCode").val());
+			                if (!/^[0-9]{6}$/.test(phoneCode)) {
+			                    layer.msg(util.getLan("comm.tips.3"));
+			                    return;
+			                }
+			            }
+			            if (totpCode == 0 && phoneCode == 0) {
+			                layer.msg(util.getLan("comm.tips.1"));
+			                return;
+			            }
+			            util.hideerrortips("withdrawerrortips");
+			            var url = "/index.php?s=exc&c=financeController&m=cnyWithdraws";
+			            var param = {
+			                tradePwd : tradePwd,
+			                withdrawBalance : balance,
+			                phoneCode : phoneCode,
+			                totpCode : totpCode,
+			                withdrawBlank : withdrawBlank,
+			                symbol : symbol
+			            };
+			            var callback = function(result) {
+			                if (result.code == 200) {
+			                    util.layerAlert("", util.getLan("finance.tips.28"), 1);
+			                } else {
+			                    layer.msg(result.msg);
+			                }
+			            };
+			            util.network({
+			                             btn : ele,
+			                             url : url,
+			                             param : param,
+			                             success : callback,
+			                         });
+			        },
+			    },
+			
+			};
+			
+			$("#withdrawCnyButton").on("click", function(event) {
+		        withdraw.cny.saveCnyWithdraw(this);
+		    });
+
+		    
+		    $("#withdrawBalance").on("keypress", function(event) {
+		        return util.goIngKeypress(this, event, util.ENTER_CNY_SCALE);
+		    }).on("keyup", function() {
+		        var amount = $("#withdrawBalance").val();
+	            var feesRate = $("#feesRate").val();
+	            if (amount == "") {
+	                amount = 0;
+	            }
+	            var feeamt = util.numFormat(util.accMul(amount, feesRate), util.DEF_FEE_SCALE);
+	            $("#free").html(feeamt);
+	            $("#amount").html(util.numFormat(parseFloat(amount) - parseFloat(feeamt), util.ENTER_CNY_SCALE));
+		    });
+		    
+        	</script>
+        	
+        <script src="{HOME_THEME_PATH}exc/js/plugin/jquery.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/finance/account.withdraw.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/finance/jquery.cityselect.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/finance/city.min.js" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }

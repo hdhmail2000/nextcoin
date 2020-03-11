@@ -1,0 +1,47 @@
+//
+//  MiningHomeCell.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/16.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "MiningHomeCell.h"
+@interface MiningHomeCell()
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleHeight;
+@property (weak, nonatomic) IBOutlet UIView *titleView;
+
+@property (weak, nonatomic) IBOutlet UILabel *addLable;
+@property (weak, nonatomic) IBOutlet UILabel *typeLable;
+@property (weak, nonatomic) IBOutlet UILabel *timeLable;
+
+@end
+@implementation MiningHomeCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+-(void)reloadCellWithDic:(NSDictionary *)dic row:(NSInteger)row{
+    
+    if (row == 0) {
+        _titleHeight.constant = 40;
+        _titleView.hidden = NO;
+    }else{
+        _titleHeight.constant = 0;
+        _titleView.hidden = YES;
+    }
+    
+}
+
+@end

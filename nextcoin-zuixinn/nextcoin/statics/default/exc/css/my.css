@@ -1,0 +1,122 @@
+.wrap {
+    background: #fff;
+    min-width: 1200px;
+}
+.basicInfo .right .account {
+    font-size: 18px;
+    color: #666;
+    font-weight: bold;
+    margin: 10px 0;
+}
+.account .lev {
+    font-size: 14px;
+    color: #e8b342;
+    font-weight: normal;
+    margin: 0 4px;
+}
+.levels li h4 {
+    color: #666;
+    font-size: 12px;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+.levels li h4 strong {
+    font-size: 14px;
+    margin-right: 3px;
+}
+.levels li p .iconfont {
+    font-size: 28px;
+    color: #929292;
+    vertical-align: middle;
+}
+.levels li.curlevel p, .levels li.curlevel p .iconfont {
+    color: #e8b342;
+}
+.SecurityCenter>.f-fl, .SecurityCenter>.f-fr {
+    width: 586px;
+}
+.panel .panel-body {
+    padding: 30px 15px;
+}
+.panel {
+    width: 100%;
+    border: 1px solid #e6e6e6;
+    margin-bottom: 15px;
+    background: #fff;
+}
+.SecurityCenter .item {
+    padding: 0 130px 0 54px;
+    position: relative;
+}
+.btn-orange {
+    background: #e8b342!important;
+    border-color: #e8b342!important;
+    color: #fff!important;
+}
+.panel .panel-title {
+    font-size: 14px;
+    color: #454545;
+    padding: 0 15px;
+    height: 36px;
+    line-height: 36px;
+    background: #f4f4f4;
+}
+.itemBox .itemTitle {
+    height: 46px;
+    line-height: 46px;
+    margin-top: 30px;
+    font-size: 16px;
+    position: relative;
+}
+.itemBox .itemTitle a, .itemBox .itemTitle a:visited {
+    font-size: 12px;
+    color: #666;
+    text-decoration: underline;
+    position: absolute;
+    right: 0;
+    top: 42px;
+    line-height: 100%;
+}
+.table {
+    width: 100%;
+    border: 1px solid #e6e6e6;
+}
+.table.table-striped th, .table.table-striped td {
+    padding: 0 10px;
+    height: 29px;
+    line-height: 29px;
+}
+body .table{
+        border: 1px solid #e6e6e6;
+}
+.table th, .table td {
+    padding: 11px 15px;
+    line-height: 100%;
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    border-top: 1px solid #e6e6e6;
+}
+.table th {
+    color: #999;
+    background: #fafafa;
+    border: none;
+}
+.table.table-striped th, .table.table-striped td {
+    padding: 0 10px;
+    height: 29px;
+    line-height: 29px;
+}
+.nodata {
+    text-align: center;
+    margin: 20px;
+}
+.nodata img {
+    width: 60px;
+}
+.nodata p {
+    font-size: 14px;
+    color: #999;
+    margin: 10px 0 0 10px;
+    line-height: 100%;
+}

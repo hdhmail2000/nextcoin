@@ -1,0 +1,174 @@
+//
+//  XHHSalesView.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/26.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHSalesView.h"
+#import "XHHSalesEntrustView.h"
+#import "XHHTradBottomBuyView.h"
+#import "XHHExplicitPriceView.h"
+#import "XHHTrandVolumeView.h"
+
+@interface XHHSalesView()
+
+@property (strong, nonatomic) XHHSalesEntrustView         *entrustView;
+@property (strong, nonatomic) XHHTradBottomBuyView        *bottomBuyView;
+
+@property (strong, nonatomic) UIButton                    *buyyButton;
+
+@property (nonatomic, strong) NSTimer                     *timer;
+@end
+
+@implementation XHHSalesView
+
+-(instancetype)init{
+    self = [super init];
+    if (self) {
+        [self zh_setupUI];
+    }
+    return self;
+}
+
+-(void)zh_setupUI{
+    [self addSubview:self.priceView];
+    [self.priceView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(self);
+        make.height.mas_equalTo(160);
+    }];
+    
+    [self addSubview:self.entrustView];
+    [self.entrustView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.top.equalTo(self.priceView.mas_bottom);
+        make.height.mas_equalTo(322);
+    }];
+    
+    [self addSubview:self.buyyButton];
+    [self.buyyButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.entrustView.mas_bottom).offset(16);
+        make.left.equalTo(self).offset(16);
+        make.right.equalTo(self).offset(-16);
+        make.height.mas_equalTo(44);
+    }];
+    
+    [self addSubview:self.volumeView];
+    [self.volumeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.top.equalTo(self.buyyButton.mas_bottom).offset(16);
+        make.height.mas_equalTo(181);
+    }];
+}
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+-(XHHExplicitPriceView *)priceView{
+    if (!_priceView) {
+        _priceView = [[[NSBundle mainBundle] loadNibNamed:@"XHHExplicitPriceView" owner:nil options:nil] lastObject];
+    }
+    return _priceView;
+}
+-(XHHTradBottomBuyView *)bottomBuyView{
+    if (!_bottomBuyView) {
+        _bottomBuyView = [[[NSBundle mainBundle] loadNibNamed:@"XHHTradBottomBuyView" owner:nil options:nil] lastObject];
+    }
+    return _bottomBuyView;
+}
+
+- (XHHSalesEntrustView *)entrustView{
+    if (!_entrustView) {
+        _entrustView = [[[NSBundle mainBundle] loadNibNamed:@"XHHSalesEntrustView" owner:nil options:nil] lastObject];
+        @weakify(self);
+        _entrustView.buySellBlock = ^(BOOL isSell) {
+            @strongify(self);
+            if (isSell)
+            {
+                [self.buyyButton setTitle:@"卖出" forState:UIControlStateNormal];
+                [self.buyyButton setBackgroundImage:[UIImage imageNamed:@"mining_explicit_sellbg"] forState:UIControlStateNormal];
+            }else
+            {
+                
+                [self.buyyButton setTitle:@"买入" forState:UIControlStateNormal];
+                [self.buyyButton setBackgroundImage:[UIImage imageNamed:@"mining_explicit_buybg"] forState:UIControlStateNormal];
+            }
+        };
+    }
+    return _entrustView;
+}
+-(XHHTrandVolumeView *)volumeView{
+    if (!_volumeView) {
+        _volumeView = [[XHHTrandVolumeView alloc] init];
+    }
+    return _volumeView;
+}
+-(void)setTypeName:(NSString *)typeName{
+    _entrustView.typeLable.text = typeName;
+}
+-(void)setNumberTypeName:(NSString *)numberTypeName{
+    _entrustView.numTypeLable.text = numberTypeName;
+}
+-(void)setProgressValue:(double)progressValue{
+    self.entrustView.progressVlalue = progressValue;
+}
+-(UIButton *)buyyButton{
+    if (!_buyyButton) {
+        _buyyButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_buyyButton setBackgroundImage:[UIImage imageNamed:@"mining_explicit_buybg"] forState:UIControlStateNormal];
+        [_buyyButton setTitle:@"买入" forState:UIControlStateNormal];
+        [_buyyButton setTitleColor:[UIColor colorWithHexString:@"ffffff"] forState:UIControlStateNormal];
+        @weakify(self);
+        [[_buyyButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
+            @strongify(self);
+            BOOL isBuy = [self.buyyButton.titleLabel.text isEqualToString:@"买入"] ? YES : NO;
+            if (self.buySellBlock)
+            {
+                self.buySellBlock(isBuy,self.entrustView.priceTextFeild.text,self.entrustView.muchTextFeild.text);
+            }
+        }];
+    }
+    return _buyyButton;
+}
+
+- (void)_refreshData
+{
+    @weakify(self);
+    [ChZHomeRequest requestDish:self.model.fid successBlock:^(id dataSource)
+     {
+         @strongify(self);
+         self.volumeView.dataDic = dataSource;
+         
+     } errorBlock:^(int code, NSString *error)
+     {
+         ChZ_MBError(error)
+     }];
+    
+}
+- (void)_loadTimer
+{
+    if (self.timer == nil)
+    {
+        self.timer = [NSTimer timerWithTimeInterval:2 target:self selector:@selector(_refreshData) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop]addTimer:self.timer forMode:NSRunLoopCommonModes];
+    }
+}
+- (void)_removeTimer
+{
+    if (_timer && _timer.valid) {
+        [_timer invalidate];
+    }
+    _timer = nil;
+}
+-(void)didMoveToSuperview{
+    [self _removeTimer];
+}
+-(void)reloadInputViews{
+    [self _loadTimer];
+}
+@end

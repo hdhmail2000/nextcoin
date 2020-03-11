@@ -1,0 +1,195 @@
+//
+//  MiningViewController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/14.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "MiningViewController.h"
+#import "XHHMiningHeadView.h"
+#import "MiningHomeCell.h"
+#import "XHHMiningAreaController.h"
+#import "XHHMinHomeListModel.h"
+#import "XHHForseWorkModel.h"
+#import "XHHMiningHomeModel.h"
+static NSString *cellIndifier = @"MiningHomeCell";
+@interface MiningViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (nonatomic , strong) UITableView *tableView;
+
+@property (nonatomic , strong) NSMutableArray *dataArray;
+
+@property (nonatomic , strong) XHHMiningHeadView *headView;
+
+@end
+
+@implementation MiningViewController
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BEGINSCROLLOW" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(clickMiningArea:) name:@"CLICKMINGAREA" object:nil];
+    [self requestHomeData];
+}
+-(void)clickMiningArea:(NSNotification *)noti{
+    NSLog(@"%@--",noti.object);
+    XHHMiningHomeModel *model = noti.object;
+    if (model)
+    {
+        [self requestMingGetId:model.getid];
+    }
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self zh_setupUI];
+    
+    [self.tableView.mj_header beginRefreshing];
+}
+-(void)zh_setupUI{
+    self.noHiddenNav = YES;
+    CGFloat bottomHeight = ChZ_IsiPhoneX ? 34 : 0;
+    [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(0, 0, 50+bottomHeight, 0));
+    }];
+}
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+        [_tableView setTableHeaderView:self.headView];
+        [_tableView setSeparatorColor:[UIColor colorWithHexString:@"4B4B80"]];
+        [_tableView setBackgroundColor:[UIColor clearColor]];
+        [_tableView registerNib:[UINib nibWithNibName:@"MiningHomeCell" bundle:nil] forCellReuseIdentifier:cellIndifier];
+        [self setupRefreshWithView:_tableView refreshHeadAction:@selector(headRefresh) refreshFooterAction:@selector(footRefresh)];
+    }
+    return _tableView;
+}
+-(NSMutableArray *)dataArray{
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+- (void)viewDidLayoutSubviews{
+    self.headView.frame = CGRectMake(0, 0, ChZ_WIDTH, ChZ_WIDTH*(100 + ChZ_WIDTH)/ChZ_WIDTH);
+}
+-(XHHMiningHeadView *)headView{
+    if (!_headView) {
+        _headView = [[[NSBundle mainBundle] loadNibNamed:@"XHHMiningHeadView" owner:nil options:nil] lastObject];
+        @weakify(self);
+        _headView.miningAreaBlock = ^{
+            @strongify(self);
+            XHHMiningAreaController *vc = [[XHHMiningAreaController alloc] init];
+            [self.navigationController pushViewController:vc animated:YES];
+        };
+    }
+    return _headView;
+}
+
+#pragma tableView delegate
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataArray.count;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    MiningHomeCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndifier];
+    [cell reloadCellWithDic:nil row:indexPath.row];
+    if (self.dataArray.count > indexPath.row)
+    {
+        XHHMinHomeListModel *model = self.dataArray[indexPath.row];
+        cell.model = model;
+    }
+    
+    return cell;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 0)
+    {
+        return 90;
+    }else{
+        return 50;
+    }
+}
+-(void)headRefresh{
+    [self requestMineList:YES];
+}
+-(void)footRefresh{
+    [self requestMineList:NO];
+}
+-(void)requestHomeData{
+    @weakify(self);
+    [XHHMiningRequest requestCityHomeSuccess:^(id dataSource)
+    {
+        @strongify(self);
+        self.headView.dataArray = dataSource;
+    } error:^(int code, NSString *error) {
+        ChZ_DebugLog(@"%@",error);
+    }];
+}
+-(void)requestMineList:(BOOL)refresh{
+    NSInteger page = 1;
+    if (refresh == NO)
+    {
+        page = (NSInteger)ceil(self.dataArray.count/10) + 2;
+    }
+    @weakify(self);
+    [XHHMiningRequest requestMinListPage:page success:^(id dataSource)
+    {
+        @strongify(self);
+        if (refresh) [self.dataArray removeAllObjects];
+        if (dataSource) [self.dataArray addObjectsFromArray:dataSource];
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+    } error:^(int code, NSString *error) {
+        @strongify(self);
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+    }];
+    
+    [XHHMiningRequest requestForseTaskSuccess:^(id dataSource)
+     {
+         @strongify(self);
+         XHHForseWorkModel *workModel = dataSource;
+         self.headView.workNumber = workModel.fability;
+     } error:^(int code, NSString *error) {
+         ChZ_DebugLog(@"%@",error);
+     }];
+}
+-(void)requestMingGetId:(NSString *)getId{
+    @weakify(self);
+    [XHHMiningRequest requestMiningInComeGetId:getId success:^(id dataSource)
+     {
+        @strongify(self);
+        ChZ_MBSuccess(@"操作成功");
+        [self requestHomeData];
+    } error:^(int code, NSString *error) {
+        ChZ_DebugLog(@"%@--",error);
+    }];
+}
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"CLICKMINGAREA" object:nil];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

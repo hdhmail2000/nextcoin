@@ -1,0 +1,23 @@
+//
+//  XHHChoosePayTypeController.h
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/23.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "BaseViewController.h"
+@class XHHPayTypeModel;
+@interface XHHChoosePayTypeController : BaseViewController
+
+
+@property (nonatomic , copy) NSString *shopId;
+
+@property (nonatomic , strong) void (^choosePayTypeBlock)(XHHPayTypeModel *model);
+
+@property (nonatomic , strong) NSMutableArray    *allPayTypes;
+
+@property (copy, nonatomic) void (^payType)(NSArray *payTypes);
+
+
+@end

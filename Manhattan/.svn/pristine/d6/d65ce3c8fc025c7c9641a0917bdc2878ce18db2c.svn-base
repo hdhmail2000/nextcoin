@@ -1,0 +1,87 @@
+//
+//  XHHSwithExplictViewController.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/8/29.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHSwithExplictViewController.h"
+#import "XHHEntrustContentView.h"
+@interface XHHSwithExplictViewController ()
+@property (strong, nonatomic) UIScrollView                *bgScrollView;
+@property (strong, nonatomic) XHHEntrustContentView       *entrustContentView;
+@end
+
+@implementation XHHSwithExplictViewController
+
+-(void)viewWillAppear:(BOOL)animated{
+     [self.bgScrollView.mj_header beginRefreshing];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    [self zh_setupUI];
+}
+-(void)zh_setupUI{
+    //背景滚动视图
+    UIScrollView *bgScrollView = [[UIScrollView alloc]init];
+    bgScrollView.showsVerticalScrollIndicator = NO;
+    [self setupRefreshWithView:bgScrollView refreshHeadAction:@selector(headRefsh) refreshFooterAction:nil];
+    [self.view addSubview:bgScrollView];
+    self.bgScrollView = bgScrollView;
+    [bgScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+
+    [bgScrollView addSubview:self.entrustContentView];
+    [self.entrustContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(self.bgScrollView).insets(UIEdgeInsetsZero);
+        make.width.equalTo(self.bgScrollView);
+        make.bottom.mas_equalTo(self.entrustContentView.tableView);
+    }];
+}
+-(XHHEntrustContentView *)entrustContentView{
+    if (!_entrustContentView) {
+        _entrustContentView = [[XHHEntrustContentView alloc] init];
+        _entrustContentView.typeName = self.buyName;
+        _entrustContentView.numberTypeName = self.sellName;
+    }
+    return _entrustContentView;
+}
+-(void)headRefsh{
+    [self _setupData];
+}
+- (void)_setupData {
+    NSString *areaAndCoint = [NSString stringWithFormat:@"%@_%@",self.sellName,self.buyName];
+    NSString *name = [areaAndCoint lowercaseString];
+    ChZ_Weak
+    [ChZHomeRequest requestTxsOrderListWithSymbol:name type:@"1" successBlock:^(id dataSource) {
+        ChZ_Strong
+        self.entrustContentView.objArray = dataSource;
+        [self.bgScrollView.mj_header endRefreshing];
+    } errorBlock:^(int code, NSString *error) {
+        ChZ_Strong
+        [self.bgScrollView.mj_header endRefreshing];
+        ChZ_MBError(error)
+        ChZ_DebugLog(@"code = %d error reason: %@", code, error);
+    }];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

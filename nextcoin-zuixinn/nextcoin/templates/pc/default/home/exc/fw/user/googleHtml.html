@@ -1,0 +1,96 @@
+{template "header.html" }
+{template "top.html" }
+
+		<div class="container" style="min-height: 800px;padding-bottom: 60px;">
+            <div class="row">
+                <div class="col-xs-12 bind-header">
+                    <div class="col-xs-12 bind-header-tetil">
+                        <h2>{$user.security_googleBind}</h2>
+                    </div>
+                    <div class="col-xs-12 bind-header-nav">
+                        <ol class="breadcrumb">
+                          <li><a href="/index.php?s=exc&c=securityController">{$user.account_security}</a></li>
+                          <li class="active">{$user.security_googleBind}</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-xs-12 bind-form-wrap">
+                    <div class="col-xs-12 bind-form-header">
+                        <h3>{$user.security_googleBind}</h3>
+                    </div>
+                    <div class="col-xs-12 goolgle-wrap">
+                        <div class="col-xs-12 goolgle-text">
+                            <p class="goolgle-hint">{$user.google_tips1}</p>
+                        </div>
+                        <div class="col-xs-12 goolgle-list">
+                            <div class="col-xs-12 goolgle-list-box">
+                                <div class="col-xs-6 goolgle-item">
+                                    <div class="col-xs-12 goolgle-item-tetil">
+                                        <p><i>1</i>{$user.security_googleDown}</p>
+                                    </div>
+                                    <div class="col-xs-12 goolgle-item-text">
+                                        <p class="goolgle-hint">{$user.google_tips3}</p>
+                                        <p class="goolgle-hint">{$user.google_tips4}</p>
+                                    </div>
+                                    <div class="col-xs-12 goolgle-item-data">
+                                        <img src="{HOME_THEME_PATH}exc/img/download_code.jpg" alt="" />
+                                        <div class="goolgle-item-new">
+                                            <p>{$user.googl_tips5}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 goolgle-item">
+                                    <div class="col-xs-12 goolgle-item-tetil">
+                                        <p><i>2</i>{$user.google_tips2}</p>
+                                    </div>
+                                    <div class="col-xs-12 goolgle-item-text">
+                                        <p class="goolgle-hint">{$user.google_tips6}</p>
+                                        <p class="goolgle-danger">{$user.google_tips7}</p>
+                                    </div>
+                                    <div class="col-xs-12 goolgle-item-data">
+                                        <!--<img src="img/demo_14.jpg" alt="" />-->
+                                        <div id="qrcode"  style="width: 150px;height: 150px; padding: 5px; background: white;">
+
+                                    		</div>
+                                        <div class="goolgle-item-new">
+                                            <p class="goolgle-hint">{$user.security_googleScanF}</p>
+                                            <div class="goolgle-item-box">
+                                                <p>{$user.security_googleAccount}</p>
+                                                <p>{$data['device_name']}</p>
+                                            </div>
+                                            <div class="goolgle-item-box">
+                                                <p>{$user.security_googleKey}</p>
+                                                <p><span id="bindgoogle-key"></span></p>
+                                                <input type="hidden" id="bindgoogle-key-hide" value="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 goolgle-list-box">
+                                <div class="col-xs-6 goolgle-item">
+                                    <div class="col-xs-12 goolgle-item-tetil">
+                                        <p><i>3</i>{$user.google_tips8}</p>
+                                    </div>
+                                    <div class="col-xs-12 goolgle-item-form">
+                                        <div class="col-xs-12 goolgle-form-item">
+                                            <p>{$user.security_topCode}</p>
+                                            <input type="text"  id="bindgoogle-topcode" value=""/>
+                                        </div>
+                                        <div class="col-xs-12 goolgle-form-item">
+                                            <button id="bindgoogle-Btn">{$user.security_submit}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+<script src="{HOME_THEME_PATH}exc/js/plugin/jquery.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="{HOME_THEME_PATH}exc/js/user/user.security.js" type="text/javascript" charset="utf-8"></script>
+<script src="{HOME_THEME_PATH}exc/js/comm/msg.js" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }
+

@@ -1,0 +1,91 @@
+{template "header.html"}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 staple">
+                    <div class="col-xs-12 staple-tetil">
+                        <h2>下单成功！</h2>
+                    </div>
+                    <div class="col-xs-12 staple-top">
+                        <ul class="col-xs-6 text-left staple-top-list">
+                            <li>订单： #115301758732011</li>
+                            <li>单价： 10787 CNY/BTC</li>
+                            <li>数量： 1000.00 BTC</li>
+                            <li class="sky">金额： 81，574 CNY</li>
+                        </ul>
+                        <div class="staple-top-num">
+                            <p>付款参考号</p>
+                            <p class="sky">317843847</p>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 staple-type">
+                        <div class="staple-type-item" style="min-width: 373px;">
+                            <img src="/statics/c2c/img/icon_10.png" alt="" />
+                            <div>
+                                <p>朱林秀</p>
+                                <p>交通银行<span>6222 6237 0000 2563 112</span></p>
+                                <p>北海市北部湾东路支行</p>
+                            </div>
+                        </div>
+                        <div class="staple-type-item" style="margin-left: 23px;">
+                            <img src="/statics/c2c/img/icon_11.png" alt="" />
+                            <div>
+                                <p>朱林秀</p>
+                                <img src="/statics/c2c/img/demo_03.jpg" alt="" />
+                            </div>
+                        </div>
+                        <div class="staple-type-item" style="float: right;">
+                            <img src="/statics/c2c/img/icon_12.png" alt="" />
+                            <div>
+                                <p>朱林秀</p>
+                                <img src="/statics/c2c/img/demo_03.jpg" alt="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 staple-confirm">
+                        <div class="right staple-confirm-btns">
+                            <div class="staple-confirm-success">
+                                <button>标记为已付款</button>
+                            </div>
+                            <div class="staple-confirm-fill">
+                                <button>取消订单</button>
+                            </div>
+                        </div>
+                        <div class="right staple-confirm-hint">
+                            <p>
+                                待支付，请于<span class="danger"><font class="min">14</font>分<font class="sin">48</font>秒</span>内向谭sir支付<span class="sky">81，574 CNY</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 staple-hint">
+                        <p>1、您的汇款将直接进入卖方账户，交易过程中卖方出售的数字资产由平台托管保护。</p>
+                        <p>2、请在会写时间内完成付款，并务必点击“我已付款”，卖方确认收款后，系统会将数字资产划转到您的账户。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {template "footer.html"}
+
+        <script type="text/javascript">
+        	       $(function(){
+        	           var _m = parseInt($(".staple-confirm-hint .min").html());
+        	           var _s = parseInt($(".staple-confirm-hint .sin").html());
+        	           var _time = setInterval(function(){
+                            if(_m >= 0){
+                                 _s--;
+                                $(".staple-confirm-hint .min").html(_m);
+                                $(".staple-confirm-hint .sin").html(_s);
+                                if( _s == 0){
+                                   _s= 60;
+                                   _m--;
+                                }
+                            }else{
+                               clearInterval(_time);
+                            }
+        	           },1000);
+
+        	       })
+        </script>
+	</body>
+</html>

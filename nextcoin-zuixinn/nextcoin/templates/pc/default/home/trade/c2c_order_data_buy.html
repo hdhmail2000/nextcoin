@@ -1,0 +1,156 @@
+{template "header.html"}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 staple" style="margin-top: 25px;">
+                    <div class="col-xs-12 staple-tetil">
+                        <h2>下单成功！</h2>
+                    </div>
+                    <div class="col-xs-12 staple-top">
+                        <ul class="col-xs-6 text-left staple-top-list">
+                            <li>订单： {$data.sn}</li>
+                            <li>单价： {$data.trade.order_price} CNY/{$data.trade.symbol_name}</li>
+                            <li>数量： {$data.order_volume}&nbsp;{$data.trade.symbol_name}</li>
+                            <li class="sky">金额： {$data.order_price} CNY</li>
+                        </ul>
+                        <div class="staple-top-num">
+                            <p>付款参考号</p>
+                            <p class="sky">{$data.pay_no}</p>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 staple-type">
+                        {if $data.bank}
+                        <div class="staple-type-item" style="min-width: 373px;">
+                            <img src="/statics/c2c/img/icon_10.png" alt="" />
+                            <div>
+                                <p>{$data.bank.khm}</p>
+                                <p>{$data.bank.khh}<span>{$data.bank.zhhm}</span></p>
+                            </div>
+                        </div>
+                        {/if}
+                        {if $data.alipay}
+                        <div class="staple-type-item" style="margin-left: 23px;">
+                            <img src="/statics/c2c/img/icon_11.png" alt="" />
+                            <div>
+                                <p>{$data.alipay.author}</p>
+                                <img src="{$data.alipay.qrcode}" alt="" />
+                            </div>
+                        </div>
+                        {/if}
+                        {if $data.weixin}
+                        <div class="staple-type-item" style="float: right;">
+                            <img src="/statics/c2c/img/icon_12.png" alt="" />
+                            <div>
+                                <p>{$data.weixin.author}</p>
+                                <img src="{$data.weixin.qrcode}" alt="" />
+                            </div>
+                        </div>
+                        {/if}
+                    </div>
+                    <div class="col-xs-12 staple-confirm">
+                        {if $data.order_status == 9}
+                        {else}
+                        <div class="right staple-confirm-btns">
+                            <div class="staple-confirm-success">
+                            		{if $data.order_status == 1}
+                                <button id="mark_pay" onclick="mark_pay({$data.id});">标记为已付款</button>
+                                {else if $data.order_status == 2}
+                                已付款
+                                {/if}
+                            </div>
+                            <div class="staple-confirm-fill">
+                            		<button id="my_order" onclick="toMyorder();" style="margin-right: 10px;">我的订单</button>
+                                <button id="cancel_oorder" onclick="cancel_order({$data.id});">取消订单</button>
+                            </div>
+                        </div>
+                        {/if}
+                        <div class="right staple-confirm-hint">
+                            <p>
+                                {if $data.order_status == 9}订单已取消{else if $data.order_status == 1}待支付，请于<span class="danger"><font class="min">14</font>分<font class="sin">59</font>秒</span>内向{$data.sell_usernmae}支付<span class="sky">{$data.order_price} CNY</span>{/if}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 staple-hint">
+                        <p>1、您的汇款将直接进入卖方账户，交易过程中卖方出售的数字资产由平台托管保护。</p>
+                        <p>2、请在会写时间内完成付款，并务必点击“我已付款”，卖方确认收款后，系统会将数字资产划转到您的账户。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {template "footer.html"}
+
+        <script type="text/javascript">
+        	       $(function(){
+        	           var _m = parseInt($(".staple-confirm-hint .min").html());
+        	           var _s = parseInt($(".staple-confirm-hint .sin").html());
+        	           var _time = setInterval(function(){
+                            if(_m >= 0){
+                                 _s--;
+                                $(".staple-confirm-hint .min").html(_m);
+                                $(".staple-confirm-hint .sin").html(_s);
+                                if( _s == 0){
+                                   _s= 60;
+                                   _m--;
+                                }
+                            }else{
+                               clearInterval(_time);
+                            }
+                            if(_m == 0 && _s == 1){
+                            		cancel_order({$data.id});
+                            }
+        	           },1000);
+        	           
+        	       })
+        	       
+        	       //取消订单
+        	       function cancel_order(id){
+        	       		$.ajax({
+        	       			type:"post",
+        	       			url:"index.php?s=trade&c=home&m=cancel_order&id="+id,
+        	       			dataType:"json",
+        	       			success: function(data){
+        	       				if(data.code == 1){
+        	       					layer.msg('订单已取消');
+        	       					window.location.reload();
+        	       				} else {
+        	       					layer.msg(data.msg);
+        	       				}
+        	       			},
+        	       			error: function(){
+        	       				layer.msg('取消订单接口错误');
+        	       			}
+        	       		});
+        	       }
+        	       
+        	       //标记为已付款
+        	       function mark_pay(id){
+        	       		layer.load(1);
+        	       		$.ajax({
+        	       			type:"post",
+        	       			url:"index.php?s=trade&c=home&m=mark_pay&id="+id,
+        	       			dataType:"json",
+        	       			success: function(data){
+        	       				if(data.code == 1){
+        	       					layer.msg(data.msg);
+        	       					window.location.reload();
+        	       				} else {
+        	       					layer.closeAll('loading');
+        	       					layer.msg(data.msg);
+        	       				}
+        	       			},
+        	       			error: function(){
+        	       				layer.closeAll('loading');
+        	       				layer.msg('标记付款接口错误');
+        	       			}
+        	       		});
+        	       }
+        	       
+        	       //跳转到我的订单
+        	       function toMyorder(){
+        	       		window.location.href = "/index.php?s=trade&c=home&m=c2cMyorder";
+        	       }
+        	       
+        </script>
+	</body>
+</html>

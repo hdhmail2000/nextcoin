@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no" />
+        <title>{$lang_Register.Login}</title>
+        <meta name="description" content="木叶" />
+        <meta name="keywords" content="木叶" />
+        <meta name="author" content="木叶" />
+        <link rel="stylesheet" type="text/css" href="/statics/exc/css/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="/statics/exc/css/swiper-4.3.3.min.css" />
+        <link rel="stylesheet" type="text/css" href="/statics/exc/css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="/statics/exc/css/custom.css"/>
+        <link rel="stylesheet" type="text/css" href="/statics/exc/css/form.css" />
+        <script src="/statics/exc/js/jquery-2.2.3.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/statics/exc/js/login/register.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+	    <style type="text/css">
+             body,html{height:100%;}
+             body{padding-bottom:0;}
+             @font-face {
+                  font-family: 'iconNewfont';  /* project id 669757 */
+                  src: url('//at.alicdn.com/t/font_669757_iyqbu6pozagx2yb9.eot');
+                  src: url('//at.alicdn.com/t/font_669757_iyqbu6pozagx2yb9.eot?#iefix') format('embedded-opentype'),
+                  url('//at.alicdn.com/t/font_669757_iyqbu6pozagx2yb9.woff') format('woff'),
+                  url('//at.alicdn.com/t/font_669757_iyqbu6pozagx2yb9.ttf') format('truetype'),
+                  url('//at.alicdn.com/t/font_669757_iyqbu6pozagx2yb9.svg#iconfont') format('svg');
+             }
+             .iconNewfont {
+                  font-family:"iconNewfont" !important;
+                  font-size:16px;
+                  font-style:normal;
+                  -webkit-font-smoothing: antialiased;
+                  -moz-osx-font-smoothing: grayscale;
+                  margin-right: 5px;
+             }
+             .icon-tishi:before { content: "\e7ae"; }
+             .icon-dateIco:before{content:"\e602";}
+
+             .verifyLayout{box-sizing:border-box;height:100%;min-height:608px;min-width:870px;background:#f7f7f7;padding-bottom:82px;position:relative;}
+             .verifyLayout .main{width:518px;padding:30px 30px 40px;background:#fff;position:absolute;left:50%;top:55%;text-align:center;
+                -webkit-transform:translate(-50%,-50%);
+                -moz-transform:translate(-50%,-50%);
+                -ms-transform:translate(-50%,-50%);
+                -o-transform:translate(-50%,-50%);
+                transform:translate(-50%,-50%,0);
+                margin-top:-41px;
+             }
+             .verifyLayout .main .logo{display:inline-block;height:64px;}
+             .verifyLayout .main .icon-logo{margin-bottom:24px;height:40px;}
+             .verifyLayout .main .messageBox{margin:0 auto 10px;}
+             .verifyLayout .main .alert{width:100%;text-align:left;box-sizing:border-box;background:none;font-size:12px;white-space:nowrap;padding:0;line-height:100%;margin-top:44px;}
+             .verifyBottom{padding:15px 0;text-align:center;width:100%;position:absolute;left:0;bottom:0;background:#f7f7f7}
+             .verifyBottom .item{font-size:14px;color:#999;margin-bottom:10px;}
+             .verifyBottom .item.lang span{cursor:pointer;margin-right:10px;}
+             .verifyBottom .item.lang span.black{color:#333;}
+             .verifyBottom .item.lang a,.verifyBottom .item.lang a:visited{color:#999;}
+             .verifyBottom .item.lang a:hover{color:#333;}
+             .verifyBottom .item.lang .languageSwitching:hover{color:#333;}
+             .verifyBottom .item.lang ul {background: #20262b; position: absolute;top:-235px;right:36%;z-index: 33;width: 250px;background: #fff;overflow: hidden;box-shadow: 1px 1px 10px rgba(0,0,0,0.35);}
+             .verifyBottom .item.lang ul li{
+                line-height: 34px;
+                width: 50%;
+                float: left;
+                font-size: 12px;
+                cursor: pointer;
+                -webkit-transition: all 0.3s ease-in-out;
+                padding-left: 25px;
+                box-sizing: border-box;
+                border-right: 1px solid #e2e2e2;
+                border-bottom: 1px solid #e2e2e2;
+                font-size: 13px;
+                color: #333;
+                position: relative;
+                list-style: none;
+                display: list-item;
+                text-align: left;
+             }
+             .verifyBottom .item.lang ul li:hover { color: #deac37;}
+	    </style>
+	    <div class="verifyLayout">
+	        <div class="main">
+	            <a href="" class="logo">
+	                <img src="/statics/exc/img/logo.png" alt="" />
+	            </a>
+	            <style type="text/css">
+                    .btn.btn-grey{line-height:44px;background:#f3f3f3;color:#666;font-size:14px;}
+
+                    .disabled-cont{height:auto;overflow:hidden;}
+                    .disabled-cont p{margin:0;padding:0;height:84px;line-height:84px;text-align:center;font-size:14px;color:#666;}
+                    .disabled-cont ul{margin:0;padding:0;list-style:none;}
+                    .disabled-cont ul li{display:block;float:left;width:50%;height:auto;overflow:hidden;}
+                    .disabled-cont ul li a{display:block;height:32px;line-height:32px;text-align:center;color:#333;font-size:14px;background:#fff;border:1px solid #e6e6e6;margin:0 7px;}
+                    .disabled-cont ul li.to-new-url a{border:1px solid #e8b342;background:#e8b342;color:#fff;}
+	            </style>
+	            <div>
+	                <div class="f-prz formWrapLR">
+	                    <form class="loginReg-form" id="myform" method="post">
+	                        <h3 class="LRtitle">
+	                            <span>{$lang_Register.Login}</span>
+	                        </h3>
+	                        <div class="importantInfo">
+	                            <p>
+	                                <i class="iconfont icon-warn"></i>
+	                                {$lang_Register.Confirm}
+	                                <strong>https://www.binance.com</strong>
+	                            </p>
+	                            <img src="/statics/exc/img/demo_05.png" alt="" />
+	                        </div>
+	                        <p class="f-nomargin Validform_checktip"></p>
+	                        <div class="filed">
+	                            <input type="email" name="data[username]" id="" value="" placeholder="{$lang_Register.Email}" class="ipt fillemail"/>
+	                        </div>
+	                        <div class="filed">
+	                            <input type="password" name="data[password]" id="" value="" placeholder="{$lang_Register.Password}" class="ipt pwd"/>
+	                        </div>
+	                        <div class="field">
+	                            <input type="button" name="" id="" onclick="dr_login()" value="{$lang_Register.Signin}" class="btn btn-orange btn-block"/>
+	                        </div>
+	                        <div class="field">
+	                            <p class="login-tip f-cb">
+	                                <span class="f-fr">
+	                                    {$lang_Register.Without}
+	                                    <a href="/index.php?s=exc&c=login&m=register" class="yellow">{$lang_Register.Signup}</a>
+	                                </span>
+	                                <a href="forgotPassword.html" class="yellow f-fl">{$lang_Register.Forget}</a>
+	                            </p>
+	                        </div>
+	                    </form>
+	                </div>
+	            </div>
+	        </div>
+
+	        <div class="verifyBottom">
+	            <div class="item lang">
+	                <a href=""> {$lang_Register.Home} </a>
+	                <a href=""> {$lang_Register.Help} </a>
+	                |
+	                <span class="font-lang languageSwitching" onclick="_lang($(this))">
+	                    <i class="iconfont icon-diqiu"></i>
+	                    <span style="margin: 0;">
+	                    		{if $lang=='zh-cn'}
+                            简体中文
+                            {else}
+                            English
+                            {/if}
+	                    </span>
+	                    <i style="margin-left: 5px;font-size: 13px;" class="iconfont icon-downsj font-lang-type"></i>
+	                </span>
+	                <ul style="display: none;">
+	                    <li class="l in langs" onclick="changeLang('english')">English</li>
+                        <li class="l in langs" onclick="changeLang('zh-cn')">简体中文</li>
+	                </ul>
+	            </div>
+	            <div class="item">© 2017 Binance.com All Rights Reserved</div>
+	        </div>
+
+	    </div>
+
+	    <script type="text/javascript">
+	    	      function _lang(e){
+	    	          if(e.children(".font-lang-type").hasClass("icon-downsj")){
+	    	              e.children(".font-lang-type").removeClass("icon-downsj").addClass("icon-upsj");
+	    	              e.siblings("ul").show();
+	    	          }else{
+	    	              e.children(".font-lang-type").addClass("icon-downsj").removeClass("icon-upsj");
+                      e.siblings("ul").hide();
+	    	          }
+	    	      }
+
+	    	      function _selectLang(e){
+	    	          var _text = $(e.target).html();
+	    	          $(e.target).parent().siblings(".font-lang").children(".font-lang-type").addClass("icon-downsj").removeClass("icon-upsj");
+	    	          $(e.target).parent().siblings(".font-lang").children("span").text(_text);
+	    	          $(e.target).parent().hide();
+	    	      }
+	    	      function changeLang(lang) {
+	        			$.ajax({
+	        				type:"get",
+	        				url:"/index.php?s=exc&c=home&m=changeLang&lang="+lang,
+	        				async:true,
+	        				dataType:"json",
+	        				success:function(res) {
+	        					if(res) {
+	        						window.location.reload();
+	        					}else{
+	        						alert('语言切换失败');
+	        					}
+	        				}
+	        			});
+	        		}
+	    </script>
+	</body>
+</html>

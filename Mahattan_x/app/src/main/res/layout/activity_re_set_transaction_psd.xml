@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_page_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_actionbar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="20dp"
+        android:gravity="left|center_vertical"
+        android:text="重置交易密码"
+        android:textColor="#6363A7"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="6dp"
+        android:text="为了您的账户安全，请输入原支付密码确认身份"
+        android:textColor="#BCBEC4"
+        android:textSize="@dimen/textSize12" />
+
+
+    <EditText
+        android:id="@+id/password_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="60dp"
+        android:background="@android:color/transparent"
+        android:singleLine="true"
+        android:inputType="textPassword"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:background="@color/colorDivider" />
+
+    <TextView
+        android:id="@+id/forget_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="16dp"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:text="忘记支付密码？"
+        android:textColor="#308AF5"
+        android:textSize="@dimen/textSize12" />
+
+    <Button
+        android:id="@+id/submit_button"
+        style="@style/SubmitButton"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="40dp"
+        android:maxLength="18"
+        android:background="@drawable/selector_login_button_bg"
+        android:text="确定" />
+
+</LinearLayout>

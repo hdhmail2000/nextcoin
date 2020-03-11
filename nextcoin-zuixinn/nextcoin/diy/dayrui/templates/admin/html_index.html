@@ -1,0 +1,199 @@
+{template nheader.html}
+
+<div class="page-bar">
+	<ul class="page-breadcrumb mylink">
+		{$menu.link}
+	</ul>
+	<ul class="page-breadcrumb myname">
+		{$menu.name}
+	</ul>
+	<div class="page-toolbar">
+		<div class="btn-group pull-right">
+			<button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false" data-hover="dropdown"> {fc_lang('操作菜单')}
+				<i class="fa fa-angle-down"></i>
+			</button>
+			<ul class="dropdown-menu pull-right" role="menu">
+				{loop $menu.quick $t}
+				<li>
+					<a href="{$t.url}">{$t.icon} {$t.name}</a>
+				</li>
+				{/loop}
+				<li class="divider"> </li>
+				<li>
+					<a href="javascript:window.location.reload();">
+						<i class="icon-refresh"></i> {fc_lang('刷新页面')}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<h3 class="page-title">
+	<small>系统仅可用生成网站首页、模块栏目、模块内容、模块首页</small>
+</h3>
+
+<div class="form-horizontal">
+	<div class="portlet light bordered myfbody">
+		<div class="portlet-title tabbable-line">
+			<ul class="nav nav-tabs" style="float:left;">
+				<li class="{if $page==0}active{/if}">
+					<a href="#tab_0" data-toggle="tab" onclick="$('#mypage').val('0')"> <i class="fa fa-home"></i> {fc_lang('首页')} </a>
+				</li>
+				<li class="{if $page==1}active{/if}">
+					<a href="#tab_1" data-toggle="tab" onclick="$('#mypage').val('1')"> <i class="fa fa-reorder"></i> {fc_lang('共享栏目')} </a>
+				</li>
+				{loop $module $t}
+				<li class="{if $page==$t.dirname}active{/if}">
+					<a href="#tab_{$t.dirname}" data-toggle="tab" onclick="$('#mypage').val('{$t.dirname}')"> <i class="{$t.icon}"></i> {fc_lang($t.name)} </a>
+				</li>
+				{/loop}
+			</ul>
+		</div>
+		<div class="portlet-body">
+			<div class="tab-content">
+
+				<div class="tab-pane  {if $page==0}active{/if}" id="tab_0">
+
+					<div class="form-group row">
+						<label class="col-md-2 text-right">{fc_lang('静态首页存储路径')}：</label>
+							<div class="col-md-9">
+								<label>{fc_lang('/cache/index/*.html')}</label>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-md-2 text-right">{fc_lang('是否生成到根目录')}：</label>
+						<div class="col-md-9">
+								<label style="margin-left: -5px;"><input type="checkbox" id="is_html" value="root">&nbsp;&nbsp;{fc_lang('是')}</label>
+
+							<p style="margin: 10px 0">{fc_lang('/index.html')}</p>
+							<span class="help-block">{fc_lang('当多个域名绑定到首页时请关闭此选项，勾选后会生成到根目录中')}</span>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-md-2 text-right">&nbsp;</label>
+						<div class="col-md-9">
+							<label><a href="javascript:dr_index_html();" class="btn green noloading"> {fc_lang('生成')} </a></label>
+						</div>
+					</div>
+					<script>
+						function dr_index_html() {
+							var url="{dr_url('html/tohtml')}";
+							window.location.href=url+'&is_root='+$("#is_html").val();
+                        }
+					</script>
+				</div>
+
+				<div class="tab-pane  {if $page==1}active{/if}" id="tab_1">
+
+					<div class="form-group row">
+						<label class="col-md-2 text-right">{fc_lang('共享栏目')}：</label>
+						<div class="col-md-9">
+							<div class="row">
+								<form action="{SITE_URL}index.php?c=category&m=html" method="post">
+									<input type="hidden" name="type" value="html" id="category_share">
+									<div class="col-sm-4">
+										<p class="text-center">{$share}</p>
+										<p class="text-center">
+											<button type="submit" onclick="$('#category_share').val('html')" class="btn green noloading">{fc_lang('生成')} </button>
+										</p>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+
+
+				{loop $module $t}
+				<div class="tab-pane  {if $page==$t.dirname}active{/if}" id="tab_{$t.dirname}">
+					{if $t.ishtml}
+
+					{if $t.ishtml && !$t.share}
+
+					<div class="form-group row" style="margin-top: 15px; padding-top: 10px;">
+						<label class="col-md-2 text-right">{fc_lang('生成模块首页')}：</label>
+						<div class="col-md-9">
+							<label><a href="{dr_url('html/tohtml')}&dir={$t.dirname}" class="btn green onloading"> {fc_lang('生成')} </a></label>
+						</div>
+					</div>
+					{/if}
+
+					{if !$t.share}
+					<div class="form-group  row">
+						<label class="col-md-2 text-right">{fc_lang('生成模块栏目列表页面')}：</label>
+						<div class="col-md-9">
+							<form action="{SITE_URL}index.php?s={$t.dirname}&c=category&m=html" method="post">
+								<input type="hidden" name="type" value="html" id="category_{$t.dirname}">
+								<label>{$t.select}</label>
+								<label>
+									<button type="submit" onclick="$('#category_{$t.dirname}').val('html')" class="btn green noloading">{fc_lang('生成')} </button>
+								</label>
+							</form>
+						</div>
+					</div>
+					{/if}
+
+					<form action="{SITE_URL}index.php?s={$t.dirname}&c=show&m=html" method="post">
+						<input type="hidden" name="type" value="html" id="show_{$t.dirname}">
+					<div class="form-group  row">
+						<label class="col-md-2 text-right">{fc_lang('生成模块内容页面')}：</label>
+						<div class="col-md-9">
+							<label>{$t.select}</label>
+						</div>
+					</div>
+
+						<div class="form-group  row">
+							<label class="col-md-2 text-right">&nbsp;</label>
+							<div class="col-md-9">
+								<label>
+									{fc_lang("内容ID范围")}：
+								</label>
+								<label><input type="text" class="form-control" value="" name="data[id_start]"></label>
+								<label>
+									{fc_lang("到")}
+								</label>
+								<label><input type="text" class="form-control" value="" name="data[time_end]"></label>
+
+							</div>
+						</div>
+						<div class="form-group  row">
+							<label class="col-md-2 text-right">&nbsp;</label>
+							<div class="col-md-9">
+								<label>
+									{fc_lang("更新时间范围")}：
+								</label>
+								<label><input type="text" class="form-control" value="" name="data[time_start]"></label>
+								<label>
+									{fc_lang("到")}
+								</label>
+								<label><input type="text" class="form-control" value="{dr_date(SYS_TIME, 'Y-m-d')}" name="data[time_end]"></label>
+
+							</div>
+						</div>
+
+						<div class="form-group  row">
+							<label class="col-md-2 text-right">&nbsp;</label>
+							<div class="col-md-9">
+								<label><button type="submit" onclick="$('#show_{$t.dirname}').val('html')" class="btn green noloading">{fc_lang('生成')} </button></label>
+
+
+							</div>
+						</div>
+						</form>
+					{else}
+					<a href="{$t.html_url}">此模块没有开启静态生成功能</a>
+					{/if}
+				</div>
+				{/loop}
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+</div>
+{template nfooter.html}

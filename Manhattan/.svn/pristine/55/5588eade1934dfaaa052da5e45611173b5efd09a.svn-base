@@ -1,0 +1,21 @@
+//
+//  UIImage+ChZExtension.h
+//  aliLibrary
+//
+//  Created by ChZ on 2017/1/13.
+//  Copyright © 2017年 ChZ. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface UIImage (ChZExtension)
+
++ (UIImage *)imageWithColor:(UIColor *)color;
+
+- (UIImage *)scaleToWidth:(CGFloat)width;
+
++ (UIImage *)imageWithView:(UIView *)view;
+
+- (NSString *)base64String;
+
+@end

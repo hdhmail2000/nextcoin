@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0d0b49"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_actionbar" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#363672">
+
+                <RelativeLayout
+                    android:id="@+id/rel_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/image_scan_code"
+                            android:layout_width="165dp"
+                            android:layout_height="165dp"
+                            android:layout_gravity="center_horizontal"
+                            tools:src="@drawable/image_qr_code" />
+
+                        <TextView
+                            android:id="@+id/text_bind_google_hint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/image_scan_code"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:text="绑定谷歌验证码"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="@dimen/textSize16" />
+
+                        <TextView
+                            android:id="@+id/text_download_google"
+                            style="@style/SubmitButton"
+                            android:layout_below="@id/text_bind_google_hint"
+                            android:layout_marginLeft="36dp"
+                            android:layout_marginRight="36dp"
+                            android:layout_marginTop="12dp"
+                            android:background="@drawable/selector_login_button_bg"
+                            android:gravity="center"
+                            android:text="下载谷歌验证器"
+                            android:textSize="@dimen/textSize16"
+                            android:textStyle="normal" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/image_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_below="@id/rel_top"
+                    android:layerType="software"
+                    android:src="@drawable/shape_dotted_line" />
+
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_below="@id/rel_top"
+                    android:layout_marginLeft="-12dp"
+                    android:layout_marginTop="-12dp"
+                    android:background="@drawable/shape_circle_0d0b49" />
+
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/rel_top"
+                    android:layout_marginRight="-12dp"
+                    android:layout_marginTop="-12dp"
+                    android:background="@drawable/shape_circle_0d0b49" />
+
+                <TextView
+                    android:id="@+id/text_account_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/image_line"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:text="账户"
+                    android:textColor="@color/colorGrayText"
+                    android:textSize="@dimen/textSize14" />
+
+                <TextView
+                    android:id="@+id/text_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/text_account_hint"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorWhite"
+                    tools:text="16165165a1sd65sa1d65asd16sa5d1" />
+
+                <TextView
+                    android:id="@+id/text_key_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_account"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:text="秘钥"
+                    android:textColor="@color/colorGrayText"
+                    android:textSize="@dimen/textSize14" />
+
+                <TextView
+                    android:id="@+id/text_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/text_key_hint"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorWhite"
+                    tools:text="16165165a1sd65sa1d65asd16sa5d1" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp">
+
+        <TextView
+            android:id="@+id/text_next"
+            style="@style/SubmitButton"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/selector_login_button_bg"
+            android:gravity="center"
+            android:text="下一步"
+            android:textColor="@color/colorWhite" />
+    </LinearLayout>
+</LinearLayout>

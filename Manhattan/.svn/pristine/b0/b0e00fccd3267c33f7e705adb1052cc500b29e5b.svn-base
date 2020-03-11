@@ -1,0 +1,92 @@
+//
+//  APPControl.m
+//  Manhattan
+//
+//  Created by Apple on 2018/9/10.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "APPControl.h"
+#import "XHHLoginViewController.h"
+#import "BaseNavigationController.h"
+#import "ChZTabBarController.h"
+
+@implementation APPControl
+
+SingletonM(APPControl)
+-(AppDelegate *)appDelegate{
+   return (AppDelegate *) [[UIApplication sharedApplication] delegate];
+}
+- (UserModel *)user
+{
+    if (_user == nil) {
+        _user = [UserModel chz_getObjForKey:kv_USER_MODEL];
+    }
+    return _user;
+}
+- (void)toLogin
+{
+    self.isLogin = NO;
+    self.user = nil;
+    [self.user chz_clear];
+    XHHLoginViewController *loginVC = [[XHHLoginViewController alloc] init];
+    BaseNavigationController *loginNav = [[BaseNavigationController alloc] initWithRootViewController:loginVC];
+    self.appDelegate.window.rootViewController = loginNav;
+}
+
+- (void)toHome
+{
+    self.appDelegate.window.rootViewController = ChZTabBarController.new;
+}
+- (NSString *)cny
+{
+    if (!ChZ_StringIsEmpty(_cny)) {
+        [self requestCNY];
+    }
+    return _cny;
+}
+- (void)requestCNY
+{
+    ChZ_Weak
+    [ChZHomeRequest requestCNYSuccessBlock:^(id dataSource)
+     {
+         ChZ_Strong
+         _strongSelf.cny = dataSource;
+         
+     } errorBlock:nil];
+}
+- (void)requestUSDT:(NSArray *)areaList
+{
+    if (self.listArray != nil) {
+        return;
+    }
+    NSString *code;
+    for (ChZMarketAreaModel *model in areaList)
+    {
+        if ([model.name isEqualToString:@"USDT"])
+        {
+            code = model.code;
+            break;
+        }
+    }
+    if (ChZ_StringIsEmpty(code))
+    {
+        ChZ_Weak
+        [ChZHomeRequest requestAreaList:code successBlock:^(id dataSource)
+         {
+             ChZ_Strong
+             [_strongSelf _handleMarket:dataSource];
+         } errorBlock:^(int code, NSString *error)
+         {
+         }];
+    }
+}
+- (void)_handleMarket:(NSArray *)array
+{
+    self.listArray = array;
+    for (ChZMarketListModel *model in array)
+    {
+        [model syncCoin];
+    }
+}
+@end

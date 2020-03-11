@@ -1,0 +1,31 @@
+pipeline {
+  agent any
+  stages {
+    stage('Init Env Vars') {
+      steps {
+        script {
+          env.MAVEN_CLI = 'docker run ' +
+            '--rm -i ' +
+            '-u root ' +            
+            "-v ${env.JENKINS_HOME}/.m2:/root/.m2 " +
+            "-v ${env.JENKINS_HOME}/workspace/${env.JOB_NAME}:/data " +
+            '-v /root/.docker:/root/.docker ' +
+            '-v /var/run/docker.sock:/var/run/docker.sock ' +
+            '-v /usr/bin/docker:/usr/bin/docker ' +
+            '-w /data ' +
+            'maven:3.5.2-jdk-8-slim ' +
+            'sh -c \'mvn %s\''
+
+            sh String.format(MAVEN_CLI, '-version')
+        }
+      }
+    }
+
+    stage('Build And Upload Artifacts') {
+      steps {
+        sh String.format(MAVEN_CLI, 'clean deploy')
+      }
+    }
+  }
+}
+

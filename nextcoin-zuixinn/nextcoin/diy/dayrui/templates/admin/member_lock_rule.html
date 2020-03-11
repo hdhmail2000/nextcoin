@@ -1,0 +1,89 @@
+{template nheader.html}
+{php $_pages=$pages;}
+<div class="page-bar">
+    <ul class="page-breadcrumb mylink">
+        {$menu.link}
+    </ul>
+    <ul class="page-breadcrumb myname">
+        {$menu.name}
+    </ul>
+    <div class="page-toolbar">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false" data-hover="dropdown"> {fc_lang('操作菜单')}
+                <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                {loop $menu.quick $t}
+                <li>
+                    <a href="{$t.url}">{$t.icon} {$t.name}</a>
+                </li>
+                {/loop}
+                <li class="divider"> </li>
+                <li>
+                    <a href="javascript:window.location.reload();">
+                        <i class="icon-refresh"></i> {fc_lang('刷新页面')}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<p>例：锁仓币解锁分为2层，共60天。每30天解锁50%</p>
+<p>每层规则应填入    1,30,50;2,60,100</p>
+<p>第一位数为第几层，第二位数为到达本层所需天数，第三位数为返还比例。</p>
+<form method="post" action="" name="rulepost" id="rulepost">
+    <label>{fc_lang('锁仓规则名称')}</label>
+    <label><input type="text" class="form-control" value="" placeholder="{fc_lang('锁仓规则名称')}" name="data[title]" /></label>
+    <label>{fc_lang('锁仓规则添加： 共分为')}</label>
+    <label><input type="number" min="1" class="form-control" value="" placeholder="{fc_lang('共几层')}" name="data[level]" /></label>
+    <label>{fc_lang('层，每层规则')}</label>
+    <label><input type="text" class="form-control" value="" placeholder="{fc_lang('例：1,10,40;2,30,100')}" name="data[rule]" /></label>
+    <label><button type="submit" class="btn green btn-sm" > <i class="fa fa-search"></i> {fc_lang('添加规则')}</button></label>
+</form>
+
+
+
+<form action="" method="post" name="myform" id="myform">
+    <input name="action" id="action" type="hidden" value="del" />
+    <div class="portlet mylistbody">
+        <div class="portlet-body">
+            <div class="table-scrollable">
+
+                <table class="mytable table table-striped table-bordered table-hover table-checkable dataTable">
+
+                    <thead>
+                    <tr>
+                        <th width="10"></th>
+                        <th>id</th>
+                        <!--<th class="{ns_sorting('username')}" name="username" >{fc_lang('会员')}</th>-->
+                        <!--<th class="{ns_sorting('groupid')}" name="groupid" >{fc_lang('会员组')}</th>-->
+                        <!--<th class="{ns_sorting('experience')}" name="experience">{SITE_EXPERIENCE}</th>
+                        <th class="{ns_sorting('score')}" name="score">{SITE_SCORE}</th>
+                        <th class="{ns_sorting('money')}" name="money">{SITE_MONEY}</th>-->
+                        <th class="{ns_sorting('phone')}" name="regtime" >{fc_lang('规则名称')}</th>
+                        <th class="{ns_sorting('email')}" name="regtime" >{fc_lang('规则内容')}</th>
+                        <!--<th class="{ns_sorting('trade_status')}" name="regtime" >{fc_lang('C2C交易状态')}</th>-->
+                        <!--<th class="{ns_sorting('regtime')}" name="regtime" >{fc_lang('时间')}</th>-->
+                        <!--<th class="dr_option">{fc_lang('操作')}</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $t}
+                    <tr id="dr_row_{$list.fid}">
+                        <td><input name="ids[]" type="checkbox" class="dr_select toggle md-check" value="{$list.fid}" /></td>
+                        <td>{$t.id}</td>
+                        <td>{$t.title}</td>
+                        <td>{$t.rule}</td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<div id="pages"><a>{fc_lang('共%s条', $param['total'])}</a>{$_pages}</div>
+{template nfooter.html}

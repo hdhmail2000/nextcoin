@@ -1,0 +1,25 @@
+//
+//  XHHSalesView.h
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/26.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "ChZMarketListModel.h"
+@class XHHTrandVolumeView,XHHExplicitPriceView;
+
+@interface XHHSalesView : UIView
+
+@property (strong, nonatomic) XHHTrandVolumeView          *volumeView;
+@property (strong, nonatomic) XHHExplicitPriceView        *priceView;
+@property (strong, nonatomic) ChZMarketListModel          *model;
+
+@property (strong, nonatomic) NSString *typeName;
+@property (strong, nonatomic) NSString *numberTypeName;
+@property (assign, nonatomic) double progressValue;
+
+@property (copy, nonatomic) void (^buySellBlock)(BOOL isBuy,NSString *price,NSString *num);
+
+@end

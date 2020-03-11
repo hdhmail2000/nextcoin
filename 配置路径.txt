@@ -1,0 +1,17 @@
+OSS配置：
+diy/module/exc/controllers/UploadController.php  ‘
+accessKeyId
+accessKeySecret
+endpoint
+还有路径
+
+
+
+redis和接口IP配置   
+diy/module/exc/controllers/Controller.php   
+
+
+
+
+数据库配置        
+config/database.php                                 

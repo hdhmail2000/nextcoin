@@ -1,0 +1,131 @@
+//
+//  XHHTradDealContentView.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHTradDealContentView.h"
+#import "XHHEntrustBuyTypeView.h"
+#import "XHHEntrustCell.h"
+
+static NSString *cellIndienfiter = @"XHHEntrustCell";
+
+@interface XHHTradDealContentView ()<UITableViewDelegate,UITableViewDataSource,XHHEntrustBuyTypeViewProtocol>
+
+@property (strong, nonatomic) XHHEntrustBuyTypeView *typeView;
+
+@property (strong, nonatomic) NSArray               *dataArray;
+
+@property (assign, nonatomic) NSInteger            currIndex;
+
+
+@end
+
+@implementation XHHTradDealContentView
+-(instancetype)init{
+    self = [super init];
+    if (self) {
+        [self zh_setupUI];
+        self.currIndex = 999;
+        self.backgroundColor = [UIColor colorWithHexString:@"1A1560"];
+    }
+    return self;
+}
+-(void)zh_setupUI{
+    [self addSubview:self.typeView];
+    [self.typeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.top.equalTo(self.typeView.mas_bottom);
+        make.height.mas_equalTo(self.dataArray.count * 123);
+    }];
+}
+
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.rowHeight = 123;
+        [_tableView setSeparatorColor:LineCorlor];
+        _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+        _tableView.backgroundColor = bgColor;
+        [_tableView registerNib:[UINib nibWithNibName:@"XHHEntrustCell" bundle:nil] forCellReuseIdentifier:cellIndienfiter];
+    }
+    return _tableView;
+}
+
+-(XHHEntrustBuyTypeView *)typeView{
+    if (!_typeView) {
+        _typeView = [[XHHEntrustBuyTypeView alloc] initWithItems:@[@"我的成交",@"全部成交"]];
+        _typeView.delegate = self;
+    }
+    return _typeView;
+}
+-(NSArray *)dataArray{
+    if (!_dataArray) {
+        _dataArray = @[@{@"row":@[@"",@"",@"",@""]},
+                       @{@"row":@[@"",@"",@"",@""]},
+                       @{@"row":@[@"",@"",@"",@""]},
+                       @{@"row":@[@"",@"",@"",@""]},
+                       @{@"row":@[@"",@"",@"",@""]},
+                       @{@"row":@[@"",@"",@"",@""]},];
+    }
+    return _dataArray;
+}
+-(void)chooseTypeIndex:(NSInteger)index{
+    NSLog(@"%ld",index);
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataArray.count;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    XHHEntrustCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndienfiter];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell IsDealList:YES];
+    if (indexPath.row == self.currIndex) {
+        [cell creatPayDetailListWithList:self.dataArray[indexPath.row][@"row"]];
+    }else{
+        [cell removeDealListView];
+    }
+    return cell;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == self.currIndex) {
+        self.currIndex = 999;
+    }else{
+        self.currIndex = indexPath.row;
+    }
+    [self.tableView reloadData];
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (self.currIndex == indexPath.row) {
+        NSArray *arr = self.dataArray[indexPath.row][@"row"];
+        [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(self.dataArray.count * 123 +arr.count *30 +60);
+        }];
+        
+        return 123 + arr.count *30 +60;
+    }else{
+        return 123;
+    }
+}
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+@end

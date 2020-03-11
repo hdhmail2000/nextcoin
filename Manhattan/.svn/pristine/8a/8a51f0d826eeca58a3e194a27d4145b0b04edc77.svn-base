@@ -1,0 +1,148 @@
+//
+//  XHHMiningHeadView.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/16.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHMiningHeadView.h"
+#import "XHHForseTaskController.h"
+#import "XHHShareView.h"
+
+#import "XHHMovePointView.h"
+
+@interface XHHMiningHeadView()<SDCycleScrollViewDelegate>
+
+@property (nonatomic , strong) SDCycleScrollView *sdScrollView;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *navHeight;
+
+@property (weak, nonatomic) IBOutlet UIImageView *bgImageView;
+
+@property (nonatomic , strong) XHHShareView *shareView;
+
+@end
+
+#define XHHWidthProportion ChZ_WIDTH/320.0
+#define XHHHeightProportion ChZ_HEIGHT/568.0
+
+@implementation XHHMiningHeadView
+
+-(void)awakeFromNib{
+    [super awakeFromNib];
+    CGFloat navHeight2 = ChZ_IsiPhoneX ? 24 : 0;
+    _navHeight.constant +=navHeight2;
+    
+    [self addSubview:self.sdScrollView];
+    [self.sdScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.top.equalTo(self.bgImageView.mas_bottom);
+        make.height.mas_equalTo(ChZ_WIDTH*100/ChZ_WIDTH);
+    }];
+    
+    CGFloat iphoneHeight = ChZ_IsiPhoneX ? 34 : 0;
+    
+    XHHMovePointView *blueView = [[XHHMovePointView alloc] initWithFrame:CGRectMake(146*XHHWidthProportion, 74*XHHHeightProportion - iphoneHeight, 36*XHHWidthProportion, 60*XHHHeightProportion)];
+    [blueView lightColor:[UIColor colorWithHexString:@"1eddfe"]];
+    [blueView moddleImage:[UIImage imageNamed:@"mining_trad_blueTT"]];
+    [self addSubview:blueView];
+    
+    
+    CGFloat redY = ChZ_IsiPhoneX ? 0 : 1;
+    
+    XHHMovePointView *redView = [[XHHMovePointView alloc] initWithFrame:CGRectMake(275*XHHWidthProportion, 12*redY*XHHHeightProportion, 36*XHHWidthProportion, 60*XHHHeightProportion)];
+    [redView lightColor:[UIColor colorWithHexString:@"C674B0"]];
+    [redView moddleImage:[UIImage imageNamed:@"mining_trad_redTT"]];
+    [self addSubview:redView];
+    
+    UIView *v = [[UIView alloc] init];
+    v.frame = CGRectMake(285*XHHWidthProportion, 12*redY*XHHHeightProportion + 60*XHHHeightProportion,26*XHHWidthProportion, 3*XHHHeightProportion);
+    [v setGradientBackgroundWithColors:@[[UIColor colorWithHexString:@"ff89e0"],[UIColor clearColor]] locations:nil startPoint:CGPointMake(0, 0) endPoint:CGPointMake(1, 0)];
+    v.backgroundColor = [UIColor colorWithHexString:@"ff89e0"];
+    v.alpha = 0.4;
+    [self addSubview:v];
+    
+    CGFloat yellowY = ChZ_IsiPhoneX ? 44 : 0;
+    XHHMovePointView *yellowView = [[XHHMovePointView alloc] initWithFrame:CGRectMake(96*XHHWidthProportion, 107*XHHHeightProportion - yellowY, 43*XHHWidthProportion, 60*XHHHeightProportion)];
+    [yellowView lightColor:[UIColor colorWithHexString:@"fff30f"]];
+    [yellowView moddleImage:[UIImage imageNamed:@"mining_trad_yellowTT"]];
+    [self addSubview:yellowView];
+    
+    
+    UIView *v1 = [[UIView alloc] init];
+    v1.frame = CGRectMake(106*XHHWidthProportion, 107*XHHHeightProportion - yellowY + 60*XHHHeightProportion,33*XHHWidthProportion, 3*XHHHeightProportion);
+    v1.backgroundColor = [UIColor colorWithHexString:@"fff30f"];
+    v1.alpha = 0.4;
+    [self addSubview:v1];
+    
+    
+    CGFloat goldViewY = ChZ_IsiPhoneX ? 54 : 0;
+    CGFloat v2X = ChZ_IsiPhoneX ?217 :218;
+    CGFloat v3X = ChZ_IsiPhoneX ?233 :231;
+    UIView *v2 = [[UIView alloc] init];
+    v2.frame = CGRectMake(v2X*XHHWidthProportion, 170*XHHHeightProportion - goldViewY, 12*XHHWidthProportion, 40*XHHHeightProportion);
+    v2.transform = CGAffineTransformMakeRotation(- M_PI * 0.1);
+    [v2 setGradientBackgroundWithColors:@[[UIColor colorWithHexString:@"1eddfe"],[UIColor clearColor]] locations:nil startPoint:CGPointMake(0, 1) endPoint:CGPointMake(0, 0)];
+    v2.alpha = 0.5;
+    [self addSubview:v2];
+    
+    
+    UIView *v3 = [[UIView alloc] init];
+    v3.frame = CGRectMake(v3X*XHHWidthProportion, 170*XHHHeightProportion - goldViewY, 12*XHHWidthProportion, 40*XHHHeightProportion);
+    v3.transform = CGAffineTransformMakeRotation( M_PI * 0.1);
+    [v3 setGradientBackgroundWithColors:@[[UIColor colorWithHexString:@"1eddfe"],[UIColor clearColor]] locations:nil startPoint:CGPointMake(0, 1) endPoint:CGPointMake(0, 0)];
+    v3.alpha = 0.5;
+    [self addSubview:v3];
+    
+//    UIView *v1 = [[UIView alloc] init];
+//    v1.frame = CGRectMake(106*XHHWidthProportion, 107*XHHHeightProportion - yellowY + 60*XHHHeightProportion,33*XHHWidthProportion, 3*XHHHeightProportion);
+//    v1.backgroundColor = [UIColor colorWithHexString:@"fff30f"];
+//    v1.alpha = 0.4;
+//    [self addSubview:v1];
+    
+    
+    XHHMovePointView *goldView = [[XHHMovePointView alloc] initWithFrame:CGRectMake(225*XHHWidthProportion, 168*XHHHeightProportion - goldViewY, 12*XHHWidthProportion, 40*XHHHeightProportion)];
+    [goldView lightColor:[UIColor colorWithHexString:@"1eddfe"]];
+    [goldView moddleImage:[UIImage imageNamed:@"mining_home_gold_cyn"]];
+    [goldView topImage:[UIImage imageNamed:@"mining_home_gold_cyn2"]];
+    [self addSubview:goldView];
+    
+    
+}
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+-(SDCycleScrollView *)sdScrollView{
+    if (!_sdScrollView) {
+        _sdScrollView = [[SDCycleScrollView alloc] init];
+        _sdScrollView.delegate = self;
+        _sdScrollView.localizationImageNamesGroup = @[@"mining_home_demoBanner",];
+        _sdScrollView.pageDotColor = [UIColor colorWithHexString:@"FFFFFF"];
+        _sdScrollView.currentPageDotColor = [UIColor colorWithHexString:@"2395FF"];
+        _sdScrollView.backgroundColor = [UIColor whiteColor];
+        _sdScrollView.autoScrollTimeInterval = 5;
+    }
+    return _sdScrollView;
+}
+- (IBAction)taskAction:(id)sender {
+    XHHForseTaskController *vc = [[XHHForseTaskController alloc] init];
+    [self.viewController.navigationController pushViewController:vc animated:YES];
+}
+- (IBAction)shareAction:(id)sender {
+    [self.shareView showInView:self.viewController.view.window];
+}
+
+-(XHHShareView *)shareView{
+    if (!_shareView) {
+        _shareView = [[[NSBundle mainBundle] loadNibNamed:@"XHHShareView" owner:nil options:nil] lastObject];
+    }
+    return _shareView;
+}
+
+@end

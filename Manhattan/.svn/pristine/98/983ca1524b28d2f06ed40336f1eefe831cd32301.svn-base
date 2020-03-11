@@ -1,0 +1,327 @@
+//
+//  XHHMyDealController.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHMyDealController.h"
+
+#import "XHHTradBuyOrSellController.h"
+
+#import "XHHSellBuyController.h"
+
+#import "XHHTadTypeChooesView.h"
+
+#import "XHHPublicItemsView.h"
+
+#import "XHHMyDealCell.h"
+
+#import "XHHSellBuyController.h"
+
+#import "XHHPublicNavView.h"
+
+#import "XHHSellBuyController.h"
+
+#import "XHHKLineController.h"
+
+#import "XHHCurrencyView.h"
+
+#import "XHHC2CCnyListModel.h"
+
+#import "XHHC2CBuyDataModel.h"
+
+#import "XHHNacTitleChooseView.h"
+
+static NSString  *cellInditifier = @"XHHMyDealCell";
+
+@interface XHHMyDealController ()<XHHPublicItemsViewProtocol,UITableViewDelegate,UITableViewDataSource,XHHPublicNavViewProtocol>
+
+@property (strong, nonatomic) XHHPublicItemsView          *itemsView;
+
+@property (nonatomic , strong) XHHPublicNavView           *navView;
+
+@property (nonatomic , strong) XHHCurrencyView            *currencyView;
+
+@property (strong, nonatomic) XHHNacTitleChooseView       *navChooseView;
+
+@property (strong, nonatomic) UITableView                 *tableView;
+
+@property (strong, nonatomic) NSMutableArray              *dataArray;
+
+@property (assign, nonatomic) NSInteger                   currIndex;
+
+@property (nonatomic , strong) NSArray                    *cnyList;
+
+@property (nonatomic , copy) NSString                     *cnyId;
+
+@property (nonatomic , assign) NSInteger                  page;
+
+@property (nonatomic , strong) XHHC2CBuyDataModel         *dataModel;
+
+@end
+
+@implementation XHHMyDealController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self zh_setupUI];
+    
+    [self requestC2CCnyList];
+}
+-(void)zh_setupUI{
+    self.currIndex = 0;
+    
+    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+    
+    [self.view addSubview:self.navView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self.view);
+        make.height.mas_equalTo(navHeight +64);
+    }];
+    [self.navView addSubview:self.navChooseView];
+    [self.navChooseView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.bottom.equalTo(self.navView);
+        make.size.mas_equalTo(CGSizeMake(120, 44));
+    }];
+    
+    [self.view addSubview:self.itemsView];
+    [self.itemsView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.navView.mas_bottom);
+        make.height.mas_equalTo(46);
+    }];
+    
+    [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.itemsView.mas_bottom);
+        make.bottom.equalTo(self.view).offset(-navHeight);
+    }];
+}
+
+-(XHHPublicNavView *)navView{
+    if (!_navView) {
+        _navView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPublicNavView" owner:nil options:nil] lastObject];
+        _navView.delegete = self;
+        [_navView setLeftButtonTitle:@"" image:@""];
+        [_navView setrightButtonTitles:nil images:@[@"trad_buysell_rightnavone",@"trad_buysell_rightnavtwo"]];
+        _navView.rightOneWithd.constant = 44;
+        _navView.rightTwoWithd.constant = 44;
+    }
+    return _navView;
+}
+-(XHHNacTitleChooseView *)navChooseView{
+    if (!_navChooseView) {
+        _navChooseView = [[[NSBundle mainBundle] loadNibNamed:@"XHHNacTitleChooseView" owner:nil options:nil] lastObject];
+        @weakify(self);
+        _navChooseView.backBlock = ^{
+            @strongify(self);
+            [self.navigationController popViewControllerAnimated:YES];
+        };
+        _navChooseView.itemBlock = ^{
+            @strongify(self);
+            [self.currencyView showInView:self.view];
+        };
+    }
+    return _navChooseView;
+}
+-(XHHPublicItemsView *)itemsView{
+    if (!_itemsView) {
+        _itemsView = [[XHHPublicItemsView alloc] init];
+        [_itemsView zh_setupUIWithItems:@[@"我要买入",@"我要卖出"]];
+        _itemsView.delegate = self;
+    }
+    return _itemsView;
+}
+-(XHHCurrencyView *)currencyView{
+    if (!_currencyView) {
+        _currencyView = [[[NSBundle mainBundle] loadNibNamed:@"XHHCurrencyView" owner:nil options:nil] lastObject];
+        @weakify(self);
+        _currencyView.selectCnyBlock = ^(XHHC2CCnyListModel *cnyModel)
+        {
+            @strongify(self);
+            self.cnyId = cnyModel.fid;
+            self.navChooseView.title = cnyModel.title;
+            [self.tableView.mj_header beginRefreshing];
+        };
+    }
+    return _currencyView;
+}
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.rowHeight = 170;
+        _tableView.backgroundColor = bgColor;
+        [_tableView setSeparatorColor:[UIColor clearColor]];
+        [_tableView registerNib:[UINib nibWithNibName:@"XHHMyDealCell" bundle:nil] forCellReuseIdentifier:cellInditifier];
+        [self setupRefreshWithView:_tableView refreshHeadAction:@selector(headRefresh) refreshFooterAction:@selector(footRefresh)];
+    }
+    return _tableView;
+}
+-(void)headRefresh{
+    if (self.currIndex == 0)
+    {
+        [self requestBuysList:YES];
+    }else
+    {
+        [self requestSellsList:YES];
+    }
+    
+}
+-(void)footRefresh{
+    if (self.currIndex == 0)
+    {
+        [self requestBuysList:NO];
+    }else
+    {
+        [self requestSellsList:NO];
+    }
+}
+
+-(NSMutableArray *)dataArray{
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
+-(void)itemsClickIndex:(NSInteger)index{
+    self.currIndex = index;
+    [self.dataArray removeAllObjects];
+    [self.tableView.mj_header beginRefreshing];
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataArray.count;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    XHHMyDealCell *cell = [tableView dequeueReusableCellWithIdentifier:cellInditifier];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (self.currIndex == 0)
+    {
+        cell.tradType = C2CTradTypeBuy;
+    }else if (self.currIndex == 1)
+    {
+        cell.tradType = C2CTradTypeSell;
+    }
+    if (self.dataArray.count > indexPath.row)
+    {
+        XHHC2CBuyModel *model = self.dataArray[indexPath.row];
+        cell.model = model;
+    }
+    @weakify(self);
+    cell.block = ^(NSInteger index, XHHC2CBuyModel *model, int type)
+    {
+        @strongify(self);
+        XHHTradBuyOrSellController *vc = [[XHHTradBuyOrSellController alloc] init];
+        vc.model = model;
+        vc.tradType = type;
+        [self.navigationController pushViewController:vc animated:YES];
+    };
+    
+    return cell;
+}
+-(void)rightButtonActionIndex:(NSInteger)index{
+    if (index == 1) {
+        XHHKLineController *vc = [[XHHKLineController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        XHHSellBuyController *vc = [[XHHSellBuyController alloc] init];
+        vc.cnyList = self.cnyList;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+-(void)requestC2CCnyList{
+    @weakify(self);
+    [ChZHomeRequest requestC2CcnyListSuccessBlock:^(NSArray *dataSource)
+    {
+        @strongify(self);
+        self.cnyList = dataSource;
+        self.currencyView.cnyList = dataSource;
+        if (self.cnyList.count)
+        {
+            XHHC2CCnyListModel *model = self.cnyList[0];
+            self.navChooseView.title = model.title;
+            self.cnyId = model.fid;
+            [self.tableView.mj_header beginRefreshing];
+        }
+        
+    } errorBlock:^(int code, NSString *error) {
+        ChZ_MBError(error);
+    }];
+}
+-(void)requestBuysList:(BOOL)isRefresh
+{
+    if (!ChZ_StringIsEmpty(self.cnyId)) {
+        return;
+    }
+    int page = 0;
+    if (isRefresh == NO) {
+        page = (int) ceil(self.dataArray.count/10.0f) + 1;
+    }
+    @weakify(self);
+    [ChZHomeRequest requestC2CBuyListCnyId:self.cnyId page:page successBlock:^(id dataSource) {
+        @strongify(self);
+        if (isRefresh) [self.dataArray removeAllObjects];
+        self.dataModel = dataSource;
+        if (self.dataModel && self.dataModel.data) {
+            [self.dataArray addObjectsFromArray:self.dataModel.data];
+        }
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+    } errorBlock:^(int code, NSString *error) {
+        @strongify(self);
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+    }];
+}
+-(void)requestSellsList:(BOOL)isRefresh
+{
+    if (!ChZ_StringIsEmpty(self.cnyId)) {
+        return;
+    }
+    int page = 0;
+    if (isRefresh == NO) {
+        page = (int) ceil(self.dataArray.count/10.0f) + 1;
+    }
+    @weakify(self);
+    [ChZHomeRequest requestC2CSellListCnyId:self.cnyId page:page successBlock:^(id dataSource) {
+        @strongify(self);
+        if (isRefresh) [self.dataArray removeAllObjects];
+        self.dataModel = dataSource;
+        [self.dataArray addObjectsFromArray:self.dataModel.data];
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+    } errorBlock:^(int code, NSString *error) {
+        @strongify(self);
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+    }];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

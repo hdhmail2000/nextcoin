@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no" />
+        <title>DOTA ONE</title>
+        <meta name="csrf-token" content="{{ csrf_token() }">
+        <meta name="description" content="DOTA ONE" />
+        <meta name="keywords" content="DOTA ONE" />
+        <meta name="author" content="DOTA ONE" />
+        <link rel="stylesheet" type="text/css" href="/iconfont/iconfont.css" />
+        <link rel="stylesheet" type="text/css" href="/css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="/css/custom.css" />
+        <script src="{HOME_THEME_PATH}exc/js/jquery-2.2.3.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/iconfont/iconfont.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+	    <!--[if lt IE 9]>对不起，浏览器版本太低~！<![endif]-->
+        <div class="container-fluid loging">
+            <div class="row loging-header">
+                <div class="col-xs-12 loging-header-logo">
+                    <a href="/index.php?s=exc&c=indexController" class=""></a>
+                </div>
+            </div>
+            <div class="row loging-body">
+                <div class="col-xs-12">
+                    <div class="loging-body-box">
+                        <h2 class="loging-body-tetil">{$vail.first_reset}</h2>
+                        <div class="form-wrap">
+                            <form class="form">
+                                <input type="hidden" id="fid" value="{$data.fuser['fid']}">
+                                <input type="hidden" id="uuid" value="{$data.uuid}">
+                                <div class="form-item">
+                                    <span class="iconfont icon-zhuanghao"></span>
+                                    <label for="">
+                                        <input id="reset-loginname" readonly value="{$data.fuser['floginname']}" >
+                                    </label>
+
+                                </div>
+
+                                <div class="form-item">
+                                    <span class="iconfont icon-mima"></span>
+                                    <label for="">
+                                        <input type="text" id="reset-googlecode" value="" placeholder="{$vail.first_place4}"/>
+                                    </label>
+                                </div>
+                                <div class="form-item">
+                                    <span class="iconfont icon-mima"></span>
+                                    <label for="">
+                                        <input type="password" id="reset-newpass" value="" placeholder="{$vail.first_place5}"/>
+                                    </label>
+                                </div>
+                                <div class="form-item">
+                                    <span class="iconfont icon-mima"></span>
+                                    <label for="">
+                                        <input type="password"  id="reset-confirmpass" value="" placeholder="{$vail.first_place6}"/>
+                                    </label>
+                                </div>
+<!----------------------------------- 错误提示 ---------------------------------->
+                                <div class="form-item-hint">
+                                    <p style="display: none;">{$vail.first_hint}</p>
+                                </div>
+                            </form>
+                            <div class="form-btn">
+                                <a href="javascript:void(0);" id="btn-email-success">{$vail.first_sure}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{HOME_THEME_PATH}exc/js/custom.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/plugin/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/comm/util.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/comm/comm.js" type="text/javascript" charset="utf-8"></script>
+        {if !isset($_COOKIE['oex_lan']) || $_COOKIE['oex_lan'] =='zh_TW'}
+            <script src="{HOME_THEME_PATH}exc/js/language/language_zh_TW.js" type="text/javascript" charset="utf-8"></script>
+        {else}
+            <script src="{HOME_THEME_PATH}exc/js/language/language_en_US.js" type="text/javascript" charset="utf-8"></script>
+
+        {/if}
+        <script src="{HOME_THEME_PATH}exc/js/user/reset.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

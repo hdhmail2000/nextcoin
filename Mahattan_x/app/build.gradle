@@ -1,0 +1,68 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+    defaultConfig {
+        applicationId "com.ifenduo.mahattan_x"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1000014
+        versionName "1.4"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //修改生成的apk名字
+    applicationVariants.all { variant ->
+        def date = new Date().format("YYYY_MM_dd_HH_mm")
+        variant.outputs.all { output ->
+            outputFileName = "MHX-release-${variant.versionName}-" + date + ".apk"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation project(':lib-common')
+    implementation project(':lib-okhttp')
+    implementation project(':lib-bottomnavigation')
+    implementation project(':lib-ikvStockChart')
+    implementation project(':lib-banner')
+    implementation project(':lib-wheelpicker')
+    implementation project(':lib-picture')
+
+    implementation rootProject.ext.supportAppcompat
+    implementation rootProject.ext.constraintLayout
+    implementation rootProject.ext.eventBus
+    implementation rootProject.ext.butterKnife
+    annotationProcessor rootProject.ext.butterKnifeAnnotationProcessor
+    implementation rootProject.ext.gson
+    implementation rootProject.ext.supportDesign
+    implementation rootProject.ext.glide
+    implementation rootProject.ext.supportCardview
+
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
+//    implementation 'com.tencent.bugly:crashreport:latest.release'
+//    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+//    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
+    implementation 'com.tencent.bugly:crashreport_upgrade:latest.release'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
+    //其中latest.release指代最新Bugly NDK版本号，也可以指
+    implementation 'pub.devrel:easypermissions:1.1.3'
+    implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.2.1'
+    implementation 'com.aliyun.dpa:oss-android-sdk:+'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+}

@@ -1,0 +1,336 @@
+<link rel="stylesheet" type="text/css" href="{HOME_THEME_PATH}dt/css/dt.css"/>
+{template "../header.html", "/"}
+
+{template "top.html", "/"}
+
+<style type="text/css">
+	.vip-list-item{
+		padding: 0 10px;
+	}
+</style>
+        <div class="container-fluid dt-wrap">
+            <div class="row">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 dt-tetil">
+                            <h1>CC</h1>
+                            <h3>CCNEX 全球区块链生态应用通证</h3>
+                        </div>
+                        <ul class="col-xs-12 dt-nav" onclick="_nav(event)">
+                            <li class="dt-navbar">
+                                <button type="button" class="active">关于CC</button>
+                            </li>
+                            <li class="dt-navbar">
+                                <button type="button">会员等级</button>
+                            </li>
+                            <li class="dt-navbar">
+                                <button type="button">交易挖矿</button>
+                            </li>
+                            <li class="dt-navbar">
+                                <button type="button">挖矿增值</button>
+                            </li>
+                        </ul>
+                        <div class="col-xs-12 vip-list">
+                            <div class="col-xs-2 vip-list-item">
+                                <div class="col-xs-12">
+                                    <div class="vip-list-tetil">注册会员</div>
+                                    <div class="vip-list-data">
+                                        <p class="vip-list-stars">
+                                            <i></i>
+                                        </p>
+                                        <div class="vip-list-table">
+                                            <p class="vip-list-text">平台注册用户</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-2 vip-list-item">
+                                <div class="col-xs-12">
+                                    <div class="vip-list-tetil">普通会员</div>
+                                    <div class="vip-list-data">
+                                        <p class="vip-list-stars">
+                                            <i></i>
+                                            <i></i>
+                                        </p>
+                                        <div class="vip-list-table">
+                                            <p class="vip-list-text">平台实名认证用户</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-2 vip-list-item">
+                                <div class="col-xs-12">
+                                    <div class="vip-list-tetil">体验会员</div>
+                                    <div class="vip-list-data">
+                                        <p class="vip-list-stars">
+                                            <i></i>
+                                            <i></i>
+                                            <i></i>
+                                        </p>
+                                        <div class="vip-list-table">
+                                            <p class="vip-list-text"> 消耗90CC即可 享受体验会员权益</p>
+                                        </div>
+                                        <div class="vip-list-btn">
+                                        	{if $groupid == 5}
+                                        	<button type="button" disabled="disabled">当前等级</button>
+                                        	{else}
+                                            <button type="button" onclick="buy_group('{$username}',5,{$groupid})">购买</button>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-2 vip-list-item">
+                                <div class="col-xs-12">
+                                    <div class="vip-list-tetil">白银会员</div>
+                                    <div class="vip-list-data">
+                                        <p class="vip-list-stars">
+                                            <i></i>
+                                            <i></i>
+                                            <i></i>
+                                            <i></i>
+                                        </p>
+                                        <div class="vip-list-table">
+                                            <p class="vip-list-text">平台实名认证用户</br>消耗3000CC</p>
+                                        </div>
+                                        <div class="vip-list-btn">
+                                        	{if $groupid == 6}
+                                        	<button type="button" disabled="disabled">当前等级</button>
+                                        	{else}
+                                            <button type="button" onclick="buy_group('{$username}',6,{$groupid})">购买</button>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-2 vip-list-item">
+                                <div class="col-xs-12">
+                                    <div class="vip-list-tetil">黄金会员</div>
+                                    <div class="vip-list-data">
+                                        <p class="vip-list-stars">
+                                            <i></i>
+                                            <i></i>
+                                            <i></i>
+                                            <i></i>
+                                            <i></i>
+                                        </p>
+                                        <div class="vip-list-table">
+                                            <p class="vip-list-text">平台实名认证用户</br>消耗16000CC</p>
+                                        </div>
+                                        <div class="vip-list-btn">
+                                            {if $groupid == 7}
+                                        	<button type="button" disabled="disabled">当前等级</button>
+                                        	{else}
+                                            <button type="button" onclick="buy_group('{$username}',7,{$groupid})">购买</button>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-2 vip-list-item">
+                                <div class="col-xs-12">
+                                    <div class="vip-list-tetil">钻石会员</div>
+                                    <div class="vip-list-data">
+                                        <p class="vip-list-stars">
+                                            <i></i>
+                                            <i></i>
+                                            <i></i>
+                                            <i></i>
+                                            <i></i>
+                                            <i></i>
+                                        </p>
+                                        <div class="vip-list-table">
+                                            <p class="vip-list-text">平台实名认证用户</br>消耗50000CC</p>
+                                        </div>
+                                        <div class="vip-list-btn">
+                                            {if $groupid == 8}
+                                        	<button type="button" disabled="disabled">当前等级</button>
+                                        	{else}
+                                            <button type="button" onclick="buy_group('{$username}',8,{$groupid})">购买</button>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                   <!--------------------- 详情 ----------------->
+
+                        <div class="col-xs-12 dt-data">
+                            <!---------- 关于 ------------->
+                            <div class="col-xs-12 dt-data-item active">
+                                <div class="col-xs-12 dt-data-box">
+                                    <h3 class="col-xs-12 dt-data-tetil">什么是CC?</h3>
+                                    <div class="col-xs-12 dt-data-text">
+                                       <p>CC是CCNEX贡献通证，是CCNEX基于区块链发行的通证。</p>
+                                       <p>CC将基于以太坊网络发行，发行总量为 1 亿，永不增发；且项目规划在3年内，将平台100%收益用于CC回购销毁，直至只剩余1000万CC流通量为止。</p>
+                                       <p>CCNEX在区块链共识机制 PoW(Proof of Work)的基础上，采用创新的“交易挖矿”模式，交易手续费按照会员等级享受比例折合成CC返还，最高返还价值交易手续费130%的CC</p>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 dt-data-box">
+                                    <h3 class="col-xs-12 dt-data-tetil">如何获得CC</h3>
+                                    <div class="col-xs-12 dt-data-list">
+                                        <div class="col-xs-4 dt-item-box">
+                                            <div class="col-xs-12">
+                                                <div class="dt-item-tetil">交易行为证明(交易挖矿)获取</div>
+                                                <p class="dt-item-text">通过“交易即挖矿”，即手续费返还的方式获取。</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 dt-item-box">
+                                            <div class="col-xs-12">
+                                                <div class="dt-item-tetil"> 币币交易获取 </div>
+                                                <p class="dt-item-text">用户可以通过币币交易的形式，购买并持有CC 。</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 dt-item-box">
+                                            <div class="col-xs-12">
+                                                <div class="dt-item-tetil">邀请好友挖矿 </div>
+                                                <p class="dt-item-text">可获得好友交易挖矿产生的CC数量的一定比例奖励</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 dt-data-box">
+                                    <h3 class="col-xs-12 dt-data-tetil">背景</h3>
+                                    <div class="col-xs-12 dt-data-text">
+                                        <p>CC致力于创建一个自治的、高效的、透明的数字资产交易平台，让交易员和投资者可以放心地进行任何规模的交易，而无需担忧平台的公正性和透明性、或其订单</p>
+                                        <p>管理系统的完整性和稳健性。CCNEX社区是一个公开透明的、Token化的组织，每个CC(CC Token)持有者都有权利参与社区的业务决策、团队选举等社区活动。</p>
+                                        <p>CCNEX是一个所有CC持有者共有、共治、共享的社区型组织。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---------- 会员 ------------->
+                            <div class="col-xs-12 dt-data-item">
+                                <div class="dt-data-box">
+                                    <h3 class="col-xs-12 dt-data-tetil" style="margin-bottom: 15px;">会员等级</h3>
+                                    <p class="col-xs-12 dt-tetil-text">成为平台等级会员即可享受平台收益</p>
+                                    <div class="col-xs-12 dt-data-table">
+                                        <img src="/statics/default/dt/img/vip.jpg" alt="" />
+                                    </div>
+                                    <p class="col-xs-12 dt-data-hint">注：以上所说的返还都是返还平台币</p>
+                                </div>
+                            </div>
+                            <!---------- 交易 ------------->
+                            <div class="col-xs-12 dt-data-item">
+                                <div class="col-xs-12 dt-data-box">
+                                    <h3 class="col-xs-12 dt-data-tetil" style="margin-bottom: 25px;">交易挖矿获得 CC</h3>
+                                    <p class="col-xs-12 dt-tetil-text">Token作为可流通的加密数字权益证明，将成为未来数字经济时代的基本要素。CC作为CCNEX社区权益的代表，是CCNEX社区治理的基石。</p>
+                                </div>
+                                <div class="col-xs-12 dt-data-box dt-trading-list">
+                                    <div class="col-xs-4 dt-trading-item">
+                                        <h3 class="dt-trading-tetli">交易手续费返还比例</h3>
+                                        <div class="dt-trading-text">
+                                            <div>
+                                                <p>注册会员 ：无</p>
+                                                <p>普通会员 ：无</p>
+                                                <p>体验会员 ： 手续费返还50%</p>
+                                                <p>白银会员 ： 手续费返还80%</p>
+                                                <p>黄金会员 ： 手续费返还90%</p>
+                                                <p>钻石会员 ： 手续费返还100%</p>
+                                            </div>
+                                        </div>
+                                        <div class="dt-trading-img">
+                                            <img src="/statics/default/dt/img/img_02.png" alt="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4 dt-trading-item">
+                                        <h3 class="dt-trading-tetli">每日挖矿总量设置限制</h3>
+                                        <div class="dt-trading-text">
+                                            <div>
+                                                <p>其每日挖矿总量=交易手续费返还总量+佣金总量。</p>
+                                                <p>达到每日挖矿总量后交易不在返还交易手续费及佣金</p>
+                                            </div>
+                                        </div>
+                                        <div class="dt-trading-img">
+                                            <img src="/statics/default/dt/img/img_03.png" alt="" />
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-4 dt-trading-item">
+                                        <h3 class="dt-trading-tetli">交易手续费细则</h3>
+                                        <div class="dt-trading-text">
+                                            <div>
+                                                <p>清算时间：每天00:00进行前24小时交易手续费清算;</p>
+                                                <p>结算时间：每天13:00开始清算前24小时应返还手续费；</p>
+                                                <p>结算比例：前24小时产生手续费按照前24小时平台代币平均价格折算代币数量进行返回。</p>
+                                                <p class="dt-trading-hint">注意：平台代币前24小时均价=前24小时平台代币总交易额/前24小时平台代币总交易数量</p>
+                                            </div>
+                                        </div>
+                                        <div class="dt-trading-img">
+                                            <img src="/statics/default/dt/img/img_04.png" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---------- 增值 ------------->
+                            <div class="col-xs-12 dt-data-item">
+                                <div class="col-xs-12 dt-data-box">
+                                    <h3 class="col-xs-12 dt-data-tetil">
+                                        <span>挖矿增值</span>
+                                    </h3>
+                                </div>
+                                <div class="col-xs-12 dt-appreciation">
+                                    <div class="col-xs-12 dt-appreciation-box">
+                                        <h2 class="col-xs-12 dt-appreciation-tetli">
+                                            <span>会员推荐体系</span>
+                                        </h2>
+                                        <div class="col-xs-12 dt-appreciation-list">
+                                            <div class="col-xs-12 dt-appreciation-item">
+                                                <span>（1）</span>
+                                                <div>
+                                                    <p>登录账户，通过账号的菜单查看您的专属推荐链接或推荐码。您可以复制或通过社交媒体把推荐链接或推荐码发送给您的朋友；</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 dt-appreciation-item">
+                                                <span>（2）</span>
+                                                <div>
+                                                    <p>通过点击您的推荐链接或使用您的推荐码，您的好友完成实名认证即成为CCNEX的一员</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 dt-appreciation-item">
+                                                <span>（3）</span>
+                                                <div>
+                                                    <p>注册成功后，您的好友在交易过程中，您即可获得好友交易手续费的一部分作为奖励；</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 dt-appreciation-item">
+                                                <span>（4）</span>
+                                                <div>
+                                                    <p>自身账户需推荐至少2个完成实名认证的账户才可以享受最低级别推荐返佣比例，具体推荐与返佣比例如下：</p>
+                                                    <p>A推荐2-9个B级账户，享受下级账户产生交易手续费15%推荐返佣；</p>
+                                                    <p>A推荐10-99个B级账户，享受下级账户产生交易手续费20%推荐返佣；</p>
+                                                    <p>A推荐100个以上B级账户，享受下级账户产生交易手续费30%推荐返佣；</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 dt-appreciation-box">
+                                        <h2 class="col-xs-12 dt-appreciation-tetli">
+                                            <span>会员推荐体系</span>
+                                        </h2>
+                                        <div class="col-xs-12 dt-appreciation-list">
+                                            <div class="col-xs-12 dt-appreciation-item">
+                                                <p>清算时间：每天00:00进行前24小时推荐账户交易手续费清算同时，清算自身账户可获得代币数量；</p>
+                                                <p>结算时间：每天13:00清算推荐账户返回手续费同时结算自身账户可获得CC数量，同时自身账户可查看单账户清算数量；</p>
+                                                <p>结算比例：按照00:00清算时间计算当下推荐会员数量即享受返佣比例进行结算。</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<script src="{HOME_THEME_PATH}dt/js/dt.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+        	       function _nav(e){
+        	           var _this = $(e.target);
+        	           var _num = _this.parent().index();
+        	           $(".dt-navbar button").removeClass("active");
+        	           _this.addClass("active");
+        	           $(".dt-data-item").removeClass("active");
+        	           $(".dt-data-item").eq(_num).addClass("active");
+        	       }
+        </script>
+{template "footer.html", "/"}

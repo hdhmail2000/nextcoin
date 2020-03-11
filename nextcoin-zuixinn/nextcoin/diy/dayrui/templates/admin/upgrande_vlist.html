@@ -1,0 +1,12 @@
+{if $rt.code == 2}
+<p style="color:green">{$rt.msg}</p>
+{else}
+<div class="dr_option">
+    <p style="color:red">{$rt.msg}</p>
+    <p style="margin-top: 30px">
+    <a class="aedit" href="http://www.phpkaiyuancms.com/index.php?c=fc&m=update&id={$rt.version.id}&url={urlencode(ADMIN_URL.dr_url('upgrade/update'))}">{fc_lang('在线升级')}</a>
+    <a class="aadd" href="http://www.phpkaiyuancms.com/index.php?c=sys&m=bdb&id={$rt.version.id}" target="_blank">{fc_lang('补丁包下载')}</a>
+
+    <a class="alist" href="{$rt.version.url}" target="_blank">{fc_lang('版本说明')}</a></p>
+</div>
+{/if}

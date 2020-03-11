@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="MYHelpListHeaderView">
+            <rect key="frame" x="0.0" y="0.0" width="379" height="52"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZS-dd-LFp">
+                    <rect key="frame" x="16" y="15" width="325" height="22"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="center_help_open" translatesAutoresizingMaskIntoConstraints="NO" id="9Nv-xB-R28">
+                    <rect key="frame" x="351" y="20" width="12" height="12"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="12" id="f9M-Vl-a7Z"/>
+                        <constraint firstAttribute="height" constant="12" id="jL0-NA-ogK"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iya-Ij-qAh">
+                    <rect key="frame" x="0.0" y="0.0" width="379" height="52"/>
+                    <connections>
+                        <action selector="selectAction:" destination="-2" eventType="touchUpInside" id="Mx6-rP-aDi"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bhP-8t-Qc9">
+                    <rect key="frame" x="16" y="51" width="347" height="1"/>
+                    <color key="backgroundColor" red="0.2371478303" green="0.2371478303" blue="0.2371478303" alpha="0.2039502641" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="o9D-6J-RVh"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="JZS-dd-LFp" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="1gh-0T-cNZ"/>
+                <constraint firstItem="bhP-8t-Qc9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="BzZ-ND-w03"/>
+                <constraint firstItem="iya-Ij-qAh" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Kn2-AI-Gqk"/>
+                <constraint firstItem="9Nv-xB-R28" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Lr6-qS-66g"/>
+                <constraint firstItem="9Nv-xB-R28" firstAttribute="leading" secondItem="JZS-dd-LFp" secondAttribute="trailing" constant="10" id="QXT-Vd-KrL"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="bhP-8t-Qc9" secondAttribute="bottom" id="Y3n-IB-Xih"/>
+                <constraint firstItem="bhP-8t-Qc9" firstAttribute="top" secondItem="JZS-dd-LFp" secondAttribute="bottom" constant="14" id="e7S-SR-7Jw"/>
+                <constraint firstAttribute="trailing" secondItem="bhP-8t-Qc9" secondAttribute="trailing" constant="16" id="hsi-KP-GaH"/>
+                <constraint firstItem="iya-Ij-qAh" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="kDG-f4-Ogt"/>
+                <constraint firstItem="iya-Ij-qAh" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="myQ-q2-dIo"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="9Nv-xB-R28" secondAttribute="trailing" constant="16" id="sM8-iM-GUg"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="JZS-dd-LFp" secondAttribute="bottom" constant="15" id="tK5-nG-Cgu"/>
+                <constraint firstAttribute="bottom" secondItem="iya-Ij-qAh" secondAttribute="bottom" id="tmt-y5-gur"/>
+                <constraint firstItem="JZS-dd-LFp" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="15" id="wcQ-Ur-6kk"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="iconImageView" destination="9Nv-xB-R28" id="ai0-0W-8vf"/>
+                <outlet property="lineView" destination="bhP-8t-Qc9" id="mEH-oP-Yj0"/>
+                <outlet property="nameLabel" destination="JZS-dd-LFp" id="T9H-EJ-zgv"/>
+            </connections>
+            <point key="canvasLocation" x="73.5" y="62"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="center_help_open" width="12" height="7"/>
+    </resources>
+</document>

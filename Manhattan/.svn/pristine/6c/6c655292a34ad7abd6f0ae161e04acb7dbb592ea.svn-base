@@ -1,0 +1,52 @@
+//
+//  XHHTSBDetailHeadView.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/30.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHTSBDetailHeadView.h"
+
+@interface XHHTSBDetailHeadView ()
+@property (weak, nonatomic) IBOutlet UILabel *buyNumLable;
+
+@property (weak, nonatomic) IBOutlet UILabel *buyNumTitleLable;
+
+@property (weak, nonatomic) IBOutlet UILabel *profitNumLable;
+
+@property (weak, nonatomic) IBOutlet UILabel *profitTitleLable;
+
+
+@property (weak, nonatomic) IBOutlet UILabel *title;
+
+@end
+
+
+@implementation XHHTSBDetailHeadView
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+-(void)reloadViewWithType:(NSInteger)type{
+    switch (type) {
+        case 1:
+            self.buyNumTitleLable.text = @"买入量";
+            _title.text = @"购买ETH";
+            break;
+        case 2:
+            self.buyNumTitleLable.text = @"出售量";
+            _title.text = @"出售ETH";
+            break;
+            
+        default:
+            break;
+    }
+}
+
+@end

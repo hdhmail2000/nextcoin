@@ -1,0 +1,63 @@
+//
+//  XHHAuthViewController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/14.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHAuthViewController.h"
+#import "XHHAuthSuccessController.h"
+#import "XHHSafeCenterController.h"
+@interface XHHAuthViewController ()
+@property (weak, nonatomic) IBOutlet UITextField *name;
+@property (weak, nonatomic) IBOutlet UITextField *idCard;
+
+@end
+
+@implementation XHHAuthViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [_name configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [_idCard configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+- (IBAction)nextAction:(id)sender {
+    XHHAuthSuccessController *vc = [XHHAuthSuccessController initWithStoryboard:@"LoginStroy"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+- (IBAction)jumpAction:(id)sender {
+    BOOL isLoginPod = YES;
+    for(UIViewController *vc in self.navigationController.viewControllers){
+        if ([vc isKindOfClass:[XHHSafeCenterController class]]) {
+            isLoginPod = NO;
+            break;
+        }
+    }
+    if (isLoginPod) {
+        [self popToVCClassName:@"XHHLoginViewController"];
+    }else{
+        [self popToVCClassName:@"XHHSafeCenterController"];
+    }
+    
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

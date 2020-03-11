@@ -1,0 +1,39 @@
+//
+//  XHHPayRecordHeadView.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/17.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHPayRecordHeadView.h"
+@interface XHHPayRecordHeadView ()
+
+@property (weak, nonatomic) IBOutlet UIImageView *typeImage;
+@property (weak, nonatomic) IBOutlet UILabel *nameLable;
+@property (weak, nonatomic) IBOutlet UILabel *moneyLable;
+@property (weak, nonatomic) IBOutlet UILabel *aboutLable;
+
+@end
+@implementation XHHPayRecordHeadView
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+-(void)setModel:(WalletListModel *)model
+{
+    _model = model;
+    if(ChZ_StringIsEmpty(model.logo)){
+        [self.typeImage sd_setImageWithURL:[NSURL URLWithString:model.logo]];
+    }
+    self.nameLable.text = [NSString stringWithFormat:@"%@",model.shortName];
+    self.moneyLable.text = [NSString stringWithFormat:@"%.4f",(floor(model.total*10000))/10000];
+    NSString *moneyString = [NSString stringWithFormat:@"%.2f",model.total * [[APPControl sharedAPPControl].cny floatValue]];
+    
+    self.aboutLable.text = [NSString stringWithFormat:@"≈ ￥%@",[NSString moneyFormat:moneyString]];
+}
+@end

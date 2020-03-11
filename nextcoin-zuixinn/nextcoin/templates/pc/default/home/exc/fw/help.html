@@ -1,0 +1,98 @@
+{template "header.html" }
+{template "top.html" }
+	    <!--[if lt IE 9]>对不起，浏览器版本太低~！<![endif]-->
+        <style type="text/css">
+               .serve-item-btn img{
+                   transition: transform .3s ease;
+                   width: 8px;
+                   transform: rotateZ(45deg);
+                   float: right;
+               }
+               .serve-list-item .serve-item-nav{
+                   transform:all .3s ease;
+               }
+        	       .serve-list-item.active .serve-item-nav{
+        	           display: block;
+        	       }
+        	       .serve-list-item.active .serve-item-btn img{
+        	           transform: rotateZ(0deg) !important;
+        	       }
+        </style>
+        <div class="container">
+            <div class="row serve-wrap">
+                <div class="col-xs-12 serve">
+<!------------------------------- 边栏 ----------------------------->
+                    <div class="col-xs-3">
+                        <ul class="serve-list">
+                            {loop $data.fabouttypes $i $types}
+                            <li class="serve-list-item {if $i==0 && empty($_GET['id'])}active{/if}">
+                                <a href="###"  class="serve-item-btn clearfix" style="width: 100%;display: inline-block;">
+                                    {$types['ftitle']}
+                                    <!--{if $data.fabout['fabouttype'] == $types['fid']}
+                                    <i class="iconfont icon-shang"></i>
+                                    {else}
+                                    <i class="iconfont icon-xia"></i>
+                                    {/if}-->
+                                    <img src="/statics/exc/dota/img/guanbi.png" alt="" />
+                                </a>
+
+                                {if !empty($types['child'])}
+                                    {if $data.fabout['fabouttype'] == $types['fid']}
+                                    <ul class="serve-item-nav" style="display: block">
+                                    {else}
+                                    <ul class="serve-item-nav">
+                                    {/if}
+	                                    {loop $types['child'] $key $value}
+	                                    <li class="serve-item-navbar">
+	                                        <a {if $_GET['id']==$key} class="active"{/if} href="/index.php?s=exc&c=indexController&m=help&id={$key}">
+	                                        		{$value}
+	                                        </a>
+	                                    </li>
+	                                    {/loop}
+
+                                		</ul>
+                               {/if}
+                            </li>
+                            {/loop}
+                        </ul>
+                    </div>
+                    <div class="col-xs-9 serve-content">
+                        <h1 class="col-xs-12 serve-tetil">{$data.fabout['ftitle']}</h1>
+                        <div class="col-xs-12 serve-data">
+                            <div class="serve-data-box">
+                                {$data.fabout['fcontent']}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="{HOME_THEME_PATH}exc/js/custom.js" type="text/javascript" charset="utf-8"></script>
+
+        <script type="text/javascript">
+        	       $(".serve-item-btn").on({
+        	           click:function(){
+        	               $(this).parent().toggleClass("active");
+        	               $(this).parent().siblings().removeClass('active');
+        	           }
+        	       })
+
+        	       $(".serve-item-navbar a").on({
+        	           click:function(){
+        	               $(".serve-item-navbar a").removeClass("active");
+        	               $(this).addClass("active");
+        	           }
+        	       })
+
+
+        </script>
+
+	</body>
+    {if !isset($_COOKIE['oex_lan']) || $_COOKIE['oex_lan'] =='zh_TW'}
+        <script src="/statics/exc/dota/js/language/language_zh_TW.js" type="text/javascript" charset="utf-8"></script>
+    {else}
+        <script src="/statics/exc/dota/js/language/language_en_US.js" type="text/javascript" charset="utf-8"></script>
+    {/if}
+{template "footer.html" }

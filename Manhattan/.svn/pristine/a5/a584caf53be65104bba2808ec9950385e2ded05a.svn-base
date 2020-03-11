@@ -1,0 +1,393 @@
+//
+//  CSSConstant.h
+//  css
+//
+//  Created by Howe on 2018/4/2.
+//  Copyright © 2018年 Howe. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface CSSConstant : NSObject
+
+@end
+
+/*
+ 获取请求地址
+ **/
+#define RequestURL(url) [NSString stringWithFormat:@"%@%@",BaseURL,url]
+
+#define RequestPHPURL(url) [NSString stringWithFormat:@"%@%@",BasePHPURL,url]
+
+//请求图片地址
+#define RequestImageURL(imageId) [NSString stringWithFormat:@"%@%@",ImageURL,imageId]
+
+
+#define RequestLastImageURL(lastImageURL) [NSString stringWithFormat:@"%@%@",ImageURL,lastImageURL]
+
+//*********************  值定义(kV_) ******************************/
+/*
+ 分页 每页数量
+ **/
+extern float  const kV_RequestNumber;
+/*
+ RefreshToKen过期
+ **/
+extern int  const kv_RefreshTokenExpired;
+/*
+ ToKen过期
+ **/
+extern int  const kv_TokenExpired;
+/*
+ ToKen错误
+ **/
+extern int  const kv_TokenEroor;
+/*
+ 刷新Token失败需要重新登录
+ **/
+extern NSInteger  const kv_NeedLoginCode;
+/*
+ 请求成功
+ **/
+extern int  const kv_JavaRequestSuccess;
+
+/*
+ 请求成功
+ **/
+extern int  const kv_PHPRequestSuccess;
+
+extern NSString *  const kv_OSS_AccessKey;
+
+extern NSString *  const kv_OSS_SecretKey;
+
+extern NSString *  const kv_OSS_BucketName;
+
+extern NSString *  const kv_OSS_EndPoint;
+
+extern NSString *  const kv_OSS_URL;
+
+//********************* Notif ******************************/
+extern NSString * const NOTIFICATION_LOGIN_SUCEESS;
+
+//********************* URL(kURL_) ******************************/
+/*
+ DoMain
+ **/
+extern NSString * const BaseURL;
+
+extern NSString * const BasePHPURL;
+
+extern NSString * const ImageURL;
+
+
+////------------这里往下需要修改
+
+/**
+ 登录用户
+ **/
+extern NSString * const kv_USER_MODEL;
+
+extern NSString * const kv_LOGIN_USERNAME;
+
+extern NSString * const kv_LOGIN_PASSWORD;
+
+extern NSString * const kURL_kline;
+
+/*
+ 登录
+ **/
+extern NSString * const kURL_login;
+/*
+ 注册
+ **/
+extern NSString * const kURL_register;
+/*
+ 修改/绑定，登录和交易密码 POST （签名）
+ **/
+extern NSString * const kURL_forget;
+/*
+ 获取用户余额 GET （非签名）
+ **/
+extern NSString * const kURL_walletList;
+
+/*
+ 获取虚拟币充值地址和近十次充值记录 GET （非签名）
+ **/
+extern NSString * const kURL_rechargeAddress;
+/*
+ 获取安全设置详情 GET （非签名）
+ **/
+extern NSString * const kURL_safeSetDetail;
+
+/*
+ 获取谷歌验证码秘钥 GET （非签名）
+ **/
+extern NSString * const kURL_googleCode;
+
+/*
+ 添加谷歌验证码秘钥  POST（签名）
+ **/
+extern NSString * const kURL_addGoogleCode;
+
+/*
+ 实名认证  POST（签名）
+ **/
+extern NSString * const kURL_verified;
+
+/*
+ 发送绑定手机的短信 GET （非签名）
+ **/
+extern NSString * const kURL_sendMsgCode;
+
+/*
+ 绑定手机 POST (非签名)
+ **/
+extern NSString * const kURL_bindingPhone;
+
+/*
+ 登录日志 GET (非签名)
+ **/
+extern NSString * const kURL_loginLog;
+
+/*
+ 安全设置日志 GET (非签名)
+ **/
+extern NSString * const kURL_secureSetLog;
+/*
+ 验证码
+ 发送需要签名的短信的
+ **/
+extern NSString * const kURL_msgCode;
+
+/*
+ 添加提现地址 POST （签名）
+ **/
+extern NSString * const kURL_outCoinAddressAdd;
+/*
+ 提币
+ **/
+extern NSString * const kURL_outCoinAddressList;
+
+/*
+ 提币
+ **/
+extern NSString * const kURL_outCoin;
+
+/*
+ 发送不需要签名的短信 POST (非签名)
+ **/
+extern NSString * const kURL_phoneMsg;
+
+/*
+ 手机注册 POST (非签名)
+ **/
+extern NSString * const kURL_phoneReg;
+
+/*
+ 买卖
+ **/
+extern NSString * const kURL_place;
+
+/*
+ 取消
+ **/
+extern NSString * const kURL_cancel;
+
+/*
+ 获取订单（未成交和已成交）
+ **/
+extern NSString * const kURL_orderRecords;
+
+/*
+ 市场 列表
+ **/
+extern NSString * const kURL_marketArea;
+
+/*
+ 币种列表
+ **/
+extern NSString * const kURL_marketList;
+
+/*
+ 盘口
+ **/
+extern NSString * const kURL_dish;
+/*
+ 币种实时数据
+ **/
+extern NSString * const kURL_realCoin;
+
+/*
+ 可用资金
+ **/
+extern NSString * const kURL_userAssets;
+/*
+ 充值码兑换
+ **/
+extern NSString * const kURL_RechargeCodeRedeem;
+/*
+ 充值码兑换列表
+ **/
+extern NSString * const kURL_RechargeCodeRecords;
+
+/*
+ 发送邮箱验证码
+ **/
+extern NSString * const kURL_emailCodeSend;
+
+/*
+ 绑定邮箱
+ **/
+extern NSString * const kURL_bindingEmail;
+
+/*
+ 用户信息
+ **/
+extern NSString * const kURL_userInfo;
+
+/*
+ 充值人民币
+ **/
+extern NSString * const kURL_RechargeCCNY;
+
+/*
+ 充值人民币Web
+ **/
+extern NSString * const kURL_RechargeCCNYURL;
+extern NSString * const kURL_WithdrawRecord;
+extern NSString * const kURL_fee;
+extern NSString * const kURL_CNYURL;
+
+//公告分类
+extern NSString * const kURL_TradCenter_notes;
+//公告列表
+extern NSString * const kURL_TradCenter_notesList;
+//公告详情
+extern NSString * const kURL_TradCenter_notesDetail;
+
+//交易收藏
+extern NSString * const kURL_trad_collect;
+//交易收藏列表
+extern NSString * const kURL_trad_collectlist;
+//交易是否收藏
+extern NSString * const kURL_trad_isCollected;
+
+
+//c2c币种列表
+extern NSString * const kURL_trad_c2cCnyList;
+//C2C购买列表
+extern NSString * const kURL_trad_c2cByList;
+//C2C出售列表
+extern NSString * const kURL_trad_c2cSellList;
+//C2C我的发布
+extern NSString * const kURL_trad_c2cMyReleaseList;
+//C2C发布卖出
+extern NSString * const kURL_trad_c2cMyReleaseSell;
+//C2C发布买入
+extern NSString * const kURL_trad_c2cMyReleaseBuy;
+//C2C查询币种余额
+extern NSString * const kURL_trad_c2cMyCnyNumber;
+//C2C发布下线
+extern NSString * const kURL_trad_c2cReleaseDownLine;
+//C2C购买币
+extern NSString * const kURL_trad_c2cBuyOherCny;
+//C2C卖出币
+extern NSString * const kURL_trad_c2cSellOherCny;
+//C2C我的订单
+extern NSString * const kURL_trad_c2cMyOrderList;
+//C2C取消订单
+extern NSString * const kURL_trad_c2cCannelOrder;
+//C2C标记为已收款
+extern NSString * const kURL_trad_c2cSigeHadGetMoney;
+//C2C标记为已付款
+extern NSString * const kURL_trad_c2cSigeHadPayMoney;
+/**
+ *我的发布详情 卖出列表
+ */
+extern NSString * const kURL_trad_c2creleaseSell;
+/**
+ *我的发布详情  买入列表
+ */
+extern NSString * const kURL_trad_c2creleaseBuy;
+/**
+ *用户账户
+ */
+extern NSString * const kURL_useraccount;
+/**
+ *提交银行卡
+ */
+extern NSString * const kURL_submitbankinfo;
+/**
+ *提交支付宝
+ */
+extern NSString * const kURL_submitalipayinfo;
+/**
+ *提交微信
+ */
+extern NSString * const kURL_submitwechatinfo;
+
+/**
+ *删除银行卡
+ */
+extern NSString * const kURL_removebankinfo;
+/**
+ *删除支付宝
+ */
+extern NSString * const kURL_removealipayinfo;
+/**
+ *删除微信
+ */
+extern NSString * const kURL_removewechatinfo;
+
+
+//注册成功后调用接口
+extern NSString * const kURL_Login_registSuccess;
+
+
+//设置交易密码
+extern NSString * const kURL_passWordSetting;
+//忘记登录密码
+extern NSString * const kURL_login_passwordForget;
+//忘记交易密码
+extern NSString * const kURL_trade_passwordForget;
+
+
+//矿区首页
+extern NSString * const kURL_city_homeDate;
+//矿区首页
+extern NSString * const kURL_city_homeBanner;
+//挖矿记录
+extern NSString * const kURL_city_mineList;
+//开矿区
+extern NSString * const kURL_city_miningAreaList;
+//挖矿
+extern NSString * const kURL_city_miningGetCome;
+//一键复投
+extern NSString * const kURL_city_miningOneKeyInput;
+//矿区投入
+extern NSString * const kURL_city_miningBuyInput;
+//算力任务
+extern NSString * const kURL_city_miningForseWork;
+//算力记录
+extern NSString * const kURL_city_miningForseWorkList;
+//分享地址
+extern NSString * const kURL_mine_shareAddress;
+//个人信息
+extern NSString * const kURL_mine_userCenterMessage;
+//修改个人信息
+extern NSString * const kURL_mine_updateuserCenterMessage;
+
+//图片上传
+extern NSString * const kURL_square_upPicture;
+//......................................我的......................................................................//
+
+//帮助中心
+extern const NSString * const kURL_Mine_apphelp;
+
+//列表（详情）页
+extern const NSString * const kURL_Mine_apphelpDetail ;
+
+//团队
+extern const NSString * const kURL_Mine_MyTeam;
+
+

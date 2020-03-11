@@ -1,0 +1,405 @@
+//
+//  ChZHomeRequest.h
+//  FuturePurse
+//
+//  Created by Howe on 2018/8/8.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "ChZBaseHttpRequest.h"
+
+@interface ChZHomeRequest : ChZBaseHttpRequest
+
++ (void)requestCNYSuccessBlock:(ChZ_SuccessBlock)successBlock
+                    errorBlock:(ErrorCodeBlock)errorBlock;
+/**
+ 
+ time,open,high,low,close,vol
+ 
+ @param Fid id
+ @param date 时间
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestKLineData:(NSString *)Fid
+                    date:(double )date
+            SuccessBlock:(ChZ_SuccessBlock)successBlock
+              errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 市场列表
+ 
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestAreaSuccessBlock:(ChZ_SuccessBlock)successBlock
+                     errorBlock:(ErrorCodeBlock)errorBlock;
+
+
+/**
+ 获取实时数据
+ 
+ @param idString id 串
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestRealCoin:(NSString *)idString
+           successBlock:(ChZ_SuccessBlock)successBlock
+             errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 币列表
+ 
+ @param fid id
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestAreaList:(NSString *)fid
+           successBlock:(ChZ_SuccessBlock)successBlock
+             errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 取消订单
+ 
+ @param fid 订单id
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestCancelOrder:(NSString *)fid
+              successBlock:(ChZ_SuccessBlock)successBlock
+                errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 下单
+ 
+ @param symbolId 交易对的中文名称，下划线分隔，btc_gest
+ @param amount 数量
+ @param price 价格
+ @param type 类型 buy买 或则 sell卖
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestCreateOrder:(NSString *)symbolId
+                    number:(float )number
+                     price:(float )price
+                      type:(NSString *)type
+                  tradePwd:(NSString *)tradePwd
+              successBlock:(ChZ_SuccessBlock)successBlock
+                errorBlock:(ErrorCodeBlock)errorBlock;
+
+
+/**
+ 获取订单列表
+ 
+ @param symbol 交易对
+ @param type 类型 0全部 1当前订单 2历史订单
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestTxsOrderListWithSymbol:(NSString *)symbol
+                                 type:(NSString *)type
+                         successBlock:(ChZ_SuccessBlock)successBlock
+                           errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 盘口数据
+ 
+ @param fid id
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestDish:(NSString *)fid
+       successBlock:(ChZ_SuccessBlock)successBlock
+         errorBlock:(ErrorCodeBlock)errorBlock;
+
+
+/**
+ 用户可用资金
+ 
+ @param fid id
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestUserAssets:(NSString *)fid
+             successBlock:(ChZ_SuccessBlock)successBlock
+               errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 公告分类
+
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestNotItemsSuccessBlock:(ChZ_SuccessBlock)successBlock
+                        errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 公告列表
+
+ @param page 页数
+ @param catid 分类ID
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)rerquestNotesListPage:(NSString *)page
+                       catid:(NSString *)catid
+                successBlock:(ChZ_SuccessBlock)successBlock
+                  errorBlock:(ErrorCodeBlock)errorBlock;
+
+
+/**
+ 公告详情
+
+ @param notesId 公告ID
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestNotesDetailId:(NSString *)notesId
+               successBlock:(ChZ_SuccessBlock)successBlock
+                 errorBlock:(ErrorCodeBlock)errorBlock;
+
+
+/**
+ c2获取币种列表
+ 
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CcnyListSuccessBlock:(ChZ_SuccessBlock)successBlock
+                          errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ C2C购买列表
+ 
+ @param cnyId 币种ID
+ @param page 页数
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CBuyListCnyId:(NSString *)cnyId
+                         page:(NSInteger)page
+                 successBlock:(ChZ_SuccessBlock)successBlock
+                   errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ C2C出售列表
+ 
+ @param cnyId 币种ID
+ @param page 页数
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CSellListCnyId:(NSString *)cnyId
+                          page:(NSInteger)page
+                  successBlock:(ChZ_SuccessBlock)successBlock
+                    errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 我的发布
+ 
+ @param uid 用户ID
+ @param page 页数
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CMyReleaseUid:(NSString *)uid
+                         page:(NSInteger)page
+                 successBlock:(ChZ_SuccessBlock)successBlock
+                   errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 发布卖出
+ 
+ @param uid 用户ID
+ @param passWord 密码
+ @param country 国家
+ @param num 数量
+ @param price 价格
+ @param cnyId 币种ID
+ @param mineValue 最小值
+ @param maxValue 最大值
+ @param payType 支付方式，多种逗号隔开
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CSendSellUid:(NSString *)uid
+                    passWord:(NSString *)passWord
+                     country:(NSString *)country
+                         num:(NSString *)num
+                       price:(NSString *)price
+                       cnyId:(NSString *)cnyId
+                    minValue:(NSString *)mineValue
+                    maxValue:(NSString *)maxValue
+                     payType:(NSString *)payType
+                successBlock:(ChZ_SuccessBlock)successBlock
+                  errorBlock:(ErrorCodeBlock)errorBlock;
+/**
+ 发布买入
+ 
+ @param uid 用户ID
+ @param passWord 密码
+ @param country 国家
+ @param num 数量
+ @param price 价格
+ @param cnyId 币种ID
+ @param mineValue 最小值
+ @param maxValue 最大值
+ @param payType 支付方式，多种逗号隔开
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CSendBuyUid:(NSString *)uid
+                   passWord:(NSString *)passWord
+                    country:(NSString *)country
+                        num:(NSString *)num
+                      price:(NSString *)price
+                      cnyId:(NSString *)cnyId
+                   minValue:(NSString *)mineValue
+                   maxValue:(NSString *)maxValue
+                    payType:(NSString *)payType
+               successBlock:(ChZ_SuccessBlock)successBlock
+                 errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 查询我的币种余额
+ 
+ @param uid 用户ID
+ @param cnyId 币种ID
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestCnyHaveNumUid:(NSString *)uid
+                      cnyId:(NSString *)cnyId
+               successBlock:(ChZ_SuccessBlock)successBlock
+                 errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 下线
+ 
+ @param uid 用户ID
+ @param releaseId 发布ID
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestReleaseDownLineUid:(NSString *)uid
+                       releaseId:(NSString *)releaseId
+                    successBlock:(ChZ_SuccessBlock)successBlock
+                      errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 购买币
+ 
+ @param uid 用户ID
+ @param volume 数量
+ @param price 单价
+ @param trade_id 交易ID
+ @param deal_psw 密码
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CBuyOtherCnyUid:(NSString *)uid
+                         volume:(NSString *)volume
+                          price:(NSString *)price
+                       trade_id:(NSString *)trade_id
+                        dealpsw:(NSString *)deal_psw
+                   successBlock:(ChZ_SuccessBlock)successBlock
+                     errorBlock:(ErrorCodeBlock)errorBlock;
+/**
+ 卖出币
+ 
+ @param uid 用户ID
+ @param volume 数量
+ @param price 单价
+ @param trade_id 交易ID
+ @param deal_psw 密码
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CSellOtherCnyUid:(NSString *)uid
+                          volume:(NSString *)volume
+                           price:(NSString *)price
+                        trade_id:(NSString *)trade_id
+                         dealpsw:(NSString *)deal_psw
+                    successBlock:(ChZ_SuccessBlock)successBlock
+                      errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 我的订单
+ 
+ @param uid 用户ID
+ @param page 页数
+ @param type 类型 1、买入 2、卖出 默认为1
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CMyOrdersUid:(NSString *)uid
+                        page:(NSInteger)page
+                        type:(C2CTradType)type
+                successBlock:(ChZ_SuccessBlock)successBlock
+                  errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 取消订单
+ 
+ @param uid 用户ID
+ @param orderId 订单ID
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CCanelOrderUid:(NSString *)uid
+                       orderId:(NSString *)orderId
+                  successBlock:(ChZ_SuccessBlock)successBlock
+                    errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 标记为已付款
+ 
+ @param uid 用户ID
+ @param orderId 订单ID
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CSignHadPayMoneyUid:(NSString *)uid
+                            orderId:(NSString *)orderId
+                       successBlock:(ChZ_SuccessBlock)successBlock
+                         errorBlock:(ErrorCodeBlock)errorBlock;
+/**
+ 标记为已收款
+ 
+ @param uid 用户ID
+ @param orderId 订单ID
+ @param successBlock 成功回调
+ @param errorBlock 失败回调
+ */
++(void)requestC2CSignHadGetMoneyUid:(NSString *)uid
+                            orderId:(NSString *)orderId
+                       successBlock:(ChZ_SuccessBlock)successBlock
+                         errorBlock:(ErrorCodeBlock)errorBlock;
+
+/**
+ 我的交易详情-卖出(订单列表)
+ 
+ @param orderId 订单ID
+ @param page 分页
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestC2CReleaseSell:(NSString *)orderId
+                         page:(int)page
+                 successBlock:(ChZ_SuccessBlock)successBlock
+                   errorBlock:(ChZ_ErrorCodeBlock)errorBlock;
+
+/**
+ 我的交易详情-买入 (订单列表)
+ 
+ @param orderId 订单ID
+ @param page 分页
+ @param successBlock 成功
+ @param errorBlock 失败
+ */
++ (void)requestC2CReleaseBuy:(NSString *)orderId
+                        page:(int)page
+                successBlock:(ChZ_SuccessBlock)successBlock
+                  errorBlock:(ChZ_ErrorCodeBlock)errorBlock;
+
+@end

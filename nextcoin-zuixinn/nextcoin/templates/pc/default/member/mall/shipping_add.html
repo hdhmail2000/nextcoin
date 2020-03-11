@@ -1,0 +1,343 @@
+{template nheader.html}
+<script type="text/javascript">
+$(function(){
+	dr_dw({intval($data.valuation)});
+});
+function dr_dw(id) {
+	if (id==1) {
+		$('.dr_dw').html('件');
+		$('.dr_free_1').html('满');
+		$('.dr_free_2').html('');
+		$('.dr_name').html('数量');
+		return '';
+	}
+	if (id==2) {
+		$('.dr_dw').html('kg');
+		$('.dr_free_1').html('在');
+		$('.dr_free_2').html('内');
+		$('.dr_name').html('重量');
+		return;
+	}
+	if (id==3) {
+		$('.dr_dw').html('m³');
+		$('.dr_free_1').html('在');
+		$('.dr_free_2').html('内');
+		$('.dr_name').html('体积');
+		return;
+	}
+}
+function dr_remove_city(obj, id, city) {
+	var val = $("#dr_city_value_"+id).val();
+	var arr = val.split(',');
+	var news = new Array();
+	for(var i=0;i<arr.length;i++){
+		if (city == arr[i]) {
+			city = 0;
+		} else {
+			news[i] = arr[i];
+		}
+	}
+	$("#dr_city_value_"+id).val(news.join(','));
+	$(obj).remove();
+}
+
+function dr_city(id) {
+	var url = "{dr_member_url('mall/shipping/city')}";
+    art.dialog.open(url, { title: '选择城市',
+        ok: function () {
+            var iframe = this.iframe.contentWindow;
+            if (!iframe.document.body) {
+                alert('iframe loading')
+                return false;
+            };
+			
+            var city1 = iframe.$('#dr_select_city_1').val();
+            var city2 = iframe.$('#dr_select_city_2').val();
+            var city3 = iframe.$('#dr_select_city_3').val();
+            var city4 = iframe.$('#dr_select_city_4').val();
+			
+			var select_id = '';
+			var select_name = '';
+			var s1 = $("#dr_city_"+id).html();
+			var s2 = $("#dr_city_value_"+id).val();
+			
+            if (city1) {
+				select_id+= ','+city1;
+				select_name+= ' <a href="javascript:;" title="删除" onclick="dr_remove_city(this, '+id+', \''+city1+'\')">'+iframe.$('#dr_select_name_city_1').val()+'</a>';
+			}
+            if (city2) {
+				select_id+= ','+city2;
+				select_name+= ' <a href="javascript:;" title="删除" onclick="dr_remove_city(this, '+id+', \''+city2+'\')">'+iframe.$('#dr_select_name_city_2').val()+'</a>';
+			}
+            if (city3) {
+				select_id+= ','+city3;
+				select_name+= ' <a href="javascript:;" title="删除" onclick="dr_remove_city(this, '+id+', \''+city3+'\')">'+iframe.$('#dr_select_name_city_3').val()+'</a>';
+			}
+            if (city4) {
+				select_id+= ','+city4;
+				select_name+= ' <a href="javascript:;" title="删除" onclick="dr_remove_city(this, '+id+', \''+city4+'\')">'+iframe.$('#dr_select_name_city_4').val()+'</a>';
+			}
+			
+			if (select_id) {
+				if (s2 == '0' || s2 == 0 || s2 == '') {
+					s2 = '';
+					s1 = '';
+				}
+				$("#dr_city_value_"+id).val(s2+select_id);
+				$("#dr_city_"+id).html(s1+select_name);
+			}
+        },
+        cancel: true
+    });
+}
+var freight_id = {$freight_id};
+function dr_add_freight() {
+	var id = freight_id;
+	var html = '<tr id="dr_row_'+id+'">';
+	html+= '<td style="text-align:left"><a href="javascript:dr_city('+id+');" style="color:blue">[选择城市]</a>&nbsp;&nbsp;<span id="dr_city_'+id+'"><a href="javascript:;" title="删除" onclick="dr_remove_city(this, '+id+', \'0\')">全国</a></span><input name="data[freight]['+id+'][city]" id="dr_city_value_'+id+'" type="hidden" value="0" /></td>';
+	html+= '<td><input type="text" name="data[freight]['+id+'][start]" value="" style="width:50px" class="input-text" /></td>';
+	html+= '<td><input type="text" name="data[freight]['+id+'][postage]" value="" style="width:50px" class="input-text" /></td>';
+	html+= '<td><input type="text" name="data[freight]['+id+'][plus]" value="" style="width:50px" class="input-text" /></td>';
+	html+= '<td><input type="text" name="data[freight]['+id+'][postageplus]" value="" style="width:50px" class="input-text" /></td>';
+	html+= '<td><a href="javascript:$(\'#dr_row_'+id+'\').remove();" style="color:red">删除</a></td>';
+	html+= '</tr>';
+	$("#dr_freight").append(html);
+	freight_id ++ ;
+}
+
+
+function dr_remove_free_city(obj, id, city) {
+	var val = $("#dr_free_city_value_"+id).val();
+	var arr = val.split(',');
+	var news = new Array();
+	for(var i=0;i<arr.length;i++){
+		if (city == arr[i]) {
+			city = 0;
+		} else {
+			news[i] = arr[i];
+		}
+	}
+	$("#dr_free_city_value_"+id).val(news.join(','));
+	$(obj).remove();
+}
+
+function dr_free_city(id) {
+	var url = "{dr_member_url('mall/shipping/city')}";
+    art.dialog.open(url, { title: '选择城市',
+        ok: function () {
+            var iframe = this.iframe.contentWindow;
+            if (!iframe.document.body) {
+                alert('iframe loading')
+                return false;
+            };
+			
+            var city1 = iframe.$('#dr_select_city_1').val();
+            var city2 = iframe.$('#dr_select_city_2').val();
+            var city3 = iframe.$('#dr_select_city_3').val();
+            var city4 = iframe.$('#dr_select_city_4').val();
+			
+			var select_id = '';
+			var select_name = '';
+			var s1 = $("#dr_free_city_"+id).html();
+			var s2 = $("#dr_free_city_value_"+id).val();
+			
+            if (city1) {
+				select_id+= ','+city1;
+				select_name+= ' <a href="javascript:;" title="删除" onclick="dr_remove_free_city(this, '+id+', \''+city1+'\')">'+iframe.$('#dr_select_name_city_1').val()+'</a>';
+			}
+            if (city2) {
+				select_id+= ','+city2;
+				select_name+= ' <a href="javascript:;" title="删除" onclick="dr_remove_free_city(this, '+id+', \''+city2+'\')">'+iframe.$('#dr_select_name_city_2').val()+'</a>';
+			}
+            if (city3) {
+				select_id+= ','+city3;
+				select_name+= ' <a href="javascript:;" title="删除" onclick="dr_remove_free_city(this, '+id+', \''+city3+'\')">'+iframe.$('#dr_select_name_city_3').val()+'</a>';
+			}
+            if (city4) {
+				select_id+= ','+city4;
+				select_name+= ' <a href="javascript:;" title="删除" onclick="dr_remove_free_city(this, '+id+', \''+city4+'\')">'+iframe.$('#dr_select_name_city_4').val()+'</a>';
+			}
+			
+			if (select_id) {
+				if (s2 == '0' || s2 == 0 || s2 == '') {
+					s2 = '';
+					s1 = '';
+				}
+				$("#dr_free_city_value_"+id).val(s2+select_id);
+				$("#dr_free_city_"+id).html(s1+select_name);
+			}
+        },
+        cancel: true
+    });
+}
+var free_id = {$free_id};
+function dr_add_free() {
+	var id = free_id;
+	var html = '<tr id="dr_free_row_'+id+'">';
+	html+= '<td style="text-align:left"><a href="javascript:dr_free_city('+id+');" style="color:blue">[选择城市]</a>&nbsp;&nbsp;<span id="dr_free_city_'+id+'"><a href="javascript:;" title="删除" onclick="dr_remove_free_city(this, '+id+', \'0\')">全国</a></span><input name="data[free]['+id+'][city]" id="dr_free_city_value_'+id+'" type="hidden" value="0" /></td>';
+	html+= '<td style="text-align:left">';
+	html+= '<p>&nbsp;&nbsp;<input type="radio" name="data[free]['+id+'][type]" value="1">&nbsp;<label></label>&nbsp;<span class="dr_free_1"></span>&nbsp;<input type="text" name="data[free]['+id+'][1]" value="" style="width:50px" class="input-text" />&nbsp;<span class="dr_dw"></span><span class="dr_free_2"></span>包邮</p>';
+	html+= '<p>&nbsp;&nbsp;<input type="radio" name="data[free]['+id+'][type]" value="2">&nbsp;<label></label>&nbsp;满&nbsp;<input type="text" name="data[free]['+id+'][2]" value="" style="width:50px" class="input-text" />&nbsp;元包邮</p>';
+	html+= '<p>&nbsp;&nbsp;<input type="radio" name="data[free]['+id+'][type]" value="3">&nbsp;<label></label>&nbsp;<span class="dr_free_1"></span>&nbsp;<input type="text" name="data[free]['+id+'][3][dw]" value="" style="width:50px" class="input-text" />&nbsp;<span class="dr_dw"></span><span class="dr_free_2"></span>，&nbsp;满&nbsp;<input type="text" name="data[free]['+id+'][3][price]" value="" style="width:50px" class="input-text" />&nbsp;元包邮</p>';
+	html+= '</td>';
+	html+= '<td><a href="javascript:$(\'#dr_free_row_'+id+'\').remove();" style="color:red">删除</a></td>';
+	html+= '</tr>';
+	$("#dr_free").append(html);
+	free_id ++ ;
+	dr_dw($('input:radio[name="data[valuation]"]:checked').val());
+}
+</script>
+<style>
+.color-box {
+	width: 12px;
+	height: 12px;
+	display: inline-block;
+	margin: 0 3px;
+	position: relative;
+	top: 3px;
+	border: 1px solid #ddd;
+}
+.sku-style th {
+	background-color: #EDEDED;
+	border: 1px solid #D7D7D7 !important;
+	font-weight: 400;
+	height: 25px;
+	text-align: center;
+	vertical-align: middle;
+	padding:0;
+}
+.sku-style td {
+	border: 1px solid #D7D7D7 !important;
+	padding: 3px 5px;
+	text-align: center;
+	vertical-align: middle;
+	height: 25px;
+	min-width: 60px;
+}
+</style>
+
+<div class="row">
+	<div class="col-md-12">
+		<form action="" method="post" class="form-horizontal" novalidate="novalidate">
+			<div class="form-body">
+
+				<table width="100%" class="table_form">
+				<tr>
+					<th width=150><font color="#FF0000">*</font>&nbsp;名称：</th>
+					<td><input type="text" name="data[name]" value="{$data.name}" required="required" style="width:200px" class="input-text" /></td>
+				</tr>
+				<tr>
+					<th><font color="#FF0000">*</font>&nbsp;计价方式：</th>
+					<td>
+					<input class="toggle md-check" type="radio" onclick="dr_dw(1)" name="data[valuation]" {if $data.valuation == 1}checked{/if} value="1">&nbsp;<label>按数量</label>&nbsp;&nbsp;&nbsp;
+					<input class="toggle md-check" type="radio" onclick="dr_dw(2)" name="data[valuation]" {if $data.valuation == 2}checked{/if} value="2">&nbsp;<label>按重量</label>&nbsp;&nbsp;&nbsp;
+					<input class="toggle md-check" type="radio" onclick="dr_dw(3)" name="data[valuation]" {if $data.valuation == 3}checked{/if} value="3">&nbsp;<label>按体积</label>&nbsp;&nbsp;&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<th><font color="#FF0000">*</font>&nbsp;运费详情：</th>
+					<td>
+						<div style="margin-top: 5px;padding: 0 15px 5px;line-height: 32px;background-color: #f3feed;">
+						默认运费：
+						<input type="text" name="data[freight][default][start]" value="{$data['freight']['default']['start']}" style="width:50px" class="input-text" />
+						<span class="dr_dw">单位</span>内，
+						<input type="text" name="data[freight][default][postage]" value="{$data['freight']['default']['postage']}" style="width:50px" class="input-text" />
+						元，每增加
+						<input type="text" name="data[freight][default][plus]" value="{$data['freight']['default']['plus']}" style="width:50px" class="input-text" />
+						<span class="dr_dw">单位</span>，增加运费
+						<input type="text" name="data[freight][default][postageplus]" value="{$data['freight']['default']['postageplus']}" style="width:50px" class="input-text" />
+						元
+						</div>
+						<table class="sku-style" border="0" cellpadding="0" cellspacing="0" style="width:100%;padding:5px;">
+						<thead>
+							<tr>
+								<th>运送到</th>
+								<th width=110>首<span class="dr_name"></span>(<span class="dr_dw"></span>)</th>
+								<th width=110>首费(元)</th>
+								<th width=110>续<span class="dr_name"></span>(<span class="dr_dw"></span>)</th>
+								<th width=110>续费(元)</th>
+								<th width=60>操作</th>
+							</tr>
+						</thead>
+						<tbody id="dr_freight">
+						{php unset($data['freight']['default']);}
+						{loop $data.freight $i $t}
+						<tr id="dr_row_{$i}">
+							<td style="text-align:left">
+								<a href="javascript:dr_city({$i});" style="color:blue">[选择城市]</a>&nbsp;&nbsp;<span id="dr_city_{$i}">
+									{php $cids=0;}
+									{if $t.city}
+									{loop $t.city $c}
+									{php $cids=','.$c;}
+									<a href="javascript:;" title="删除" onclick="dr_remove_city(this, {$i}, {$c})">{dr_linkage('address', $c, 0, 'name')} </a>
+									{/loop}
+									{else}
+									<a href="javascript:;" title="删除" onclick="dr_remove_city(this, {$i}, 0)">全国 </a>
+									{/if}
+								</span>
+								<input name="data[freight][{$i}][city]" id="dr_city_value_{$i}" type="hidden" value="{$cids}" />
+							</td>
+							<td><input type="text" name="data[freight][{$i}][start]" value="{$t.start}" style="width:50px" class="input-text" /></td>
+							<td><input type="text" name="data[freight][{$i}][postage]" value="{$t.postage}" style="width:50px" class="input-text" /></td>
+							<td><input type="text" name="data[freight][{$i}][plus]" value="{$t.plus}" style="width:50px" class="input-text" /></td>
+							<td><input type="text" name="data[freight][{$i}][postageplus]" value="{$t.postageplus}" style="width:50px" class="input-text" /></td>
+							<td><a href="javascript:$('#dr_row_{$i}').remove();" style="color:red">删除</a></td>
+						</tr>
+						{/loop}
+						</tbody>
+						</table>
+						<a href="javascript:;" onclick="dr_add_freight()" style="color:blue">为指定地区城市设置运费</a>
+					</td>
+				</tr>
+				<tr>
+					<th>包邮策略：</th>
+					<td>
+					<table class="sku-style" border="0" cellpadding="0" cellspacing="0" style="width:100%;padding:5px;">
+						<thead>
+							<tr>
+								<th>运送到</th>
+								<th>设置包邮条件</th>
+								<th width=60>操作</th>
+							</tr>
+						</thead>
+						<tbody id="dr_free">
+						{loop $data.free $i $t}
+						<tr id="dr_free_row_{$i}">
+							<td style="text-align:left">
+								<a href="javascript:dr_free_city({$i});" style="color:blue">[选择城市]</a>&nbsp;&nbsp;<span id="dr_free_city_{$i}">
+									{php $cids=0;}
+									{if $t.city}
+									{loop $t.city $c}
+									{php $cids=','.$c;}
+									<a href="javascript:;" title="删除" onclick="dr_remove_free_city(this, {$i}, {$c})">{dr_linkage('address', $c, 0, 'name')} </a>
+									{/loop}
+									{else}
+									<a href="javascript:;" title="删除" onclick="dr_remove_free_city(this, {$i}, 0)">全国 </a>
+									{/if}
+								</span>
+								<input name="data[free][{$i}][city]" id="dr_free_city_value_{$i}" type="hidden" value="{$cids}" />
+							</td>
+							<td style="text-align:left">
+<p>&nbsp;&nbsp;<input type="radio" name="data[free][{$i}][type]" {if $t.type==1}checked{/if} value="1">&nbsp;<label></label>&nbsp;<span class="dr_free_1"></span>&nbsp;<input type="text" name="data[free][{$i}][1]" value="{$t[1]}" style="width:50px" class="input-text" />&nbsp;<span class="dr_dw"></span><span class="dr_free_2"></span>包邮</p>
+<p>&nbsp;&nbsp;<input type="radio" name="data[free][{$i}][type]" {if $t.type==2}checked{/if} value="2">&nbsp;<label></label>&nbsp;满&nbsp;<input type="text" name="data[free][{$i}][2]" value="{$t[2]}" style="width:50px" class="input-text" />&nbsp;元包邮</p>
+<p>&nbsp;&nbsp;<input type="radio" name="data[free][{$i}][type]" {if $t.type==3}checked{/if} value="3">&nbsp;<label></label>&nbsp;<span class="dr_free_1"></span>&nbsp;<input type="text" name="data[free][{$i}][3][dw]" value="{$t[3]['dw']}" style="width:50px" class="input-text" />&nbsp;<span class="dr_dw"></span><span class="dr_free_2"></span>，&nbsp;满&nbsp;<input type="text" name="data[free][{$i}][3][price]" value="{$t[3]['price']}" style="width:50px" class="input-text" />&nbsp;元包邮</p>
+</td>
+<td><a href="javascript:$('#dr_free_row_{$i}').remove();" style="color:red">删除</a></td>
+</tr>
+						{/loop}
+						</tbody>
+						</table>
+						<a href="javascript:;" onclick="dr_add_free()" style="color:blue">为指定地区城市包邮策略</a>
+					</td>
+				</tr>
+				<tr>
+					<th style="border-bottom:none">&nbsp;</th>
+					<td style="border-bottom:none;padding-top: 20px;">
+						<button type="submit" class="mysubmit btn green"><i class="fa fa-save"></i> 保存</button></td>
+				</tr>
+				</table>
+            </div>
+		</form>
+    </div>
+</div>
+{template nfooter.html}

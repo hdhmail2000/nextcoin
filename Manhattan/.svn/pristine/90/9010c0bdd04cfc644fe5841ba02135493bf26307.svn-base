@@ -1,0 +1,86 @@
+//
+//  XHHLoginPwController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/16.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHLoginPwController.h"
+
+@interface XHHLoginPwController ()
+@property (weak, nonatomic) IBOutlet UITextField *currPw;
+@property (weak, nonatomic) IBOutlet UITextField *nPw;
+@property (weak, nonatomic) IBOutlet UITextField *surePw;
+
+@end
+
+@implementation XHHLoginPwController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [_currPw configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [_nPw configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [_surePw configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    // Do any additional setup after loading the view.
+}
+- (IBAction)back:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+- (IBAction)sureUpdateAction:(id)sender {
+    if (self.currPw.text.length == 0) {
+        ChZ_MBError(@"请输入旧密码");
+        return;
+    }
+    if ([self.currPw.text isEqualToString:self.nPw.text]) {
+        ChZ_MBError(@"新旧密码不能一致");
+        return;
+    }
+    if (self.currPw.text.length == 0) {
+        ChZ_MBError(@"请输入新密码");
+        return;
+    }
+    if (![self.surePw.text isEqualToString:self.nPw.text]) {
+        ChZ_MBError(@"新密码不一致");
+        return;
+    }
+    [self updateLoginPsw];
+}
+
+-(void)updateLoginPsw{
+    ChZ_MBMsg(nil)
+    [XHHSafeCenterRequest requestUpdatePassword:self.currPw.text
+                                       password:self.nPw.text
+                                        msgCode:nil
+                                     googleCode:nil
+                                     cardNumber:nil
+                                           type:@"0"
+                                   successBlock:^(id dataSource)
+     {
+         ChZ_MBDismssSuccess(dataSource);
+         [[NSNotificationCenter defaultCenter] postNotificationName:@"updateLoginPassWordSuccess" object:nil];
+         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+             [[APPControl sharedAPPControl] toLogin];
+         });
+         
+     } errorBlock:^(int code, NSString *error)
+     {
+         ChZ_MBDismssError(error)
+         
+     }];
+}
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

@@ -1,0 +1,39 @@
+Java 代码结构说明
+
+bc 模块：服务消费者，提供前端和 App 访问的接口
+
+admin 模块：管理员后台
+
+service_activity 模块：统计相关的定时任务，发送短信和邮件相关验证功能
+
+service_admin 模块：后台操作的服务器提供者
+
+service_coin 模块：虚拟币充值扫描和确认用户资产更改
+
+service_entrust 模块：订单相关，查询、挂单、取消 服务提供者
+
+service_market 模块：行情市场模块，生成 k线 、实时价格
+
+service_mathc 模块：撮合
+
+service_user 模块：用户和资产相关的服务提供者
+
+service_score 、service_validate、service_capital 三个模块 没有使用。
+
+
+需要更改的地方:
+
+com.qkwl.common.util.Constant 类的一下常量
+
+	GoogleAuthName、AesSecretKey、SIGN_HOST
+
+com.qkwl.common.oss.OSSConstant 类的以下常量
+
+	ACCESS_ID、ACCESS_KEY、OSS_ENDPOINT、BUCKET_BASE、PLATFORM_HK
+
+
+每一个模块下的 application-prod.xml 配置修改
+
+
+
+

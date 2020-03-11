@@ -1,0 +1,246 @@
+/** DT规则 **/
+.dt-wrap{
+    background: url(../img/bg_20180814.jpg)no-repeat;
+    background-size: cover;
+    background-position: top center;
+}
+.dt-tetil{
+    text-align: center;
+    padding-top:110px;
+    color: #f7c069;
+    line-height: 1;
+}
+.dt-tetil h1{
+    font-size: 200px;
+}
+.dt-tetil h3{
+    margin-top: 45px;
+    font-size: 30px;
+}
+.dt-nav{
+    text-align: center;
+    margin-top: 120px;
+}
+.dt-navbar{
+    display: inline-block;
+    padding: 0 21px;
+}
+.dt-navbar button{
+    width: 135px;
+    height: 50px;
+    border-radius: 18px;
+    background: #eaa12d;
+    border: 0;
+    font-size: 18px;
+}
+.dt-navbar button:hover{
+    background:#b47a1e ;
+}
+.dt-navbar button.active{
+    background: #b47a1e;
+}
+.vip-list{
+    margin-top: 135px;
+    padding: 0;
+}
+.vip-list-item{
+    padding: 0 12px;
+}
+.vip-list-item>div{
+    padding: 0 16px 0 8px;
+}
+.vip-list-tetil{
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 0;
+    background: url(../img/img_01.png) no-repeat;
+    background-size: 100%;
+    text-align: center;
+    font-size: 16px;
+    height: 50px;
+    line-height: 34px;
+}
+.vip-list-data{
+    background: -webkit-linear-gradient(rgba(11,70,120,.4), rgba(11,70,120,0)); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(rgba(11,70,120,.4), rgba(11,70,120,0)); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(rgba(11,70,120,.4), rgba(11,70,120,0)); /* Firefox 3.6 - 15 */
+    background: linear-gradient(rgba(11,70,120,.4), rgba(11,70,120,0));
+    border-top-left-radius: 20px;
+    text-align: center;
+    padding: 50px 16px 0 16px;
+    min-height: 205px;
+}
+.vip-list-stars{
+    margin-top: 15px;
+}
+.vip-list-stars i{
+    display: inline-block;
+    width: 14px;
+    height: 15px;
+    background: url(../img/star.png)no-repeat;
+    background-size: 100%;
+}
+.vip-list-table{
+    display: table;
+    width: 100%;
+}
+.vip-list-text{
+    margin-top: 10px;
+    display: table-cell;
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
+    font-size: 14px;
+    width: 100%;
+    padding: 0;
+}
+.vip-list-btn{
+    margin-top: 15px;
+}
+.vip-list-btn button{
+    width: 80px;
+    height: 26px;
+    background: transparent;
+    border: 1px solid #eaa12d;
+    color: #eaa12d;
+    transition: all ease .3s;
+    border-radius: 10px;
+    font-size: 13px;
+}
+.vip-list-btn button:hover{
+    background: #eaa12d;
+    color: #fff;
+}
+.dt-data{
+    padding: 50px 0;
+}
+.dt-data-item{
+    padding: 0;
+    display: none;
+}
+.dt-data-item.active{
+    display: block;
+}
+.dt-data-box{
+    padding: 0;
+    margin-top: 60px;
+}
+.dt-data-tetil{
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 30px;
+}
+.dt-data-text{
+    padding: 0;
+    text-align: center;
+    font-size: 16px;
+    line-height: 28px;
+}
+.dt-item-box{
+    padding: 0 13px;
+}
+.dt-item-box>div{
+    text-align: center;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    padding: 45px 0;
+    line-height: 1;
+}
+.dt-item-tetil{
+    margin-top: 13px;
+    font-size: 24px;
+    color: #ffc66c;
+}
+.dt-item-text{
+    margin-top: 28px;
+    font-size: 16px;
+}
+.dt-tetil-text{
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 16px;
+}
+.dt-data-hint{
+    font-size: 16px;
+    margin-top: 20px;
+    color: #ffc66c;
+}
+.dt-trading-item{
+    padding: 0;
+}
+.dt-trading-list{
+    margin-top: 110px;
+}
+.dt-trading-tetli{
+    font-size: 24px;
+    color: #ffc66c;
+    margin-bottom: 28px;
+}
+.dt-trading-text{
+    display: table;
+    width: 100%;
+}
+.dt-trading-text>div{
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 20px;
+    height: 160px;
+    border-left: 1px solid #ffc66c;
+    width: 100%;
+}
+.dt-trading-text p{
+    font-size: 16px;
+    line-height: 28px;
+}
+.dt-trading-hint{
+    color: #ffc66c;
+}
+.dt-trading-img{
+    text-align: center;
+    margin-top: 90px;
+}
+.dt-data-tetil span{
+    border-bottom:4px solid #fff;
+    display: inline-block;
+    padding: 15px 40px;
+}
+.dt-appreciation{
+    padding: 55px 60px;
+    background: -webkit-linear-gradient(left bottom, rgba(255,198,108,.4),rgba(255,198,108,0) , rgba(255,198,108,.4)); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(top right,rgba(255,198,108,.4),rgba(255,198,108,0) , rgba(255,198,108,.4)); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(top right,rgba(255,198,108,.4),rgba(255,198,108,0) , rgba(255,198,108,.4)); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to top right,rgba(255,198,108,.4),rgba(255,198,108,0) , rgba(255,198,108,.4));
+}
+.dt-appreciation-tetli{
+    padding: 0;
+    font-size: 24px;
+}
+.dt-appreciation-tetli span{
+    padding-bottom: 15px;
+    display: inline-block;
+    min-width: 190px;
+    border-bottom: 2px solid #ffc66c;
+}
+.dt-appreciation-box{
+    margin-bottom: 170px;
+}
+.dt-appreciation-box:last-child{
+    margin: 0;
+}
+.dt-appreciation-item{
+    padding: 0;
+    font-size: 16px;
+    line-height: 28px;
+}
+.dt-appreciation-item>span{
+    float: left;
+}
+.dt-appreciation-list{
+    padding: 0;
+    margin-top: 15px;
+}
+.dt-appreciation-item>div{
+    padding-left: 45px;
+}

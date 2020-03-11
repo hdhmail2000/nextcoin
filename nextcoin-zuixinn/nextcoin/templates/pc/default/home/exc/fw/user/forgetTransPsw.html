@@ -1,0 +1,178 @@
+{template "header.html" }
+{template "top.html" }
+<script src="/statics/c2c/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+		<div class="container" style="min-height: 800px;">
+            <div class="row">
+                <div class="col-xs-12 bind-header">
+                    <div class="col-xs-12 bind-header-tetil">
+                        <h2>{$user.security_forgetTrade}</h2>
+                    </div>
+                    <div class="col-xs-12 bind-header-nav">
+                        <ol class="breadcrumb">
+                          <li><a href="/index.php?s=exc&c=securityController">账号安全</a></li>
+                          <li class="active">{$user.security_forgetTrade}</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-xs-12 bind-form-wrap">
+                    <div class="col-xs-12 bind-form-header">
+                        <h3>{$user.security_forgetTrade}</h3>
+                    </div>
+                    <div class="col-xs-12 bind-form">
+                        <div class="clearfix">
+                        		<!--<div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_oldTrade}</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="password"  id="bindtradepass-oldpass" value=""/>
+                                </label>
+                            </div>-->
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_newTrade}</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="password"  id="bindtradepass-newpass" value=""/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_reTrade}</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="password"  id="bindtradepass-confirmpass" value=""/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">手机号</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="text"  id="phone" value="{$phone}"/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">验证码</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                		<input type="hidden"  id="areaNum" value="{$areaNum}"/>
+                                    <input type="text"  id="code" value="" style="width: 67%;"/>
+                                    <button class="send-captcha" style="float: right;width: 30%;background: transparent;height: 48px;line-height: 48px;border: 1px solid #474652;padding: 0;">发送验证码</button>
+                                </label>
+                            </div>
+                            
+                            <!--<div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_idNumber}</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="text"  id="bindtradepass-identityno" value=""/>
+                                </label>
+                            </div>-->
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_topCode}</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="text"  id="bindtradepass-googlecode" value=""/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <button class="bind-form-btn" id="forget_psw">{$user.security_submit}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+        		function sendMessage(){
+        			var phone = $("#phone").val().trim();
+        			if(phone == null || phone == ""){
+        				layer.msg("手机号不能为空");
+        			} else {
+        				$.ajax({
+	        				type:"post",
+	        				url:"/v1/validate/send.html",
+	        				dataType:"json",
+	        				data:{area:$("#areaNum").val().trim(),phone:phone,type:107},
+	        				success: function(data){
+							if(data.code == 200){
+                            		timeCount();
+                    			} else {
+                    				layer.msg(data.msg);
+                    			}
+	        				},
+	        				error:function(){
+	        					layer.msg("发送短信接口错误");
+	        				}
+	        			});
+        			}
+        		}
+
+        		$("#forget_psw").click(function(){
+        			var psw = $("#bindtradepass-newpass").val().trim();
+        			var confirm_psw = $("#bindtradepass-confirmpass").val().trim();
+        			var code = $("#code").val().trim();
+        			if(psw=="" || psw==null || confirm_psw=="" || confirm_psw==null || code == "" || code == null){
+	        			layer.msg("填写内容不能为空");
+	        		} else {
+	        			$.ajax({
+		        			type:"post",
+		        			url:"/index.php?s=exc&c=securityController&m=forgetTransPsw",
+		        			data:{phone:$("#phone").val().trim(),code:code,totpCode:$("#bindtradepass-googlecode").val().trim(),newPassword:psw,newPassword2:confirm_psw,area:$("#areaNum").val().trim()},
+		        			dataType:"json",
+		        			success:function(data){
+		        				if(data.code == 200){
+		        					layer.msg(data.msg);
+		        					window.location.href = "/index.php?s=exc&c=securityController";
+		        				} else {
+		        					layer.msg(data.msg);
+		        				}
+		        			},
+		        			error:function(){
+		        				layer.msg("接口错误");
+		        			}
+		        		});
+	        		}
+        		});
+
+
+
+
+        		var _time = 60;
+           var _send_captcha = _time;
+            $(".send-captcha").on({
+                click: function() {
+//                  $(this).unbind('click');
+                    $(this).attr('disabled', 'disabled');
+                    sendMessage();
+                }
+            })
+
+            var timeCount = function() {
+                window.setTimeout(function() {
+                    if(_send_captcha > 0) {
+                        _send_captcha -= 1;
+                        $(".send-captcha").html(_send_captcha + "s");
+                        timeCount();
+
+                    } else {
+                        $(".send-captcha").html("重新发送");
+                        $(".send-captcha").removeAttr('disabled');
+                        _send_captcha = _time;
+                    };
+                }, 1000);
+            }
+        </script>
+
+<!--<script src="/statics/exc/dota/js/plugin/jquery.qrcode.min.js" type="text/javascript" charset="utf-8"></script>-->
+<!--<script src="/statics/exc/dota/js/user/user.security.js" type="text/javascript" charset="utf-8"></script>-->
+<script src="{HOME_THEME_PATH}exc/js/comm/msg.js" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }
+
+

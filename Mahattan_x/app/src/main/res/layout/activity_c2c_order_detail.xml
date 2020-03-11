@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_page_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_actionbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_c2c_order_detail_pay_status_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:background="#363672"
+                android:paddingBottom="8dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingTop="8dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSize12"
+                android:visibility="gone"
+                tools:text="已付款，等待卖家确认收款。" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_pay_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:textColor="#FF67D2"
+                    android:textSize="22sp"
+                    tools:text="未付款" />
+
+                <LinearLayout
+                    android:id="@+id/count_down_time_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/shape_c2c_countdown_time_bg"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/count_down_time_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:src="@drawable/ic_c2c_countdown_time" />
+
+                    <TextView
+                        android:id="@+id/count_down_time_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        tools:text="200" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="20dp"
+                android:text="付款参考号"
+                android:textColor="@color/colorGrayText"
+                android:textSize="@dimen/textSize12" />
+
+            <TextView
+                android:id="@+id/text_c2c_order_detail_pay_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/colorWhite"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                tools:text="327843847" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorDivider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_money"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorBlueText"
+                    android:textSize="@dimen/textSize16"
+                    tools:text="10000.00" />
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_num"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlueText"
+                    android:textSize="@dimen/textSize16"
+                    tools:text="10000.00" />
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textColor="@color/colorBlueText"
+                    android:textSize="@dimen/textSize16"
+                    tools:text="10000.00" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="交易金额"
+                    android:textColor="@color/colorGrayText"
+                    android:textSize="@dimen/textSize10" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="数量"
+                    android:textColor="@color/colorGrayText"
+                    android:textSize="@dimen/textSize10" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="价格"
+                    android:textColor="@color/colorGrayText"
+                    android:textSize="@dimen/textSize10" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="#0B0841" />
+
+            <TextView
+                android:id="@+id/text_c2c_order_detail_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="类型："
+                android:textColor="@color/colorGrayText"
+                android:textSize="@dimen/textSize12" />
+
+            <TextView
+                android:id="@+id/text_c2c_order_detail_order_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="6dp"
+                android:text="订单号："
+                android:textColor="@color/colorGrayText"
+                android:textSize="@dimen/textSize12" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="#0B0841" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="付款信息"
+                android:textColor="@color/colorGrayText"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:id="@+id/bank_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:text="银行卡"
+                    android:textColor="@color/colorGrayText"
+                    android:textSize="@dimen/textSize14" />
+
+                <!--<TextView-->
+                    <!--android:id="@+id/text_c2c_order_detail_bank_title"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                    <!--android:layout_marginTop="8dp"-->
+                    <!--android:text="银行："-->
+                    <!--android:textColor="@color/colorTextHint"-->
+                    <!--android:textSize="@dimen/textSize12" />-->
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_bank_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="8dp"
+                    android:text="开户行："
+                    android:textColor="@color/colorTextHint"
+                    android:textSize="@dimen/textSize12" />
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_bank_card_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="8dp"
+                    android:text="开户名："
+                    android:textColor="@color/colorTextHint"
+                    android:textSize="@dimen/textSize12" />
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_bank_card_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="8dp"
+                    android:text="账号："
+                    android:textColor="@color/colorTextHint"
+                    android:textSize="@dimen/textSize12" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:background="@color/colorDivider" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/alipay_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:paddingBottom="12dp"
+                android:paddingTop="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_alipay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="支付宝"
+                    android:textColor="@color/colorGrayText"
+                    android:textSize="@dimen/textSize14" />
+
+                <ImageView
+                    android:id="@+id/image_c2c_order_detail_alipay_qr_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/text_c2c_order_detail_alipay"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/icon_qr_pay" />
+
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="48dp"
+                    android:layout_below="@id/text_c2c_order_detail_alipay"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toLeftOf="@id/image_c2c_order_detail_alipay_qr_icon"
+                    android:background="@color/colorDivider" />
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_alipay_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/image_c2c_order_detail_alipay_qr_icon"
+                    android:text="姓名："
+                    android:textColor="@color/colorTextHint"
+                    android:textSize="@dimen/textSize12" />
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_alipay_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="账号："
+                    android:textColor="@color/colorTextHint"
+                    android:textSize="@dimen/textSize12" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@color/colorDivider" />
+
+            <RelativeLayout
+                android:id="@+id/wx_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:paddingBottom="12dp"
+                android:paddingTop="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_wx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="微信"
+                    android:textColor="@color/colorGrayText"
+                    android:textSize="@dimen/textSize14" />
+
+                <ImageView
+                    android:id="@+id/image_c2c_order_detail_wx_qr_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/text_c2c_order_detail_wx"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/icon_qr_pay" />
+
+                <View
+                    android:layout_width="1px"
+                    android:layout_height="48dp"
+                    android:layout_below="@id/text_c2c_order_detail_wx"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toLeftOf="@id/image_c2c_order_detail_wx_qr_icon"
+                    android:background="@color/colorDivider" />
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_wx_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/image_c2c_order_detail_wx_qr_icon"
+                    android:text="姓名："
+                    android:textColor="@color/colorTextHint"
+                    android:textSize="@dimen/textSize12" />
+
+                <TextView
+                    android:id="@+id/text_c2c_order_detail_wx_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="账号："
+                    android:textColor="@color/colorTextHint"
+                    android:textSize="@dimen/textSize12" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@color/colorDivider" />
+
+            <TextView
+                android:id="@+id/text_c2c_order_detail_cancel_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:textColor="@color/colorGrayText"
+                android:textSize="@dimen/textSize14"
+                android:visibility="gone"
+                tools:text="本订单于2018-01-22 17:22:12由买方取消" />
+        </LinearLayout>
+    </ScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#16134C"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="12dp">
+
+        <Button
+            android:id="@+id/appeal_button"
+            style="@style/SubmitButton"
+            android:layout_width="0dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_transaction_button_bg"
+            android:text="申诉" />
+
+        <Button
+            android:id="@+id/button_c2c_order_detail_has_pay"
+            style="@style/SubmitButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_login_button_bg"
+            android:text="我已付款" />
+    </LinearLayout>
+
+</LinearLayout>

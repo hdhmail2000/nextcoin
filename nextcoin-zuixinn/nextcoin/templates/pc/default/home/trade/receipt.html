@@ -1,0 +1,380 @@
+{template "header.html"}
+		
+		<style type="text/css">
+			.receipt-form-item select {
+			    width: 100%;
+			    margin-top: 13px;
+			    height: 48px;
+			    line-height: 48px;
+			    padding: 0 10px;
+			    font-size: 14px;
+			    border: 1px solid #474652;
+			    background: #27262E;
+			    color: #C9D6E8;
+			    border-radius: 0;
+			}
+		</style>
+		
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 financial">
+                    <!-------------------------------- 边栏导航 -------------------------------->
+                    <div class="col-xs-3 financial-sidebar">
+                        <h2 class="financial-sidebar-tetil">财务中心</h2>
+                        <ul class="financial-sidebar-nav">
+                            <!--<li class="financial-sidebar-bar">
+                                <a href="###">交易账户</a>
+                            </li>
+                            <li class="financial-sidebar-bar">
+                                <a href="###">我的推荐</a>
+                            </li>-->
+                            <li class="financial-sidebar-bar">
+                                <a href="/index.php?s=trade&c=home&m=addPayType" class="active">收款账户（C2C）</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!---------------------------------- 内容详情 ----------------------------->
+                    <div class="col-xs-9 receipt-mian">
+                        <ul class="col-xs-12 receipt-header" onclick="_type(event)">
+                            <li class="receipt-header-item">
+                                <a href="###" class="active">银行卡</a>
+                            </li>
+                            <li class="receipt-header-item">
+                                <a href="###">支付宝</a>
+                            </li>
+                            <li class="receipt-header-item">
+                                <a href="###">微信</a>
+                            </li>
+                        </ul>
+
+                        <!----- 银行卡添加/修改 --------->
+
+                        <div class="col-xs-12 receipt-code-wrap receipt-type-item active">
+                            <form class="receipt-form" id="myform" {if $bank}style="display: none;"{/if}>
+                                <div class="receipt-form-item">
+                                    <label for="">
+                                        <p>开户名</p>
+                                        <input type="text" name="data[khm]" id="khm" value="{$bank.khm}" />
+                                    </label>
+                                </div>
+                                <div class="receipt-form-item">
+                                    <label for="">
+                                        <p>身份证号码</p>
+                                        <input type="text" name="data[idCard]" id="idCard" value="{$bank.idCard}" />
+                                    </label>
+                                </div>
+                                <div class="receipt-form-item">
+                                    <label for="">
+                                        <p>银行卡卡号</p>
+                                        <input type="text" name="data[zhhm]" id="zhhm" value="{$bank.zhhm}" />
+                                        <!--<div>
+                                            <img src="/statics/c2c/img/icon_14.png" alt="" />中国建设银行
+                                        </div>-->
+                                    </label>
+                                </div>
+                                <div class="receipt-form-item">
+                                    <label for="">
+                                        <p>开户行</p>
+                                        <select name="data[khh]" id="khh">
+                                        		{list action=table table=linkage_data_3}
+                                        		<option {if $bank.khh == $t.name} selected="selected" {/if}value="{$t.name}">{$t.name}</option>
+                                        		{/list}
+                                        </select>
+                                    </label>
+                                </div>
+                                <div class="receipt-form-item">
+                                    <label for="">
+                                        <p>手机号码</p>
+                                        <input type="text" name="data[phone]" id="phone" value="{$bank.phone}" placeholder="银行预留手机号码"/>
+                                    </label>
+                                </div>
+                                <div class="receipt-form-btn">
+                                    <!--<button type="button" onclick="_save($(this))">确定</button>-->
+                                    <button type="button" id="bank-submit">确定</button>
+                                </div>
+                            </form>
+							{if $bank}
+                            <div class="receipt-code">
+                                <table class="receipt-code-box">
+                                	   <tr>
+                                	       <td style="width: 10%;">
+                                	           <!--<img src="/statics/c2c/img/icon_14.png" alt="" />-->
+                                	       </td>
+                                	       <td>{$bank.khh}</td>
+                                	       <td>{$bank.zhhm}</td>
+                                	       <td>{$bank.khm}</td>
+                                	       <td>
+                                	           <button onclick="_edit($(this))">编辑</button>
+                                	       </td>
+                                	   </tr>
+                                </table>
+                            </div>
+                            {/if}
+                        </div>
+
+                        <!------- 支付宝上传 ------------>
+
+                        <div class="col-xs-12 receipt-phone receipt-type-item">
+                            <div class="receipt-phone-form">
+	                            	<form id="alipay_form">
+	                                <div class="receipt-phone-zh">
+	                                    <label for="">
+	                                        <p>支付宝账号</p>
+	                                        <input type="text" name="data[username]" id="account" value="{$alipay.username}" />
+	                                    </label>
+	                                </div>
+	                                <div class="receipt-phone-code">
+	                                    <p class="receipt-phone-tetil">
+	                                        <img src="/statics/default/c2c/img/icon_11.png" alt="" />上传支付宝二维码
+	                                    </p>
+	                                    <div class="receipt-phone-upload" {if $alipay} style="display: none;"{/if}>
+	                                        <img src="/statics/default/c2c/img/icon_15.png" alt="" onclick="_img($(this))"/>
+	                                        <input type="file" id="upload1" style="display: none;" onchange="file_alipay(event)"/>
+	                                        <p>请上传你的支付宝收款二维码图片</p>
+	                                    </div>
+	                                    <div class="receipt-phone-img" {if $alipay} style="display: block;" {/if}>
+	                                        <img {if $alipay.qrcode} src="{$alipay.qrcode}"  {else} src="" {/if} alt=""  id="myImg-alipay"/>
+	                                        <input type="hidden" id="alipay-qrcode" name="data[qrcode]" value="{$alipay.qrcode}" />
+	                                        <div>
+	                                            <button type="button" onclick="_gh($(this))">更换二维码</button>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                                <div class="receipt-phone-btn">
+	                                    <button type="button" id="alipay_submit">确定</button>
+	                                </div>
+	                            </form>
+                            </div>
+                        </div>
+
+                        <!------- 微信上传 ------------>
+
+                        <!--<div class="col-xs-12 receipt-phone receipt-type-item">-->
+                            <!--<div class="receipt-phone-form">-->
+                                <!--<div class="receipt-phone-zh">-->
+                                    <!--<label for="">-->
+                                        <!--<p>微信账号</p>-->
+                                        <!--<input type="text" name="data[username]" id="account-weixin" value="{$weixin.username}" />-->
+                                    <!--</label>-->
+                                <!--</div>-->
+                                <!--<div class="receipt-phone-code">-->
+                                    <!--<p class="receipt-phone-tetil">-->
+                                        <!--<img src="/statics/default/c2c/img/icon_12.png" alt="" />上传微信二维码-->
+                                    <!--</p>-->
+                                    <!--<div class="receipt-phone-upload" {if $weixin} style="display: none;"{/if}>-->
+                                        <!--<img src="/statics/default/c2c/img/icon_15.png" alt="" onclick="_img($(this))"/>-->
+                                        <!--<input type="file" id="upload" style="display: none;" onchange="file_weixin(event)"/>-->
+                                        <!--<p>请上传你的支付宝收款二维码图片</p>-->
+                                    <!--</div>-->
+                                    <!--<div class="receipt-phone-img" {if $weixin} style="display: block;" {/if}>-->
+                                        <!--<img {if $weixin.qrcode} src="{$weixin.qrcode}"  {else} src="" {/if} alt=""  id="myImg-weixin"/>-->
+                                        <!--<input type="hidden" id="weixin-qrcode" name="data[qrcode]" value="{$weixin.qrcode}" />-->
+                                        <!--<div>-->
+                                            <!--<button type="button" onclick="_gh($(this))">更换二维码</button>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="receipt-phone-btn">-->
+                                    <!--<button type="button" id="weixin_submit">确定</button>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                <div class="col-xs-12 receipt-phone receipt-type-item">
+                    <div class="receipt-phone-form">
+                        <from id="wechat_form">
+                            <div class="receipt-phone-zh">
+                                <label for="">
+                                    <p>微信账号</p>
+                                    <input type="text" name="data[username]" id="account-weixin" value="{$weixin.username}" />
+                                </label>
+                            </div>
+                            <div class="receipt-phone-code">
+                                <p class="receipt-phone-tetil">
+                                    <img src="/statics/default/c2c/img/icon_12.png" alt="" />上传微信二维码
+                                </p>
+
+                                <div class="receipt-phone-upload"  {if !($weixin)}style="display: block;"{/if}>
+                                    <img src="/statics/default/c2c/img/icon_15.png" alt="" onclick="_img($(this))"/>
+                                    <input type="file" id="upload2" style="display: none;" onchange="file_weixin(event)"/>
+                                    <p>请上传你的微信收款二维码图片</p>
+                                </div>
+
+
+                                <div class="receipt-phone-img"  {if $weixin} style="display: block;"{/if} >
+                                    <img {if $weixin.qrcode} src="{$$weixin.qrcode}" {else} src="" {/if} alt=""  id="myImg-weixin"/>
+                                    <input type="hidden" id="weixin-qrcode" name="data[qrcode]" value="{$weixin.qrcode}" />
+                                    <div>
+                                        <button type="button" onclick="_gh($(this))">更换二维码</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="receipt-phone-btn">
+                                <button type="button" id="weixin_submit">确定</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                    </div>
+                </div>
+            </div>
+        <!--</div>-->
+
+        {template "footer.html"}
+
+        <script type="text/javascript">
+               function _edit(e){
+                   e.parents(".receipt-code").hide();
+                   e.parents(".receipt-code").siblings(".receipt-form").show();
+               }
+
+               function _save(e){
+                   e.parents(".receipt-form").hide();
+                   e.parents(".receipt-form").siblings(".receipt-code").show();
+               }
+
+        	       function _img(e){
+        	           e.siblings("input").click();
+        	       }
+
+               function _gh(e){
+                   e.parents(".receipt-phone-img").siblings(".receipt-phone-upload").children("input").click();
+               }
+
+               function _type(e){
+                   $(e.target).parent().siblings().children().removeClass("active");
+                   $(e.target).addClass("active");
+                   var _index = $(e.target).parent().index();
+                   $(".receipt-type-item").hide();
+                   $(".receipt-type-item").eq(_index).show();
+               }
+
+        	       function file_alipay(e){
+        	           var _this = e;
+	                for (var i = 0; i < e.target.files.length; i++) {
+	                    var file = e.target.files.item(i);
+	                    if (!(/^image\/.*$/i.test(file.type))) {
+	                        continue; //不是图片 就跳出这一次循环
+	                    }
+	                    //实例化FileReader API
+	                    var freader = new FileReader();
+	                    freader.readAsDataURL(file);
+	                    freader.onload = function(e) {
+	                        console.log(_this.target);
+	                        $(_this.target).parent().siblings(".receipt-phone-img").show();
+	                        $(_this.target).parent().hide();
+	                        $(_this.target).parent().siblings(".receipt-phone-img").children("#myImg-alipay").attr("src",e.target.result);
+	                        $("#alipay-qrcode").val(e.target.result);
+	                    };
+	                }
+	             }
+        	       
+        	       function file_weixin(e){
+        	           var _this = e;
+	                for (var i = 0; i < e.target.files.length; i++) {
+	                    var file = e.target.files.item(i);
+	                    if (!(/^image\/.*$/i.test(file.type))) {
+	                        continue; //不是图片 就跳出这一次循环
+	                    }
+	                    //实例化FileReader API
+	                    var freader = new FileReader();
+	                    freader.readAsDataURL(file);
+	                    freader.onload = function(e) {
+	                        console.log(_this.target);
+	                        $(_this.target).parent().siblings(".receipt-phone-img").show();
+	                        $(_this.target).parent().hide();
+	                        $(_this.target).parent().siblings(".receipt-phone-img").children("#myImg-weixin").attr("src",e.target.result);
+	                        $("#weixin-qrcode").val(e.target.result);
+	                    };
+	                }
+	             }
+        	     
+        	     // -----     银行账户 ---------
+        	     $("#bank-submit").click(function(){
+        	     	if(	$("#khm").val() == null || $("#khm").val() == '' ||
+        	     		$("#idCard").val() == null || $("#idCard").val() == '' ||
+        	     		$("#zhhm").val() == null || $("#zhhm").val() == '' ||
+        	     		$("#khh").val() == null || $("#khh").val() == '' ||
+        	     		$("#phone").val() == null || $("#phone").val() == ''
+        	     	){
+        	     		layer.msg('所填内容不能为空');
+        	     	} else {
+        	     		$.ajax({
+        	     			type:"post",
+        	     			url:"/index.php?s=trade&c=home&m=bank_submit",
+        	     			dataType:"json",
+        	     			data:$("#myform").serialize(),
+        	     			success:function(data){
+        	     				if(data.code == 1){
+        	     					layer.msg(data.msg);
+        	     					window.location.href = "/index.php?s=trade&c=home&m=addPayType";
+        	     				} else {
+        	     					layer.msg(data.msg);
+        	     				}
+        	     			},
+        	     			error:function(){
+        	     				layer.msg('接口错误');
+        	     			}
+        	     		});
+        	     	}
+        	     });
+        	     
+        	     // -----     支付宝账户 ---------
+        	     $("#alipay_submit").click(function(){
+        	     	if($("#account").val() == "" || $("#account").val() == null ||  $("#alipay-qrcode").val() == "" || $("#alipay-qrcode").val() == null){
+        	     		layer.msg("上传内容不能为空");
+        	     	} else {
+                        // alert($("#alipay_form").serialize());
+                        // console.log($("#alipay_form").serialize());return;
+        	     		$.ajax({
+        	     			type:"post",
+        	     			url:"/index.php?s=trade&c=home&m=alipay_submit",
+        	     			dataType:"json",
+        	     			data:$("#alipay_form").serialize(),
+        	     			success:function(data){
+        	     				if(data.code == 1){
+        	     					layer.msg(data.msg);
+        	     					window.location.href = "/index.php?s=trade&c=home&m=addPayType";
+        	     				} else {
+        	     					layer.msg(data.msg);
+        	     				}
+        	     			},
+        	     			error:function(){
+        	     				layer.msg("支付宝上传接口错误");
+        	     			}
+        	     		});
+        	     	}
+        	     });
+        	     
+        	     // -----     微信账户 ---------
+        	     $("#weixin_submit").click(function(){
+        	     	if($("#account-weixin").val() == "" || $("#account-weixin").val() == null ||  $("#weixin-qrcode").val() == "" || $("#weixin-qrcode").val() == null){
+        	     		layer.msg("上传内容不能为空");
+        	     	} else {
+        	     	    // alert($("#wechat_form").serialize());
+        	     	    // console.log($("#wechat_form").serialize());return;
+        	     		$.ajax({
+        	     			type:"post",
+        	     			url:"/index.php?s=trade&c=home&m=weixin_submit",
+        	     			dataType:"json",
+        	     			data:$("#weixin_form").serialize(),
+        	     			success:function(data){
+        	     				if(data.code == 1){
+        	     					layer.msg(data.msg);
+        	     					window.location.href = "/index.php?s=trade&c=home&m=addPayType";
+        	     				} else {
+        	     					layer.msg(data.msg);
+        	     				}
+        	     			},
+        	     			error:function(){
+        	     				layer.msg("微信上传接口错误");
+        	     			}
+        	     		});
+        	     	}
+        	     });
+        	     
+        </script>
+	</body>
+</html>

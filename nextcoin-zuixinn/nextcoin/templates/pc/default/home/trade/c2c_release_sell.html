@@ -1,0 +1,276 @@
+{template "header.html"}
+		
+		<style type="text/css">
+			.release-order-item{
+				min-height: 225px;
+			}
+              .pagination {
+                display: inline-block;
+                padding-left: 0;
+                margin: 20px 0;
+                border-radius: 4px;
+            }
+            .pagination>li {
+                display: inline;
+            }
+            .pagination>li>a, .pagination>li>span {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.42857143;
+                color: #666;
+                text-decoration: none;
+                background-color: #27262E;
+                border: 1px solid rgba(255,255,255,.1);
+                transition: all .3s ease;
+            }
+            .pagination>li:first-child>a, .pagination>li:first-child>span {
+                margin-left: 0;
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+            }
+            .pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {
+                z-index: 2;
+                color: #fff;
+                background-color: #337ab7;
+                /*border-color: #ddd;*/
+            }
+            .pagination>li>a.active{
+                color: #fff;
+                background-color: #337ab7;
+            }
+            .pagination>li:last-child>a, .pagination>li:last-child>span {
+                border-top-right-radius: 4px;
+                border-bottom-right-radius: 4px;
+            }
+        </style>
+		
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 merchandise-wrap">
+                    {template "nav.html"}
+
+                    <div class="col-xs-12 release">
+                        <div class="col-xs-12 release-num">
+                            <div class="release-num-item">
+                                <p>出售量</p>
+                                <h3>{$trade.trade_total}</h3>
+                            </div>
+                            <div class="release-num-item">
+                                <p>已成交量</p>
+                                <h3>{$trade.success_total}</h3>
+                            </div>
+                        </div>
+                        <ul class="col-xs-12 release-order">
+                            {loop $mc $k $v}
+                            <li class="release-order-item">
+                                <div class="release-order-header">
+                                    <span>{dr_date($v['order_time'])}</span>
+                                    <span>订单号：{$v['sn']}</span>
+                                    <span>类型：卖出</span>
+                                    <span>买家姓名：{$v['buy_username']}</span>
+                                </div>
+                                <div class="release-order-table">
+                                    <table>
+                                        <colgroup style="width: 28%;"></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup style="width: 10%;"></colgroup>
+                                            <thead class="release-order-th">
+                                                <tr>
+                                                    <th>收款信息</th>
+                                                    <th>价格</th>
+                                                    <th>数量</th>
+                                                    <th>交易金额</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="release-order-tr">
+                                                    <td style="text-align: left;">
+                                                    		{if $v['bank']}
+                                                        <span style="margin-right: 33px;">{$v['bank']['khm']}</span>
+                                                        <span>{$v['bank']['zhhm']}</span>
+                                                        {/if}
+                                                    </td>
+                                                    <td>{$v['price']}</td>
+                                                    <td>{$v['order_volume']}</td>
+                                                    <td>{$v['order_price']}</td>
+                                                    <td>
+                                                        {if $v['order_status'] == 1}
+                                                        <span class="danger">未付款</span>
+                                                        {else if $v['order_status'] == 2}
+                                                        <span class="danger">待卖方确认</span>
+                                                        {else if $v['order_status'] == 3}
+                                                        <span class="hint">已完成</span>
+                                                        {else if $v['order_status'] == 4}
+                                                        <span class="danger">申诉中</span>
+                                                        {else if $v['order_status'] == 9}
+                                                        <span class="hint">已取消</span>
+                                                        {/if}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="clearfix release-order-type">
+                                    {if $v['alipay']}
+                                    <div class="left">
+                                        <span>支付宝</span>
+                                        <img src="{$v['alipay']['qrcode']}" alt="">
+                                    </div>
+                                    {/if}
+                                    {if $v['weixin']}
+                                     <div class="left">
+                                        <span>微信</span>
+                                        <img src="{$v['weixin']['qrcode']}" alt="">
+                                    </div>
+                                    {/if}
+                                    <div class="right">
+                                        {if $v['order_status'] == 1}
+                                        <button class="release-order-fill" type="button" data-toggle="modal" data-target="#myModal-{$v['id']}">取消交易</button>
+                                        {else if $v['order_status'] == 2}
+                                        <button class="release-order-btn" data-toggle="modal" data-target="#myModal_01-{$v['id']}">我已收款</button>
+                                        {else if $v['order_status'] == 3}
+                                        <!--<span class="hint">已完成</span>-->
+                                        {else if $v['order_status'] == 4}
+                                        <!--<span class="danger">申诉中</span>-->
+                                        {else if $v['order_status'] == 9}
+                                        <!--<span class="hint">已取消</span>-->
+                                        {/if}
+                                    </div>
+                                </div>
+								
+                                <div class="release-order-footer">
+                                    <p>付款参考号：<span>{$v['pay_no']}</span></p>
+                                </div>
+                            </li>
+                            {/loop}
+                        </ul>
+
+                        <div class="col-xs-12" style="text-align: center; margin-top: 80px;">
+                            <ul class="pagination" id="pages">
+                                <!--<li><a href="#" class="active">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>-->
+                                <!--<li><a href="#">&raquo;</a></li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		
+		{loop $mc $k $v}
+        <div class="modal fade" id="myModal-{$v['id']}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background: #27262E;">
+            <div class="modal-dialog" style="background: #27262E;">
+                <div class="modal-content"  style="background: #27262E;">
+                    <div class="modal-header" style="border: 0;">
+                        <button style="text-shadow:none;opacity: 1;color: #6B6C7E;" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body" style="text-align: center;font-size: 24px; background: #27262E;margin-top: 20px;">是否取消交易</div>
+                    <div class="modal-footer" style="margin-top: 20px; text-align: center;background: #27262E;border: 0;box-shadow:none;">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="border: 0; padding: 0; background: transparent;line-height: 48px;margin-right: 20px;box-shadow: none;color: #666;margin-bottom: 15px;">关闭</button>
+                        <a href="###" onclick="cancel_order({$v['id']});" class="btn btn-primary" style="padding:0;background: #3473C9;width: 100px; height: 38px;line-height: 38px;margin-bottom: 15px;">确定</a>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+        {/loop}
+		
+		{loop $mc $k $v}
+        <div class="modal fade" id="myModal_01-{$v['id']}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background: #27262E;">
+            <div class="modal-dialog" style="background: #27262E;">
+                <div class="modal-content"  style="background: #27262E;">
+                    <div class="modal-header" style="border: 0;">
+                        <button style="text-shadow:none;opacity: 1;color: #6B6C7E;" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body" style="text-align: center;font-size: 24px; background: #27262E;margin-top: 20px;">是否已收款</div>
+                    <div class="modal-footer" style="margin-top: 20px; text-align: center;background: #27262E;border: 0;box-shadow:none;">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="border: 0; padding: 0; background: transparent;line-height: 48px;margin-right: 20px;box-shadow: none;color: #666;margin-bottom: 15px;">关闭</button>
+                        <a href="###" onclick="mark_receved({$v['id']});" class="btn btn-primary" style="padding:0;background: #3473C9;width: 100px; height: 38px;line-height: 38px;margin-bottom: 15px;">确定</a>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+        {/loop}
+
+        {template "footer.html"}
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="{HOME_THEME_PATH}c2c/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+                   function _switch(e){
+                       var _this = $(e.target);
+                       $(".merchandise-header .left a").removeClass("active");
+                       _this.addClass("active");
+                   }
+                   
+                   //取消订单
+                   function cancel_order(id){
+                   		$.ajax({
+                   			type:"post",
+                   			url:"/index.php?s=trade&c=home&m=cancel_order&id="+id,
+                   			dataType:"json",
+                   			success: function(data){
+                   				if(data.code == 1){
+                   					layer.msg(data.msg);
+                   					window.location.reload();
+                   				} else {
+                   					layer.msg(data.msg);
+                   				}
+                   			},
+                   			error: function(){
+                   				layer.msg("取消订单接口出错");
+                   			}
+                   		});
+                   }
+                   
+                   //我已收款
+                   function mark_receved(id){
+                   		layer.load(1);
+                   		$.ajax({
+                   			type:"post",
+                   			url:"/index.php?s=trade&c=home&m=mark_receved&id="+id,
+                   			dataType:"json",
+                   			success: function(data){
+                   				if(data.code == 1){
+                   					layer.msg(data.msg);
+                   					window.location.reload();
+                   				} else {
+                   					layer.closeAll('loading');
+                   					layer.msg(data.msg);
+                   				}
+                   			},
+                   			error: function(){
+                   				layer.closeAll('loading');
+                   				layer.msg("我已收款接口出错");
+                   			}
+                   		});
+                   }
+                   
+        </script>
+        
+        <script type="text/javascript">
+			var pagesize = {$pagecount};
+			var str = "";
+			var page = {$page};
+			var tradeId = {$trade['id']};
+			if(pagesize){
+				for(var i=1;i<=pagesize;i++){
+					if(page == i){
+						str += '<li><a href="/index.php?s=trade&c=home&m=releaseBuy&id='+ tradeId +'&page='+ i + '"' +' class="active">'+ i +'</a></li>';
+					} else {
+						str += '<li><a href="/index.php?s=trade&c=home&m=releaseBuy&id='+ tradeId +'&page='+ i + '"' +'>'+ i +'</a></li>';
+					}
+				}
+				$("#pages").html(str);
+			}
+		</script>
+        
+    </body>
+</html>

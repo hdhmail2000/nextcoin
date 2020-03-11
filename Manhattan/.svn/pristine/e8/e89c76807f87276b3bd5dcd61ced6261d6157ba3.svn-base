@@ -1,0 +1,123 @@
+//
+//  XHHMineFrogetPswViewController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/9/15.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHMineFrogetPswViewController.h"
+
+@interface XHHMineFrogetPswViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *titleLable;
+
+@property (weak, nonatomic) IBOutlet UILabel *alertLable;
+@property (weak, nonatomic) IBOutlet UITextField *currTextFeild;
+@property (weak, nonatomic) IBOutlet UITextField *nPswTextFeild;
+@property (weak, nonatomic) IBOutlet UITextField *sureTextFeild;
+@property (weak, nonatomic) IBOutlet UIButton *codeButton;
+
+@property (nonatomic , copy) NSString *userPhone;
+
+
+@end
+
+@implementation XHHMineFrogetPswViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self.currTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [self.nPswTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [self.sureTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    
+    [self getCode];
+    // Do any additional setup after loading the view.
+}
+- (IBAction)back:(id)sender {
+    [self pop];
+}
+-(void)showAlertTitle{
+    NSString *username = [NSString chz_getObjForKey:kv_LOGIN_USERNAME];
+    if (ChZ_StringIsEmpty(username))
+    {
+        if (username.length == 11)
+        {
+            self.alertLable.text = [NSString stringWithFormat:@"已向 +86 %@****%@发送了验证码",[username substringToIndex:3],[username substringFromIndex:7]];
+        }
+    }
+}
+- (IBAction)sureAction:(id)sender {
+    if (self.currTextFeild.text.length == 0) {
+        ChZ_MBError(@"请输入验证码");
+        return;
+    }
+//    if (self.nPswTextFeild.text.length == 11) {
+//        ChZ_MBError(@"请输入正确的验证码");
+//        return;
+//    }
+    if (self.nPswTextFeild.text.length < 6) {
+        ChZ_MBError(@"密码长度小于6");
+        return;
+    }
+    @weakify(self);
+    [XHHSafeCenterRequest requestTradePasswordForget:self.userPhone
+                                                area:@"86"
+                                                code:self.currTextFeild.text
+                                            totpCode:self.sureTextFeild.text
+                                         newPassword:self.nPswTextFeild.text
+                                        newPassword2:self.nPswTextFeild.text
+                                        successBlock:^(id dataSource)
+     {
+         @strongify(self);
+         ChZ_MBDismss
+         ChZ_MBSuccess(@"密码找回成功");
+         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+             [self popToVCClassName:@"XHHSafeCenterController"];
+         });
+     } errorBlock:^(int code, NSString *error) {
+         ChZ_MBDismss
+         ChZ_MBError(error)
+     }];
+}
+
+- (IBAction)getCodeAgin:(UIButton *)sender
+{
+    [self getCode];
+}
+#pragma --获取验证码
+-(void)getCode{
+    ChZ_MBMsg(nil);
+    @weakify(self);
+    NSString *username = [NSString chz_getObjForKey:kv_LOGIN_USERNAME];
+    self.userPhone = username;
+    if (ChZ_StringIsEmpty(username))
+    {
+        [XHHSafeCenterRequest requestPhoneMsg:@"86" phone:username type:@"107" successBlock:^(id dataSource) {
+            @strongify(self);
+            [self.codeButton startWithTime:59
+                                     title:@"获取验证码"
+                            countDownTitle:@" s"
+                                 mainColor:[UIColor colorWithHexString:@"308AF5"]
+                                countColor:[UIColor colorWithHexString:@"4B4B80"]];
+            [self showAlertTitle];
+            ChZ_MBDismss;
+        } errorBlock:^(int code, NSString *error) {
+            ChZ_MBDismssError(error);
+        }];
+    }else{
+        ChZ_MBError(@"登录失效");
+        [[APPControl sharedAPPControl] toLogin];
+    }
+    
+}
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

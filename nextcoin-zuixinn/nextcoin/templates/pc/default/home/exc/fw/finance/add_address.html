@@ -1,0 +1,146 @@
+{template "header.html" }
+{template "top.html" }
+		<input type="hidden" id="symbol" value="{$data.coinType['id']}">
+        <input type="hidden" id="coinName" value="{$data.coinType['shortname']}">
+	    <div class="container" style="min-height: 800px;padding-bottom: 60px;">
+	        <div class="row">
+	            <div class="col-xs-12 bind-header">
+                    <div class="col-xs-12 bind-header-tetil">
+                        <h2>{$finance.account_add}</h2>
+                    </div>
+                    <div class="col-xs-12 bind-header-nav">
+                        <ol class="breadcrumb">
+                          <!--<li><a href="/financial/index.html">{$finance.account_center}</a></li>-->
+                          <li><a href="index.php?s=exc&c=financeController">{$finance.account_center}</a></li>
+                          <li class="active">{$finance.account_add}</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 content-form-wrap">
+                    <div class="col-xs-12 content-form-tetil">
+                        <h3>{$finance.account_add}</h3>
+                    </div>
+                    <div class="col-xs-12 content-form">
+                        <div class="clearfix content-form-box">
+                            <div class="col-xs-12 content-form-item">
+                                <p>{$finance.account_address}</p>
+                                <label for="">
+                                    <input type="text"  id="withdrawBtcAddr" value=""  class="form-site-text"/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 content-form-item">
+                                <p>{$finance.account_remark}</p>
+                                <label for="">
+                                    <input type="text" id="withdrawBtcRemark" value="" />
+                                </label>
+                            </div>
+                            <!--<div class="col-xs-12 content-form-item">-->
+                                <!--<p>{$finance.account_tradPassword}</p>-->
+                                <!--<label for="">-->
+                                    <!--<input type="password" id="withdrawBtcPass" value="" />-->
+                                <!--</label>-->
+                            <!--</div>-->
+                            <!--<div class="col-xs-12 content-form-item">-->
+		                        <!--<p>{$finance.withdraw_getSms}:</p>-->
+		                        <!--<label for="">-->
+		                            <!--<input type="text" id="withdrawBtcAddrPhoneCode"  />-->
+		                            <!--<span type="button" id="send-msg" class="send-msg msg-button-inline" style="position: absolute;right:10px; top: 56px;cursor: pointer; ">{$finance.withdraw_getSms}</span>-->
+		                        <!--</label>-->
+		                    <!--</div>-->
+                            <!--<div class="col-xs-12 content-form-item">-->
+                                <!--<p>{$finance.account_googleCode}</p>-->
+                                <!--<label for="">-->
+                                    <!--<input type="text"  id="withdrawBtcAddrTotpCode" value="" />-->
+                                <!--</label>-->
+                            <!--</div>-->
+                            <div class="col-xs-12 content-form-item">
+                                <button class="content-form-btn" id="withdrawBtcAddrBtns">{$finance.account_save}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+	        </div>
+	    </div>
+        <script src="{HOME_THEME_PATH}exc/js/plugin/jquery.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/finance/account.withdraw.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/{$drpath}js/custom.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+//      		$('#send-msg').click(function(){
+//		        var obj = this;
+//		        var url = "/index.php?s=exc&c=financeController&m=smsBank";
+//		        var param = {
+//		
+//		        };
+//		        var callback = function(data) {
+//		            if( data.code ==200){
+//		                util.counter(obj,120,'重新发送');
+//		               util.layerAlert('','发送成功',1,function(){})
+//		            } else{
+//		                util.layerAlert('',data.msg,2,function(){})
+//		            }
+//		        };
+//		        util.network({url : url,
+//		            param : param,
+//		            success : callback});
+//		    });
+		    
+		    $("#withdrawBtcAddrBtns").on("click", function(that) {
+		        
+	            var coinName = $("#coinName").val();
+	            var withdrawAddr = util.trim($("#withdrawBtcAddr").val());
+	            var withdrawRemark = util.trim($("#withdrawBtcRemark").val());
+	            // var withdrawBtcPass = util.trim($("#withdrawBtcPass").val());
+                var withdrawBtcPass = 0;
+	            var withdrawBtcAddrTotpCode = 0;
+	            var withdrawBtcAddrPhoneCode = 0;
+	            var symbol = $("#symbol").val();
+	            if (withdrawAddr == "") {
+	                layer.msg(util.getLan("finance.tips.24"));
+	                return;
+	            }
+	            // if ($("#withdrawBtcAddrTotpCode").length > 0) {
+	            //     withdrawBtcAddrTotpCode = util.trim($("#withdrawBtcAddrTotpCode").val());
+	            //     if (!/^[0-9]{6}$/.test(withdrawBtcAddrTotpCode)) {
+	            //        layer.msg(util.getLan("comm.tips.2"));
+	            //         $("#withdrawBtcAddrTotpCode").val("");
+	            //         return;
+	            //     }
+	            // }
+	            // if ($("#withdrawBtcAddrPhoneCode").length > 0) {
+	            //     withdrawBtcAddrPhoneCode = util.trim($("#withdrawBtcAddrPhoneCode").val());
+	            //     if (!/^[0-9]{6}$/.test(withdrawBtcAddrPhoneCode)) {
+	            //         layer.msg(util.getLan("comm.tips.3"));
+	            //         $("#withdrawBtcAddrPhoneCode").val("");
+	            //         return;
+	            //     }
+	            // }
+	            util.hideerrortips("binderrortips");
+	            var url = "/index.php?s=exc&c=financeController&m=saveWithdrawAddress";
+	            var param = {
+	                withdrawAddr : withdrawAddr,
+	                totpCode : withdrawBtcAddrTotpCode,
+	                phoneCode : withdrawBtcAddrPhoneCode,
+	                symbol : symbol,
+	                password : withdrawBtcPass,
+	                remark : withdrawRemark
+	            };
+	            var callback = function(result) {
+	                if (result.code == 200) {
+	                    // window.location.reload(true);
+                        window.location.href="/index.php?s=exc&c=financeController";
+	                } else {
+	                    layer.msg(result.msg);
+	                }
+	            };
+	            util.network({
+	                             btn : that,
+	                             url : url,
+	                             param : param,
+	                             success : callback,
+	                         });
+        
+		    });
+		    
+        </script>
+{template "footer.html" }

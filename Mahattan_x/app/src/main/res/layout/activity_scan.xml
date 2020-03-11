@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <cn.bingoogolapple.qrcode.zxing.ZXingView
+        android:id="@+id/zx_scan"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:qrcv_animTime="1000"
+        app:qrcv_tipTextSize="12sp"
+        app:qrcv_isTipTextBelowRect="true"
+        app:qrcv_tipTextMargin="24dp"
+        app:qrcv_tipTextColor="@android:color/white"
+        app:qrcv_isShowTipTextAsSingleLine="true"
+        app:qrcv_isShowTipBackground="false"
+        app:qrcv_qrCodeTipText="请对准二维码，即可自动扫描"
+        app:qrcv_topOffset="140dp"
+        app:qrcv_cornerColor="#308AF5"
+        app:qrcv_maskColor="#a5000000"
+        app:qrcv_scanLineColor="#308AF5"/>
+
+    <include layout="@layout/toolbar_actionbar" />
+</RelativeLayout>

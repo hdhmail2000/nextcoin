@@ -1,0 +1,57 @@
+{template "header.html" }
+{template "top.html" }
+	    <!--[if lt IE 9]>对不起，浏览器版本太低~！<![endif]-->
+        <div class="container-fluid loging">
+            <!--<div class="row loging-header">
+                <div class="col-xs-12 loging-header-logo">
+                    <a href="{{route('main}" class=""></a>
+                </div>
+            </div>-->
+            <div class="row loging-body">
+                <div class="col-xs-12">
+                    <div class="loging-body-box">
+                        <div class="form-wrap">
+                            <form class="form">
+                                <!--<div class="form-item">-->
+                                    <!--<span class="iconfont icon-mima"></span>-->
+                                    <!--<label for="">-->
+                                        <!--<input type="text" id="reset-googlecode" value="" placeholder="{$vail.first_place4}"/>-->
+                                    <!--</label>-->
+                                <!--</div>-->
+                                <div class="form-item">
+                                    <span class="iconfont icon-mima"></span>
+                                    <label for="">
+                                        <input type="password" id="reset-newpass" value="" placeholder="{$vail.first_place5}"/>
+                                    </label>
+                                </div>
+                                <div class="form-item">
+                                    <span class="iconfont icon-mima"></span>
+                                    <label for="">
+                                        <input type="password"  id="reset-confirmpass" value="" placeholder="{$vail.first_place6}"/>
+                                    </label>
+                                </div>
+<!----------------------------------- 错误提示 ---------------------------------->
+                                <div class="form-item-hint">
+                                    <p style="display: none;">{$vail.first_hint}</p>
+                                </div>
+                            </form>
+                            <div class="form-btn">
+                                <a href="javascript:void(0);" id="btn-phone-success">{$vail.first_sure}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="{HOME_THEME_PATH}exc/js/custom.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/plugin/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/comm/util.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/comm/comm.js" type="text/javascript" charset="utf-8"></script>
+        {if !isset($_COOKIE['oex_lan']) || $_COOKIE['oex_lan'] =='zh_TW'}
+            <script src="{HOME_THEME_PATH}exc/js/language/language_zh_TW.js" type="text/javascript" charset="utf-8"></script>
+        {else}
+            <script src="{HOME_THEME_PATH}exc/js/language/language_en_US.js" type="text/javascript" charset="utf-8"></script>
+
+        {/if}
+        <script src="{HOME_THEME_PATH}exc/js/user/reset.js" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }

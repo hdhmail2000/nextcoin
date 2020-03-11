@@ -1,0 +1,29 @@
+//
+//  XHHSalesView.h
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/26.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+//修改
+#import "ChZRealCoinInfoModel.h"
+//------
+
+@class XHHTrandVolumeView;
+@interface XHHSalesView : UIView
+
+@property (strong, nonatomic) NSString *typeName;
+@property (strong, nonatomic) NSString *numberTypeName;
+
+@property (copy, nonatomic) void (^buySellBlock)(BOOL isBuy,NSString *price,NSString *num);
+
+
+//修改-----
+@property (strong, nonatomic) XHHTrandVolumeView    *volumeView;
+@property (nonatomic , strong) ChZRealCoinInfoModel *coinModel;
+@property (nonatomic , assign) double               progressValue;
+@property (nonatomic , strong) NSDictionary         *depthDic;
+//----
+@end

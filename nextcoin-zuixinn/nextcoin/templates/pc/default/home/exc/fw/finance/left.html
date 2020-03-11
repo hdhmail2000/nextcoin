@@ -1,0 +1,30 @@
+<div class="col-xs-2 financial-sidebar">
+    <h2 class="financial-sidebar-tetil">{$finance.account_center}</h2>
+    <ul class="financial-sidebar-nav">
+        <li class="financial-sidebar-bar">
+            <a href="/index.php?s=exc&c=financeController" {if $method=='' || $method=='index'}class="active"{/if}>{$finance.account_asset}</a>
+        </li>
+        <li class="financial-sidebar-bar">
+            <a href="/index.php?s=exc&c=financeController&m=commission" {if $method=='commission'}class="active"{/if}>{$finance.recommend_my}</a>
+        </li>
+        <li class="financial-sidebar-bar">
+            <a href="/index.php?s=exc&c=financeController&m=unLockUser" {if $method=='unLockUser'}class="active"{/if}>{$finance.unLockUser_my}</a>
+        </li>
+        <!--{loop $data $k $item}
+        	{if $item['shortName'] == 'USDT'}
+        <li class="financial-sidebar-bar">
+            <a href="/index.php?s=exc&c=financeController&m=c2cDeposit&symbol={$item['coinId']}" {if $method=='c2cDeposit'}class="active"{/if}>C2C{$finance.account_deposit}</a>
+        </li>
+        {/if}
+        {/loop}-->
+        <!--<li class="financial-sidebar-bar">
+            <a href="/index.php?s=exc&c=financeController&m=sdRecord" {if $method=='sdRecord'}class="active"{/if}>{$finance.manual_recharge_details}</a>
+        </li>-->
+        <!--<li class="financial-sidebar-bar">
+            <a href="/index.php?s=exc&c=financeController&m=transferAccounts" {if $method=='transferAccounts'}class="active"{/if}>{$finance.account_transfer}</a>
+        </li>-->
+        <!--<li class="financial-sidebar-bar">
+            <a href="/index.php?s=exc&c=financeController&m=authentication" {if $method=='authentication'}class="active"{/if}>{$finance.account_mining}</a>
+        </li>-->
+    </ul>
+</div>

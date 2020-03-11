@@ -1,0 +1,318 @@
+<?php if ($fn_include = $this->_include("header.html")) include($fn_include); ?>
+		<style>
+			#deal_psw {
+				    margin: 0;
+				    padding: 0 16px;
+				    line-height: 48px;
+				    width: 520px;
+				    height: 48px;
+				    border: 1px solid #474652;
+				    background: #27262E;
+				    color: #C9D6E8;
+				    font-size: 16px;
+				    border-radius: 0;
+			}
+			.release-form-data select{
+			    padding: 0 0 0 16px \9 !important;
+			    *padding: 0 0 0 16px !important;
+			}
+		</style>
+		<div class="container">
+            <div class="row">
+                <div class="col-xs-12 merchandise-wrap">
+                    <?php if ($fn_include = $this->_include("nav.html")) include($fn_include); ?>
+                    <div class="col-xs-12 release-wrap">
+                        <div class="col-xs-12 release-tetil">
+                            <h3>发布交易</h3>
+                        </div>
+                        <div class="col-xs-12 release-form">
+                            <form class="col-xs-12" id="myform">
+                                <div class="col-xs-12 release-form-item">
+                                    <label for="" class="release-form-text">
+                                        <p>交易类型</p>
+                                        <div class="clearfix release-form-data">
+                                            <select name="data[deal_type]" class="left type-select" id="deal_type">
+                                            	   <option value="1">卖出</option>
+                                            	   <option value="2">买入</option>
+                                            </select>
+                                            <p class="left release-form-hint">* 必填 请选择你的交易类型，你是需要买入或卖出</p>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 release-form-item">
+                                    <label for="" class="release-form-text">
+                                        <p>国家</p>
+                                        <div class="clearfix release-form-data">
+                                            <select name="data[country]" class="left" id="country">
+                                        			<?php $return = array();$list_temp = $this->list_tag("action=table table=linkage_data_2"); if ($list_temp) extract($list_temp); $count=count($return); if (is_array($return)) { foreach ($return as $key=>$t) { ?>
+                                            	   <option value="<?php echo $t['id']; ?>"><?php echo $t['name']; ?></option>
+                                            		<?php } } ?>
+                                            </select>
+                                            <p class="left release-form-hint">* 必填 请选择您的国家地区</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+
+                                <!--
+
+                                买入模块class为：release-form-mall
+                                卖出模块class为：release-form-sell
+
+                                -->
+
+
+                                <div class="col-xs-12 release-form-item release-form-sell">
+                                    <label for="" class="release-form-text">
+                                        <p>货币</p>
+                                        <div class="clearfix release-form-data">
+                                            <select name="data[symbol_sell]" class="left" id="symbol_sell">
+                                            	   <?php if (is_array($coin_list)) { $count=count($coin_list);foreach ($coin_list as $k=>$t) { ?>
+                                            	   <option value="<?php echo $t['id']; ?>"><?php echo $t['name']; ?></option>
+                                            	   	<?php } } ?>
+                                            </select>
+                                            <p class="left release-form-hint">* 必填 请选择您要卖出的币种类型</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="col-xs-12 release-form-item release-form-mall">
+                                    <label for="" class="release-form-text">
+                                        <p>货币</p>
+                                        <div class="clearfix release-form-data">
+                                            <select name="data[symbol_buy]" class="left" id="symbol_buy">
+                                        			<?php if (is_array($coin_list)) { $count=count($coin_list);foreach ($coin_list as $k=>$t) { ?>
+                                            	   <option value="<?php echo $t['id']; ?>"><?php echo $t['name']; ?></option>
+                                            	   	<?php } } ?>
+                                            </select>
+                                            <p class="left release-form-hint">* 必填 请选择您要买入的币种类型</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="col-xs-12 release-form-item release-form-mall">
+                                    <label for="" class="release-form-text">
+                                        <p>单价</p>
+                                        <div class="clearfix release-form-data">
+                                            <input type="text" name="data[order_price_buy]" id="order_price_buy" placeholder="请输入单价" style="padding-right: 75px;" class="left"/>
+                                            <span style="position: absolute;top: 0;left: 463px; font-size: 19px; color: rgba(201,214,232,.3);line-height: 48px;">CNY</span>
+                                            <p class="left release-form-hint">* 必填 请输入你想买入的单价</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="col-xs-12 release-form-item release-form-sell">
+                                    <label for="" class="release-form-text">
+                                        <p>单价</p>
+                                        <div class="clearfix release-form-data">
+                                            <input type="text" name="data[order_price_sell]" id="order_price_sell" placeholder="请输入单价" style="padding-right: 75px;" class="left"/>
+                                            <span style="position: absolute;top: 0;left: 463px; font-size: 19px; color: rgba(201,214,232,.3);line-height: 48px;">CNY</span>
+                                            <p class="left release-form-hint">* 必填 请输入你想卖出的单价</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="col-xs-12 release-form-item release-form-mall">
+                                    <label for="" class="release-form-text">
+                                        <p>数量</p>
+                                        <div class="clearfix release-form-data">
+                                            <input type="text" name="data[order_volume_buy]" id="order_volume_buy" placeholder="请输入数量" style="padding-right: 75px;" class="left"/>
+                                            <span style="position: absolute;top: 0;left: 463px; font-size: 19px; color: rgba(201,214,232,.3);line-height: 48px;"></span>
+                                            <p class="left release-form-hint">* 必填 请输入你要买入的数量</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="col-xs-12 release-form-item release-form-sell">
+                                    <label for="" class="release-form-text">
+                                        <p>数量</p>
+                                        <div class="clearfix release-form-data">
+                                            <div class="left" style="width: 520px;">
+                                                <input type="text" name="data[order_volume_sell]" id="order_volume_sell" placeholder="请输入数量" style="width: 235px;"/>
+                                                <span style="margin-left: 30px;color:  rgba(201,214,232,.3);font-size: 14px;">可用余额：<font id="kyye">4374.03943</font> <a href="###" onclick="_allSell($(this))">全部卖出</a></span>
+                                            </div>
+                                            <p class="left release-form-hint">* 必填 请输入你要卖出的数量</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="col-xs-12 release-form-item">
+                                    <label for="" class="release-form-text">
+                                        <p>交易范围</p>
+                                        <div class="clearfix release-form-data">
+                                            <div class="left" style="width: 520px;">
+                                                <input type="text" name="data[min_value]" id="min_value" placeholder="请输入最小交易量" style="width: 238px;"/>
+                                                <span style="color:  rgba(201,214,232,.3);margin: 0 12px;">-</span>
+                                                <input type="text" name="data[max_value]" id="max_value" placeholder="请输入最大交易量" style="width: 238px;"/>
+                                            </div>
+                                            <p class="left release-form-hint">* 必填 请输入你允许的交易范围</p>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 release-form-item">
+                                    <label for="" class="release-form-text">
+                                        <p>付款方式 <a href="/index.php?s=trade&c=home&m=addPayType">添加</a></p>
+                                        <div class="clearfix release-form-data">
+                                            <div class="left release-form-checkbox">
+                                                <input type="checkbox" checked="checked" name="data[pay_type][]" id="" value="银行卡" />
+                                                银行卡
+                                            </div>
+                                            <div class="left release-form-checkbox">
+                                                <input type="checkbox" name="data[pay_type][]" id="" value="支付宝" />
+                                                支付宝
+                                            </div>
+                                            <div class="left release-form-checkbox">
+                                                <input type="checkbox" name="data[pay_type][]" id="" value="微信" />
+                                                微信
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 release-form-item">
+                                    <label for="" class="release-form-text">
+                                        <p>交易密码</p>
+                                        <div class="clearfix release-form-data">
+                                            <input type="password" name="data[deal_psw]" id="deal_psw" placeholder="请输入交易密码" style="width: 211px;" class="left"/>
+                                            <!--<a href="" class="left release-form-hint">忘记密码？</a>-->
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="col-xs-12 release-form-btn">
+                                    <button type="button" onclick="add_trade();">确认发布</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background: #27262E;display: none;">
+            <div class="modal-dialog" style="background: #27262E;">
+                <div class="modal-content"  style="background: #27262E;">
+                    <div class="modal-header" style="border: 0;">
+                        <button style="text-shadow:none;opacity: 1;color: #6B6C7E;" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body" style="text-align: center;font-size: 34px; background: #27262E;">发布成功!</div>
+                    <div class="modal-footer" style="margin-top: 100px; text-align: center;background: #27262E;border: 0;box-shadow:none;">
+                        <a href="/index.php?s=trade&c=home&m=c2cReleaseList" class="btn btn-primary" style="background: #3473C9;width: 210px; height: 48px;line-height: 48px;margin-bottom: 15px;">查看发布</a>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <?php if ($fn_include = $this->_include("footer.html")) include($fn_include); ?>
+
+         <script type="text/javascript">
+                   function _switch(e){
+                       var _this = $(e.target);
+                       $(".merchandise-header .left a").removeClass("active");
+                       _this.addClass("active");
+                   }
+
+                   function _allSell(e){
+                       var _num = e.siblings("font").html();
+                       e.parent("span").siblings("input").val(_num);
+                   }
+
+                  $(".type-select").on({
+                      change:function(){
+                          var i = $(this).val();
+                          console.log(i);
+                          if(i == 1){
+                              $(".release-form-mall").hide();
+                              $(".release-form-sell").show();
+                          }else if(i == 2){
+                              $(".release-form-mall").show();
+                              $(".release-form-sell").hide();
+                          }
+                      }
+                  })
+
+                  //发布
+                  function add_trade(){
+                  		var type = $("#deal_type").val();
+                  		if(type == 1){
+                  			//卖出
+                  			if($("#order_price_sell").val() == "" || $("#order_price_sell").val() == null || $("#order_volume_sell").val() == null || $("#order_volume_sell").val() == "" || $("#order_volume_sell").val() == 0 || $("#min_value").val() == null || $("#min_value").val() == "" || $("#max_value").val() == null || $("#max_value").val() == "" || $("#deal_psw").val() == null || $("#deal_psw").val() == ""){
+	                  			layer.msg("发布内容不能为空");
+	                  		} else {
+	                  			$.ajax({
+	                  				type:"post",
+	                  				url:"/index.php?s=trade&c=home&m=fabu&type="+type,
+	                  				data:$("#myform").serialize(),
+	                  				dataType:"json",
+	                  				success:function(data){
+	                  					//发布成功model
+	                  					if(data.code == 1){
+	                  						$('#myModal').modal('show');
+	                  					} else {
+	                  						layer.msg(data.msg);
+	                  					}
+	                  				},
+	                  				error:function(){
+	                  					layer.msg("卖出接口错误");
+	                  				}
+	                  			});
+	                  		}
+                  		} else if(type == 2){
+                  			//买入
+                  			if($("#order_price_buy").val() == "" || $("#order_price_buy").val() == null || $("#order_volume_buy").val() == null || $("#order_volume_buy").val() == "" || $("#order_volume_buy").val() == 0 || $("#min_value").val() == null || $("#min_value").val() == "" || $("#max_value").val() == null || $("#max_value").val() == "" || $("#deal_psw").val() == null || $("#deal_psw").val() == ""){
+	                  			layer.msg("发布内容不能为空");
+	                  		} else {
+	                  			$.ajax({
+	                  				type:"post",
+	                  				url:"/index.php?s=trade&c=home&m=fabu&type="+type,
+	                  				data:$("#myform").serialize(),
+	                  				dataType:"json",
+	                  				success:function(data){
+	                  					//发布成功model
+	                  					if(data.code == 1){
+	                  						$('#myModal').modal('show');
+	                  					} else {
+	                  						layer.msg(data.msg);
+	                  					}
+	                  				},
+	                  				error:function(){
+	                  					layer.msg("买入接口错误");
+	                  				}
+	                  			});
+	                  		}
+                  		}
+
+                  }
+
+                  //返回可用余额
+                  total_of_symbol($("#symbol_sell").val());
+
+                  function total_of_symbol(val){
+                  	$.ajax({
+	                  	type:"get",
+	                  	url:"/index.php?s=trade&c=home&m=total_of_symbol&symbol="+val,
+	                  	dataType:"json",
+	                  	success:function(data){
+	                  		if(data.code == 1){
+	                  			var num = data.resultData;
+	                  			var num_n = new Number(num);
+	                  			$("#kyye").text(num_n.toFixed(6));
+	                  		}
+	                  	},
+	                  	error:function(){
+	                  		layer.msg("可用余额接口错误");
+	                  	}
+	                  });
+                  }
+
+                  $("#symbol_sell").change(function(){
+                  	if($("#deal_type").val() == 1){
+                  		total_of_symbol($("#symbol_sell").val());
+                  	}
+                  });
+
+        </script>
+	</body>
+</html>

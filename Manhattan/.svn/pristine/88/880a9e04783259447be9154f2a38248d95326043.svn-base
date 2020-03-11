@@ -1,0 +1,129 @@
+//
+//  XHHCurrencyView.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/20.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHCurrencyView.h"
+#import "XHHCurrencyCell.h"
+#import "XHHC2CCnyListModel.h"
+static NSString *cellIndifier = @"XHHCurrencyCell";
+@interface XHHCurrencyView ()<UITableViewDataSource,UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *navHeight;
+
+@property (weak, nonatomic) IBOutlet UIView *navView;
+@property (weak, nonatomic) IBOutlet UIButton *grayButton;
+
+@property (nonatomic , strong) UITableView *tableView;
+
+@property (nonatomic , assign) NSInteger index;
+
+@end
+
+@implementation XHHCurrencyView
+
+-(void)awakeFromNib{
+    [super awakeFromNib];
+    CGFloat h = ChZ_IsiPhoneX ? 24 :0;
+    _navHeight.constant += h;
+    
+    _index = 0;
+    self.navView.backgroundColor = bgColor;
+    
+    
+    [self addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.bottom.equalTo(self);
+        make.top.equalTo(self.navView.mas_bottom);
+        make.right.equalTo(self.navView);
+    }];
+    
+}
+-(void)setCnyList:(NSArray *)cnyList
+{
+    _cnyList = cnyList;
+    [self.tableView reloadData];
+}
+
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.rowHeight = 56;
+        [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 0, 0, 0)];
+        [_tableView setSeparatorColor:LineCorlor];
+        [_tableView setBackgroundColor:bgColor];
+        [_tableView registerNib:[UINib nibWithNibName:@"XHHCurrencyCell" bundle:nil] forCellReuseIdentifier:cellIndifier];
+    }
+    return _tableView;
+}
+#pragma tableView delegate
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.cnyList.count;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    XHHCurrencyCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndifier];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (indexPath.row == _index) {
+        [cell choseImageHiddle:NO];
+        cell.backgroundColor = [UIColor colorWithHexString:@"16134C"];
+    }else{
+        [cell choseImageHiddle:YES];
+        cell.backgroundColor = bgColor;
+    }
+    if (self.cnyList.count > indexPath.row) {
+        XHHC2CCnyListModel *model = self.cnyList[indexPath.row];
+        cell.model = model;
+    }
+    return cell;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    _index = indexPath.row;
+    if (self.selectCnyBlock)
+    {
+        XHHC2CCnyListModel *model = self.cnyList[indexPath.row];
+        self.selectCnyBlock(model);
+    }
+    [self.tableView reloadData];
+    [self dismiss];
+}
+
+-(void)showInView:(UIView *)view{
+    [view addSubview:self];
+    self.frame = CGRectMake(-ChZ_WIDTH, 0, ChZ_WIDTH, ChZ_HEIGHT);
+    [UIView animateWithDuration:0.5 animations:^{
+        self.x = 0;
+    } completion:^(BOOL finished) {
+        self.grayButton.hidden = NO;
+    }];
+}
+-(void)dismiss{
+    [UIView animateWithDuration:0.5 animations:^{
+        self.alpha = 0;
+        self.x = -ChZ_WIDTH;
+        self.grayButton.hidden = YES;
+    } completion:^(BOOL finished) {
+        self.alpha = 1;
+        [self removeFromSuperview];
+    }];
+}
+- (IBAction)hiddleAction:(UIButton *)sender {
+    [self dismiss];
+    self.grayButton.hidden = YES;
+}
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+@end

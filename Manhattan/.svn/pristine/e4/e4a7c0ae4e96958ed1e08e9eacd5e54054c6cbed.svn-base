@@ -1,0 +1,554 @@
+//
+//  ChZHomeRequest.m
+//  FuturePurse
+//
+//  Created by Howe on 2018/8/8.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "ChZHomeRequest.h"
+#import "ChZMarketAreaModel.h"
+#import "ChZMarketListModel.h"
+#import "ChZRealCoinInfoModel.h"
+#import "ChZMarketTxsOrderItemModel.h"
+#import "HCMarketAreaModel.h"
+#import "XHHNotesItemModel.h"
+#import "XHHNotesListModel.h"
+#import "XHHNotesDetailModel.h"
+
+@implementation ChZHomeRequest
++ (void)requestKLineData:(NSString *)Fid
+                    date:(double )date
+            SuccessBlock:(ChZ_SuccessBlock)successBlock
+              errorBlock:(ErrorCodeBlock)errorBlock
+{
+    
+    NSString *url = [NSString stringWithFormat:@"%@/kline/fullperiod.html",@"https://www.dota-one.com"];
+    NSString *urlStr = [NSString stringWithFormat:@"%@?symbol=%@&step=%.f", url, Fid,date];
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:config];
+    NSURLSessionDataTask *task = [session dataTaskWithURL:[NSURL URLWithString:urlStr] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+                                  {
+                                      if (error) {
+                                          if (errorBlock)    errorBlock(0,@"请求失败");
+                                          return ;
+                                      }
+                                      
+                                      NSError *jsonError;
+                                      NSArray *array = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&jsonError];
+                                      if (jsonError) {
+                                          if (errorBlock)    errorBlock(0,@"请求失败");
+                                          return ;
+                                      }
+                                      if (array)
+                                          if (successBlock) {
+                                              successBlock(array);
+                                          }
+                                  }];
+    [task resume];
+}
+
++ (void)requestAreaSuccessBlock:(ChZ_SuccessBlock)successBlock
+                     errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSString *urlStr = RequestURL(kURL_marketArea);
+    [self GetWithURL:urlStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+        if (code != kv_JavaRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        NSArray *data = [responseDic objectForKey:@"data"];
+        if (data)
+        {
+            NSArray *objArray = [HCMarketAreaModel mj_objectArrayWithKeyValuesArray:data];
+            if (successBlock)
+            {
+                successBlock(objArray);
+            }
+        } else {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+}
+
++ (void)requestRealCoin:(NSString *)idString
+           successBlock:(ChZ_SuccessBlock)successBlock
+             errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_realCoin)];
+    if (ChZ_StringIsEmpty(idString)) {
+        [url appendString:[NSString stringWithFormat:@"?symbol=%@",idString]];
+    }
+    [self GetWithURL:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+        
+        
+        if (code != kv_JavaRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        NSArray *data = [responseDic objectForKey:@"data"];
+        if (data)
+        {
+            NSArray *objArray = [ChZRealCoinInfoModel mj_objectArrayWithKeyValuesArray:data];
+            if (successBlock)
+            {
+                successBlock(objArray);
+            }
+        } else {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+    
+}
+
+
++ (void)requestAreaList:(NSString *)fid
+           successBlock:(ChZ_SuccessBlock)successBlock
+             errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_marketList)];
+    
+    if (ChZ_StringIsEmpty(fid)) {
+        [url appendString:[NSString stringWithFormat:@"?symbol=%@",fid]];
+    }
+    
+    [self GetWithURL:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+        if (code != kv_JavaRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        NSArray *data = [responseDic objectForKey:@"data"];
+        if (data)
+        {
+            NSArray *objArray = [ChZMarketListModel mj_objectArrayWithKeyValuesArray:data];
+            if (successBlock)
+            {
+                successBlock(objArray);
+            }
+        } else {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+}
+
++ (void)requestCancelOrder:(NSString *)fid
+              successBlock:(ChZ_SuccessBlock)successBlock
+                errorBlock:(ErrorCodeBlock)errorBlock
+{
+//    NSMutableString *url = [NSMutableString string];
+//    [url appendString:RequestURL(kURL_cancel)];
+//    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+//    if (ChZ_StringIsEmpty(fid))[parameters setObject:fid forKey:@"id"];
+//    [self PostAuthWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//     {
+//         NSDictionary *responseDic = responseObject;
+//         if ([responseDic isKindOfClass:[NSNull class]])
+//         {
+//             if (errorBlock) errorBlock(0,@"请求失败"); return;
+//         }
+//         int code = [[responseDic objectForKey:@"code"]intValue];
+//         NSString *msg = [responseDic objectForKey:@"msg"];
+//         if (code != kv_JavaRequestSuccess)
+//         {
+//             if (ChZ_StringIsEmpty(msg))
+//             {
+//                 if (errorBlock) errorBlock(code,msg); return;
+//             }
+//             if (errorBlock) errorBlock(code,@"请求失败"); return;
+//         }
+//         if (successBlock)successBlock(nil);
+//         return;
+//     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+//     {
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     }];
+    
+    
+    
+}
+
++ (void)requestCreateOrder:(NSString *)symbolId
+                    number:(float )number
+                     price:(float )price
+                      type:(NSString *)type
+                  tradePwd:(NSString *)tradePwd
+              successBlock:(ChZ_SuccessBlock)successBlock
+                errorBlock:(ErrorCodeBlock)errorBlock
+{
+//    NSMutableString *url = [NSMutableString string];
+//    [url appendString:RequestURL(kURL_place)];
+//    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+//    if (ChZ_StringIsEmpty(symbolId))[parameters setObject:symbolId forKey:@"symbol"];
+//    [parameters setObject:[NSString stringWithFormat:@"%f",number] forKey:@"tradeAmount"];
+//    [parameters setObject:[NSString stringWithFormat:@"%f",price] forKey:@"tradePrice"];
+//    if (ChZ_StringIsEmpty(tradePwd))[parameters setObject:tradePwd forKey:@"tradePwd"];
+//    if (ChZ_StringIsEmpty(type))[parameters setObject:type forKey:@"type"];
+//    [self PostAuthWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//     {
+//         NSDictionary *responseDic = responseObject;
+//         if ([responseDic isKindOfClass:[NSNull class]])
+//         {
+//             if (errorBlock) errorBlock(0,@"请求失败"); return;
+//         }
+//         int code = [[responseDic objectForKey:@"code"]intValue];
+//         NSString *msg = [responseDic objectForKey:@"msg"];
+//         if (code != kv_JavaRequestSuccess)
+//         {
+//             if (ChZ_StringIsEmpty(msg))
+//             {
+//                 if (errorBlock) errorBlock(code,msg); return;
+//             }
+//             if (errorBlock) errorBlock(code,@"请求失败"); return;
+//         }
+//         if (successBlock)successBlock(nil);
+//         return;
+//     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+//     {
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     }];
+}
+
+#pragma mark - 获取订单列表
++ (void)requestTxsOrderListWithSymbol:(NSString *)symbol
+                                 type:(NSString *)type
+                         successBlock:(ChZ_SuccessBlock)successBlock
+                           errorBlock:(ErrorCodeBlock)errorBlock
+{
+//    NSMutableString *url = [NSMutableString string];
+//    [url appendString:RequestURL(kURL_orderRecords)];
+//    NSString *token = [AppControl sharedAppControl].token;
+//    if (ChZ_StringIsEmpty(token)) {
+//        [url appendString:[NSString stringWithFormat:@"?token=%@",token]];
+//    }
+//    if (ChZ_StringIsEmpty(symbol)) {
+//        [url appendString:[NSString stringWithFormat:@"&symbol=%@",symbol]];
+//    }
+//    if (ChZ_StringIsEmpty(type)) {
+//        [url appendString:[NSString stringWithFormat:@"&type=%@", type]];
+//    }
+//
+//    [self GetWithURL:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSDictionary *responseDic = responseObject;
+//        if ([responseDic isKindOfClass:[NSNull class]])
+//        {
+//            if (errorBlock) errorBlock(0,@"请求失败"); return;
+//        }
+//        int code = [[responseDic objectForKey:@"code"]intValue];
+//        NSString *msg = [responseDic objectForKey:@"msg"];
+//        if (code != kv_JavaRequestSuccess)
+//        {
+//            if (ChZ_StringIsEmpty(msg))
+//            {
+//                if (errorBlock) errorBlock(code,msg); return;
+//            }
+//            if (errorBlock) errorBlock(code,@"请求失败"); return;
+//        }
+//        NSDictionary *data = [responseDic objectForKey:@"data"];
+//        if (data)
+//        {
+//
+//            NSArray *entrutsCurArray = data[@"entrutsCur"];
+//            NSArray *entrutsHisArray = data[@"entrutsHis"];
+//            NSMutableArray *tempItemArray = [NSMutableArray array];
+//            if (entrutsCurArray != nil && entrutsCurArray.count !=0 )
+//            {
+//                [tempItemArray addObjectsFromArray:entrutsCurArray];
+//            }
+//
+//            if (entrutsHisArray != nil && entrutsHisArray.count !=0 )
+//            {
+//                [tempItemArray addObjectsFromArray:entrutsHisArray];
+//            }
+//
+//            if (tempItemArray.count == 0) if (successBlock)successBlock(nil);
+//
+//            NSArray *objArray = [ChZMarketTxsOrderItemModel mj_objectArrayWithKeyValuesArray:tempItemArray];
+//            if (successBlock)successBlock(objArray);
+//        } else
+//        {
+//            if (successBlock)successBlock(nil);
+//        }
+//
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        if (errorBlock) errorBlock(0,@"请求失败"); return;
+//    }];
+}
+
+
++ (void)requestDish:(NSString *)fid
+       successBlock:(ChZ_SuccessBlock)successBlock
+         errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSMutableString *url = [NSMutableString string];
+    [url appendString:RequestURL(kURL_dish)];
+    
+    if (ChZ_StringIsEmpty(fid)) {
+        [url appendString:[NSString stringWithFormat:@"?symbol=%@",fid]];
+    }
+    
+    [self GetWithURL:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+        if (code != kv_JavaRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        NSDictionary *data = [responseDic objectForKey:@"data"];
+        if (data)
+        {
+            
+            if (successBlock)
+            {
+                successBlock(data);
+            }
+        } else {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+}
+
++ (void)requestUserAssets:(NSString *)fid
+             successBlock:(ChZ_SuccessBlock)successBlock
+               errorBlock:(ErrorCodeBlock)errorBlock
+{
+//    NSMutableString *url = [NSMutableString string];
+//    [url appendString:RequestURL(kURL_userAssets)];
+//    NSString *token = [AppControl sharedAppControl].token;
+//    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+//    if (ChZ_StringIsEmpty(fid))[parameters setObject:fid forKey:@"tradeid"];
+//    if (ChZ_StringIsEmpty(token))[parameters setObject:token forKey:@"token"];
+//    [self PostWithURL:url parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+//     {
+//         NSDictionary *responseDic = responseObject;
+//         if ([responseDic isKindOfClass:[NSNull class]])
+//         {
+//             if (errorBlock) errorBlock(0,@"请求失败"); return;
+//         }
+//         int code = [[responseDic objectForKey:@"code"]intValue];
+//         NSString *msg = [responseDic objectForKey:@"msg"];
+//         if (code != kv_JavaRequestSuccess)
+//         {
+//             if (ChZ_StringIsEmpty(msg))
+//             {
+//                 if (errorBlock) errorBlock(code,msg); return;
+//             }
+//             if (errorBlock) errorBlock(code,@"请求失败"); return;
+//         }
+//         
+//         NSDictionary *data = [responseDic objectForKey:@"data"];
+//         if (data)
+//         {
+//             if (successBlock)
+//             {
+//                 successBlock(data);
+//                 return;
+//             }
+//         }
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error)
+//     {
+//         if (errorBlock) errorBlock(0,@"请求失败"); return;
+//     }];
+}
++ (void)requestCNYSuccessBlock:(ChZ_SuccessBlock)successBlock
+                    errorBlock:(ErrorCodeBlock)errorBlock
+{
+    NSString *urlStr = RequestURL(kURL_CNYURL);
+    [self GetWithURL:urlStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+        if (code != kv_JavaRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        NSDictionary *data = [responseDic objectForKey:@"data"];
+        if (data)
+        {
+            NSString *cny = [data objectForKey:@"CNY"];
+            if (successBlock) {
+                successBlock(cny);
+            }
+        } else {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+}
+
++(void)requestNotItemsSuccessBlock:(ChZ_SuccessBlock)successBlock errorBlock:(ErrorCodeBlock)errorBlock{
+    NSString *urlStr = RequestURL(kURL_TradCenter_notes);
+    [self GetWithURL:urlStr parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+        if (code != kv_PHPRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        NSArray *data = [responseDic objectForKey:@"return"];
+        if (data)
+        {
+            NSArray *objArray = [XHHNotesItemModel mj_objectArrayWithKeyValuesArray:data];
+            if (successBlock) {
+                successBlock(objArray);
+            }
+        } else {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+}
++(void)rerquestNotesListPage:(NSString *)page catid:(NSString *)catid successBlock:(ChZ_SuccessBlock)successBlock errorBlock:(ErrorCodeBlock)errorBlock{
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    if (page) [param setObject:page forKey:@"page"];
+    if (catid) [param setObject:catid forKey:@"catid"];
+    
+    NSString *urlStr = RequestURL(kURL_TradCenter_notesList);
+    [self GetWithURL:urlStr parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+        if (code != kv_PHPRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        NSArray *data = [responseDic objectForKey:@"return"];
+        if (data)
+        {
+            NSArray *objArray = [XHHNotesListModel mj_objectArrayWithKeyValuesArray:data];
+            if (successBlock) {
+                successBlock(objArray);
+            }
+        } else {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+}
++(void)requestNotesDetailId:(NSString *)notesId successBlock:(ChZ_SuccessBlock)successBlock errorBlock:(ErrorCodeBlock)errorBlock{
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    if (notesId) [param setObject:notesId forKey:@"id"];
+    NSString *urlStr = RequestURL(kURL_TradCenter_notesDetail);
+    [self GetWithURL:urlStr parameters:param progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDic = responseObject;
+        if ([responseDic isKindOfClass:[NSNull class]])
+        {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        int code = [[responseDic objectForKey:@"code"]intValue];
+        NSString *msg = [responseDic objectForKey:@"msg"];
+        if (code != kv_PHPRequestSuccess)
+        {
+            if (ChZ_StringIsEmpty(msg))
+            {
+                if (errorBlock) errorBlock(code,msg); return;
+            }
+            if (errorBlock) errorBlock(code,@"请求失败"); return;
+        }
+        NSDictionary *data = [responseDic objectForKey:@"return"];
+        if (data)
+        {
+            XHHNotesDetailModel *model = [XHHNotesDetailModel mj_objectWithKeyValues:data];
+            if (successBlock) {
+                successBlock(model);
+            }
+        } else {
+            if (errorBlock) errorBlock(0,@"请求失败"); return;
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (errorBlock) errorBlock(0,@"请求失败"); return;
+    }];
+}
+
+@end

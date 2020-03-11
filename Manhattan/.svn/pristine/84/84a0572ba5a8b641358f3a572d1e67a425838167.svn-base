@@ -1,0 +1,125 @@
+//
+//  XHHTradReleaseViewCell.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/30.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHTradReleaseViewCell.h"
+
+@interface XHHTradReleaseViewCell()
+
+@property (weak, nonatomic) IBOutlet UILabel *typeTitleLable;
+
+@property (weak, nonatomic) IBOutlet UILabel *timeLable;
+
+@property (weak, nonatomic) IBOutlet UILabel *buyNumLable;
+
+@property (weak, nonatomic) IBOutlet UILabel *hadProfitLable;
+
+@property (weak, nonatomic) IBOutlet UIButton *outLineButton;
+
+@property (weak, nonatomic) IBOutlet UILabel *buyNumbTitleLable;
+
+@end
+
+@implementation XHHTradReleaseViewCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    
+    _outLineButton.layer.cornerRadius = 3;
+    // Initialization code
+}
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    for (UIView *subView in self.subviews){
+        if([subView isKindOfClass:NSClassFromString(@"UITableViewCellDeleteConfirmationView")]) {
+            UIView *confirmView=(UIView *)[subView.subviews firstObject];
+            UIImageView *img = [[UIImageView alloc] init];
+            img.image = [UIImage imageNamed:@"trad_explicit_botton_buy"];
+            [confirmView addSubview:img];
+            [img mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(confirmView);
+            }];
+            UILabel *lb = [UILabel newSingleFrame:CGRectZero title:@"下线" fontS:14.0 color:[UIColor colorWithHexString:@"FFFFFF"]];
+            [confirmView addSubview:lb];
+            [lb mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.center.equalTo(img);
+            }];
+            
+            break;
+        }
+    }
+} 
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+-(void)reloadCellWithDic:(NSDictionary *)dic{
+    NSInteger type = [[dic objectForKey:@"type"] integerValue];
+    switch (type) {
+        case 1:
+            self.typeTitleLable.text = @"发布中";
+            self.typeTitleLable.textColor = [UIColor colorWithHexString:@"FF67D2"];
+            self.buyNumLable.textColor = [UIColor colorWithHexString:@"4EE2FE"];
+            self.buyNumbTitleLable.text = @"买入量";
+//            self.outLineButton.hidden = NO;
+            break;
+        case 2:
+            self.typeTitleLable.text = @"已完成";
+            self.typeTitleLable.textColor = [UIColor colorWithHexString:@"4EE2FE"];
+            self.buyNumLable.textColor = [UIColor colorWithHexString:@"FF67D2"];
+            self.buyNumbTitleLable.text = @"出售量";
+//            self.outLineButton.hidden = YES;
+            break;
+        case 3:
+            self.typeTitleLable.text = @"已取消";
+            self.typeTitleLable.textColor = [UIColor colorWithHexString:@"4B4B80"];
+            self.buyNumbTitleLable.text = @"卖出量";
+//            self.outLineButton.hidden = YES;
+            break;
+            
+        default:
+            break;
+    }
+}
+-(void)reloadCellWithModel:(XHHC2CMyReleaseModel *)model{
+    if ([model.deal_type isEqualToString:@"1"])
+    {//卖出
+        self.buyNumbTitleLable.text = @"出售量";
+    }else
+    {//买入
+        self.buyNumbTitleLable.text = @"买入量";
+    }
+    self.buyNumLable.text = model.trade_total;
+    self.hadProfitLable.text = model.success_total;
+    self.timeLable.text = [ChZUtil chz_getDateAndTimeWithTimeIntervalSince1970:model.inputtime];
+    
+    self.outLineButton.hidden = NO;
+    
+    if ([model.status isEqualToString:@"9"])
+    {
+        self.typeTitleLable.text = @"发布中";
+        self.typeTitleLable.textColor = [UIColor colorWithHexString:@"FF67D2"];
+        self.buyNumLable.textColor = [UIColor colorWithHexString:@"4EE2FE"];
+        self.outLineButton.hidden = NO;
+    }else if ([model.status isEqualToString:@"10"])
+    {
+        self.typeTitleLable.text = @"已取消";
+        self.typeTitleLable.textColor = [UIColor colorWithHexString:@"4B4B80"];
+        self.buyNumLable.textColor = [UIColor colorWithHexString:@"02C188"];
+        self.outLineButton.hidden = YES;
+    }else
+    {
+        self.typeTitleLable.text = @"已完成";
+        self.typeTitleLable.textColor = [UIColor colorWithHexString:@"4EE2FE"];
+        self.buyNumLable.textColor = [UIColor colorWithHexString:@"FF67D2"];
+        self.outLineButton.hidden = YES;
+    }
+    
+}
+@end

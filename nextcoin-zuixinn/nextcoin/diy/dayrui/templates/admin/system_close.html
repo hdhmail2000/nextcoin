@@ -1,0 +1,132 @@
+{template nheader.html}
+
+<div class="page-bar">
+    <ul class="page-breadcrumb mylink">
+        {$menu.link}
+
+    </ul>
+    <ul class="page-breadcrumb myname">
+        {$menu.name}
+    </ul>
+    <div class="page-toolbar">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false" data-hover="dropdown"> {fc_lang('操作菜单')}
+                <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                {loop $menu.quick $t}
+                <li>
+                    <a href="{$t.url}">{$t.icon} {$t.name}</a>
+                </li>
+                {/loop}
+                <li class="divider"> </li>
+                <li>
+                    <a href="javascript:window.location.reload();">
+                        <i class="icon-refresh"></i> {fc_lang('刷新页面')}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<h3 class="page-title">
+    <small>{fc_lang('不需要的功能可以自由关闭')}</small>
+</h3>
+<?php $page=1;?>
+<form class="form-horizontal" action="" method="post" id="myform" name="myform">
+    <input name="page" id="mypage" type="hidden" value="{$page}" />
+    <div class="portlet light bordered myfbody">
+        <div class="portlet-title tabbable-line hide">
+            <ul class="nav nav-tabs" style="float:left;">
+                <li class="{if $page==0}active{/if}">
+                    <a href="#tab_0" data-toggle="tab" onclick="$('#mypage').val('0')"> <i class="fa fa-cog"></i> {fc_lang('功能开关')} </a>
+                </li>
+                <li class="{if $page==1}active{/if}">
+                    <a href="#tab_1" data-toggle="tab" onclick="$('#mypage').val('1')"> <i class="fa fa-list"></i> {fc_lang('菜单开关')} </a>
+                </li>
+            </ul>
+        </div>
+        <div class="portlet-body">
+            <div class="tab-content">
+
+                <div class="tab-pane {if $page==1}active{/if}" id="tab_1">
+                    <div class="form-body">
+
+                        <table class="mytable table table-striped table-bordered table-hover table-checkable dataTable">
+
+                            <thead>
+                            <tr>
+                                <th width="20"></th>
+                                <th style="text-align: center" width="80">{fc_lang('可用')}</th>
+                                <th>{fc_lang('名称')}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {$list_menu}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+                <div class="tab-pane {if $page==0}active{/if}" id="tab_0">
+                    <div class="form-body">
+
+                        {loop $close $i $t}
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" style="padding-top: 10px;">{fc_lang($t.name)}：</label>
+                            <div class="col-md-9">
+                                <div class="radio-list">
+                                    <label class="radio-inline"><input type="radio" name="data[SYS_CLOSE_{$i}]" {if !$data['SYS_CLOSE_'.$i]}checked{/if} value="0" /> {fc_lang('开启')}</label>
+                                    <label class="radio-inline"><input type="radio" name="data[SYS_CLOSE_{$i}]" {if $data['SYS_CLOSE_'.$i]}checked{/if} value="1" /> {fc_lang('关闭')}</label>
+                                </div>
+                                <span class="help-block">{fc_lang($t.tips)}</span>
+                            </div>
+                        </div>
+
+                        {/loop}
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="myfooter hide">
+            <div class="row">
+                <div class="portlet-body form">
+                    <div class="form-body">
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="btn green"> <i class="fa fa-save"></i> {fc_lang('保存')}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    function dr_close_menu_hidden(url) {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: url,
+            data: {},
+            success: function(data) {
+                if (data.status == 1) {
+                    dr_tips(data.code, 2, 1);
+                    setTimeout("window.location.href='{dr_url("system/close")}&page="+$("#mypage").val()+"'",1000);
+                } else {
+                    dr_tips(data.code, 2, 1);
+                }
+            },
+            error: function(HttpRequest, ajaxOptions, thrownError) {}
+        })
+    }
+</script>
+{template nfooter.html}

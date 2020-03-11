@@ -1,0 +1,125 @@
+{template "header.html" }
+{template "top.html" }
+		<style type="text/css">
+        	       .feedback-navbar a{
+        	           display: inline-block;
+                   padding: 10px 25px;
+                   border: 1px solid #474652;
+                   color: #FFFFFF;
+                   font-size: 14px;
+                   font-weight: 300;
+        	       }
+        	       .feedback-navbar .active{
+        	           color: #3473C9;
+        	           border-color:#474652;
+                   border-bottom: solid 1px #27262E !important;
+                   background: #27262E;
+        	       }
+        	       .feedback-box{
+        	           border-color: #474652;
+        	       }
+        	       .feedback-form-data button{
+        	           background: #3473C9;
+        	       }
+        	       .feedback-form-data select{
+        	           background: transparent;
+        	           border-color: #474652;
+        	       }
+        	       .feedback-form-data textarea{
+        	           background: transparent;
+                   border-color: #474652;
+        	       }
+        	</style>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 feedback">
+                    <div class="col-xs-12 feedback-nav">
+                        <div class="feedback-navbar">
+                            <a id="feedback_form_btn" href="/index.php?s=exc&c=helpController&m=question">{$question.feedback}</a>
+                        </div>
+                        <div class="feedback-navbar">
+                            <a class="active" id="feedback_list_btn" href="/index.php?s=exc&c=helpController&m=questionList">{$question.list}</a>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 feedback-box"  id="feedback_list">
+                        <div class="col-xs-12">
+                            <table class="financial-table annal-tabel">
+                                <tr class="financial-table-header">
+                                    <th>{$question.num}</th>
+                                    <th>{$question.time}</th>
+                                    <th>{$question.questionType}</th>
+                                    <th>{$question.desc}</th>
+                                    <th>{$question.status}</th>
+                                    <th>{$question.operation}</th>
+                                </tr>
+                                <tbody class="financial-table-body">
+                                {loop $data.list['data'] $item}
+                                    <tr class="financial-table-item">
+                                        <td>{$item['fid']}</td>
+                                        <td>{date('Y-m-d H:i:s',intval(substr($item['fcreatetime'],0,10)))}</td>
+                                        <td>{$item['ftype_s']}</td>
+                                        <td style="width: 260px;">{$item['fdesc']}</td>
+                                        <td>{$item['fstatus_s']}</td>
+                                        <td class="financial-table-btn">
+                                            <a href="javascript:void(0);" class="delete" data-questionid="{$item['fid']}" >删除</a>
+                                            {if $item['fstatus']==2}
+                                                || <a  href="javascript:void(0);" class="look" data-question="{$item['fdesc']}" data-answer="{$item['fanswer']}">查看</a>
+                                            {/if}
+                                        </td>
+                                    </tr>
+                                    {/loop}
+                                </tbody>
+                            </table>
+                            {if isset($data.list['pagin'])}
+                            <div class="pagination-wrap">
+                                <nav aria-label="Page navigation" class="pagination">
+                                    <ul>
+                                       {$data.list['pagin']}
+                                    </ul>
+                                </nav>
+                            </div>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+<!--------------------- 问题详情弹框 ----------------->
+
+        <div class="model" id="question-detail">
+                <div class="model-body">
+                    <div class="model-form-header clearfix">
+                        <div class="model-form-tetil">
+                            <h2>{$question.detail}</h2>
+                        </div>
+                        <div class="model-hide">
+                            <button class="iconfont icon-guanbi"></button>
+                        </div>
+                    </div>
+                    <div class="clearfix feedback-model-list">
+                        <dl class="col-xs-12 feedback-model-item">
+                        	   <dt>{$question.title}</dt>
+                        	   <dd class="js-data-title"></dd>
+                        </dl>
+                        <dl class="col-xs-12 feedback-model-item">
+                        	   <dt>{$question.content}</dt>
+                        	   <dd class="js-data-data"></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript" src="{HOME_THEME_PATH}exc/js/question/question.js"></script>
+        <script type="text/javascript">
+
+
+        	       $("#feedback_form_btn").on({
+        	           click:function(){
+        	               $("#feedback_form").show();
+        	               $("#feedback_list").hide();
+        	           }
+        	       })
+
+        </script>
+{template "footer.html" }

@@ -1,0 +1,237 @@
+//
+//  XHHTrandVolumeView.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHTrandVolumeView.h"
+#import "TrandVolumeHeadView.h"
+#import "TrandVolumeCell.h"
+
+static NSString *cellIdentifie = @"TrandVolumeCell";
+@interface XHHTrandVolumeView ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (strong, nonatomic) TrandVolumeHeadView   *tableHeadView;
+
+@property (strong, nonatomic) TrandVolumeHeadView   *rightTableHeadView;
+
+@property (strong, nonatomic) UITableView           *tableView;
+
+@property (strong, nonatomic) NSArray               *dataArray;
+
+@property (strong, nonatomic) UITableView           *righttableView;
+
+@property (strong, nonatomic) NSArray               *rightdataArray;
+
+@property (strong, nonatomic) UIView                *lineView;
+
+@property (nonatomic , strong) NSArray *leftArray;
+@property (nonatomic , strong) NSArray *rightArray;
+
+@end
+
+
+@implementation XHHTrandVolumeView
+
+-(instancetype)init{
+    self = [super init];
+    if (self) {
+        [self zh_setupUI];
+    }
+    return self;
+}
+
+-(void)zh_setupUI{
+    [self addSubview:self.lineView];
+    [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self);
+        make.height.mas_equalTo(10);
+    }];
+    
+    [self addSubview:self.tableHeadView];
+    [self.tableHeadView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self);
+        make.top.equalTo(self.lineView.mas_bottom);
+        make.width.equalTo(self).multipliedBy(0.5);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self addSubview:self.rightTableHeadView];
+    [self.rightTableHeadView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self);
+        make.top.equalTo(self.lineView.mas_bottom);
+        make.width.equalTo(self).multipliedBy(0.5);
+        make.height.mas_equalTo(40);
+    }];
+    
+    
+    
+    [self addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self);
+        make.bottom.equalTo(self).offset(-16);
+        make.top.equalTo(self.tableHeadView.mas_bottom);
+        make.width.equalTo(self).multipliedBy(0.5);
+    }];
+    
+    [self addSubview:self.righttableView];
+    [self.righttableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self);
+        make.bottom.equalTo(self).offset(-16);
+        make.top.equalTo(self.tableHeadView.mas_bottom);
+        make.width.equalTo(self).multipliedBy(0.5);
+    }];
+}
+
+-(TrandVolumeHeadView *)tableHeadView{
+    if (!_tableHeadView) {
+        _tableHeadView = [[[NSBundle mainBundle] loadNibNamed:@"TrandVolumeHeadView" owner:nil options:nil] lastObject];
+        [_tableHeadView setFrame:CGRectMake(0, 0, ChZ_WIDTH/2, 0)];
+    }
+    return _tableHeadView;
+}
+-(TrandVolumeHeadView *)rightTableHeadView{
+    if (!_rightTableHeadView) {
+        _rightTableHeadView = [[[NSBundle mainBundle] loadNibNamed:@"TrandVolumeHeadView" owner:nil options:nil] lastObject];
+        [_rightTableHeadView setFrame:CGRectMake(0, 0, ChZ_WIDTH/2, 0)];
+    }
+    return _rightTableHeadView;
+}
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.rowHeight = 23;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        [_tableView setSeparatorColor:[UIColor clearColor]];
+        _tableView.scrollEnabled = NO;
+        _tableView.backgroundColor = bgColor;
+        [_tableView registerNib:[UINib nibWithNibName:@"TrandVolumeCell" bundle:nil] forCellReuseIdentifier:cellIdentifie];
+    }
+    return _tableView;
+}
+-(NSArray *)dataArray{
+    if (!_dataArray) {
+        _dataArray = @[@{@"row":@"1",@"much":@"8104.76",@"volume":@"0.316",@"mulitpy":@"0.1"},
+                       @{@"row":@"2",@"much":@"8104.76",@"volume":@"0.316",@"mulitpy":@"0.2"},
+                       @{@"row":@"3",@"much":@"8104.76",@"volume":@"0.316",@"mulitpy":@"0.3"},
+                       @{@"row":@"4",@"much":@"8104.76",@"volume":@"0.316",@"mulitpy":@"0.4"},
+                       @{@"row":@"5",@"much":@"8104.76",@"volume":@"0.316",@"mulitpy":@"0.8"},];
+    }
+    return _dataArray;
+}
+-(void)setDataDic:(NSDictionary *)dataDic{
+    NSArray *lArr = dataDic[@"depth"][@"asks"];
+    NSArray *rArr = dataDic[@"depth"][@"bids"];
+    NSLog(@"%@--",lArr);
+    
+    NSLog(@"%@--",rArr);
+    
+    //    NSLog(@"%@---",dataDic[@"depth"][@"asks"]);
+    
+    
+    
+    NSMutableArray *lmArray = [NSMutableArray array];
+    NSMutableArray *rmArray = [NSMutableArray array];
+    
+    if (lArr && lArr.count >= 5) {
+        CGFloat sum = [lArr[0][1] floatValue] + [lArr[1][1] floatValue] + [lArr[2][1] floatValue] + [lArr[3][1] floatValue] + [lArr[4][1] floatValue] ;
+        for(int i = 0; i < 5 ; i ++){
+            CGFloat volume = 0;
+            for(int j = 0; j <= i; j ++){
+                volume += [lArr[j][1] floatValue];
+                
+            }
+            NSArray *ttArrar = lArr[i];
+            [lmArray addObject:@{@"row":[NSString stringWithFormat:@"0%d",i+1],
+                                 @"much":ttArrar[0],
+                                 @"volume":[NSString stringWithFormat:@"%.2f",volume],
+                                 @"mulitpy":[NSString stringWithFormat:@"%.2f",volume/sum]}];
+            
+            
+        }
+        self.leftArray = lmArray;
+        [self.tableView reloadData];
+    }
+    
+    if (rArr && rArr.count >= 5) {
+        CGFloat sum1 = [rmArray[0][1] floatValue] + [rmArray[1][1] floatValue] + [rmArray[2][1] floatValue] + [rmArray[3][1] floatValue] + [rmArray[4][1] floatValue] ;
+        for(int i = 0; i < 5 ; i ++){
+            CGFloat volume = 0;
+            for(int j = 0; j <= i; j ++){
+                volume += [rArr[j][1] floatValue];
+                
+            }
+            NSArray *ttArrar = rArr[i];
+            [rmArray addObject:@{@"row":[NSString stringWithFormat:@"0%d",i+1],
+                                 @"much":ttArrar[0],
+                                 @"volume":[NSString stringWithFormat:@"%.2f",volume],
+                                 @"mulitpy":[NSString stringWithFormat:@"%.2f",volume/sum1]}];
+            
+            
+        }
+        self.rightArray = rmArray;
+        [self.tableView reloadData];
+    }
+    
+    
+}
+-(UITableView *)righttableView{
+    if (!_righttableView) {
+        _righttableView = [[UITableView alloc] init];
+        _righttableView.delegate = self;
+        _righttableView.dataSource = self;
+        _righttableView.rowHeight = 23;
+        _righttableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+//        [_righttableView setSeparatorColor:[UIColor clearColor]];
+        _righttableView.scrollEnabled = NO;
+        _righttableView.backgroundColor = [UIColor colorWithHexString:@"1A1560"];
+
+        [_righttableView registerNib:[UINib nibWithNibName:@"TrandVolumeCell" bundle:nil] forCellReuseIdentifier:cellIdentifie];
+    }
+    return _righttableView;
+}
+-(NSArray *)rightdataArray{
+    if (!_rightdataArray) {
+        _rightdataArray = @[@"",@"",@"",@"",@""];
+    }
+    return _rightdataArray;
+}
+-(UIView *)lineView{
+    if (!_lineView) {
+        _lineView = [[UIView alloc] init];
+        _lineView.backgroundColor = [UIColor colorWithHexString:@"0F131C"];
+    }
+    return _lineView;
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataArray.count;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    TrandVolumeCell  *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifie];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    NSDictionary *dic1 = self.leftArray[indexPath.row];
+    NSDictionary *dic2 = self.rightArray[indexPath.row];
+    if (tableView == self.tableView) {
+        [cell reloadLeftCellWithDic:dic1];
+    }else{
+        [cell reloadRightCellWithDic:dic2];
+    }
+    return cell;
+}
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+@end

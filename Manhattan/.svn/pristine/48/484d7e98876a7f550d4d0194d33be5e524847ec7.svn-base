@@ -1,0 +1,59 @@
+//
+//  TrandVolumeCell.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "TrandVolumeCell.h"
+
+@interface TrandVolumeCell ()
+
+@property (weak, nonatomic) IBOutlet UIView *volumView;
+@property (weak, nonatomic) IBOutlet UILabel *rowLable;
+@property (weak, nonatomic) IBOutlet UILabel *muchLable;
+@property (weak, nonatomic) IBOutlet UILabel *sumLable;
+
+@end
+
+@implementation TrandVolumeCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    [_volumView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.top.bottom.equalTo(self.contentView);
+        make.width.equalTo(self.contentView).multipliedBy(0.3);
+    }];
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+-(void)reloadLeftCellWithDic:(NSDictionary *)dic{
+    CGFloat mulitpy = [[dic objectForKey:@"mulitpy"] floatValue];
+    [self.volumView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.top.bottom.equalTo(self.contentView);
+        make.width.equalTo(self.contentView).multipliedBy(mulitpy);
+    }];
+    self.rowLable.text = [dic objectForKey:@"mulitpy"];
+    self.muchLable.text = [dic objectForKey:@"much"];
+    self.sumLable.text = [dic objectForKey:@"volume"];
+}
+-(void)reloadRightCellWithDic:(NSDictionary *)dic{
+    CGFloat mulitpy = [[dic objectForKey:@"mulitpy"] floatValue];
+    [self.volumView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.top.bottom.equalTo(self.contentView);
+        make.width.equalTo(self.contentView).multipliedBy(mulitpy);
+    }];
+    self.rowLable.text = [dic objectForKey:@"mulitpy"];
+    self.muchLable.text = [dic objectForKey:@"much"];
+    self.sumLable.text = [dic objectForKey:@"volume"];
+    self.rowLable.textColor = [UIColor colorWithHexString:@"00BD9A"];
+    self.muchLable.textColor = [UIColor colorWithHexString:@"00BD9A"];
+    self.volumView.backgroundColor = [UIColor colorWithHexString:@"082E57"];
+}
+@end

@@ -1,0 +1,329 @@
+{template "header.html"}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 merchandise-wrap">
+                    <div class="col-xs-12 merchandise-header">
+                        <div class="left">
+                            <div class="left">
+                                <p>出售</p>
+                                <ul class="clearfix" onclick="_switch(event)">
+                                    <li>
+                                        <a href="###" class="active">BTC</a>
+                                    </li>
+                                    <li>
+                                        <a href="###">ETH</a>
+                                    </li>
+                                    <li>
+                                        <a href="###">USDT</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="left">
+                                <p>购买</p>
+                                <ul class="clearfix"  onclick="_switch(event)">
+                                    <li>
+                                        <a href="###">BTC</a>
+                                    </li>
+                                    <li>
+                                        <a href="###">ETH</a>
+                                    </li>
+                                    <li>
+                                        <a href="###">USDT</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <ul class="right">
+                            <li>
+                                <a href="c2c_form.html">发布交易</a>
+                            </li>
+                            <li>
+                                <a href="c2c_release_list.html" class="active">我的发布</a>
+                            </li>
+                            <li>
+                                <a href="">我的订单</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-xs-12 release">
+                        <div class="col-xs-12 release-num">
+                            <div class="release-num-item">
+                                <p>买入量</p>
+                                <h3>10000</h3>
+                            </div>
+                            <div class="release-num-item">
+                                <p>已成交量</p>
+                                <h3>3000</h3>
+                            </div>
+                        </div>
+                        <ul class="col-xs-12 release-order">
+                            <li class="release-order-item">
+                                <div class="release-order-header">
+                                    <span>2018-6-24</span>
+                                    <span>订单号：#5489843116454</span>
+                                    <span>类型：买入</span>
+                                </div>
+                                <div class="release-order-table">
+                                    <table>
+                                        <colgroup style="width: 28%;"></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup style="width: 10%;"></colgroup>
+                                        	<thead class="release-order-th">
+                                        	    <tr>
+                                        	        <th>收款信息</th>
+                                        	        <th>价格</th>
+                                        	        <th>数量</th>
+                                        	        <th>交易金额</th>
+                                        	        <th></th>
+                                        	    </tr>
+                                        	</thead>
+                                        	<tbody>
+                                        	    <tr class="release-order-tr">
+                                        	        <td style="text-align: left;">
+                                        	            <span style="margin-right: 33px;">谭某</span>
+                                        	            <span>6227 0037 6163 0694 511</span>
+                                        	        </td>
+                                        	        <td>0.549</td>
+                                        	        <td>3000</td>
+                                        	        <td>50000.00</td>
+                                        	        <td>
+                                        	            <span class="danger">未付款</span>
+                                        	        </td>
+                                        	    </tr>
+                                        	</tbody>
+                                    </table>
+                                </div>
+
+                                <div class="clearfix release-order-type">
+                                    <div class="left"><span>中国建设银行</span></div>
+                                    <div class="right">
+                                        <button class="release-order-fill" data-toggle="modal" data-target="#myModal_01">取消交易</button>
+                                        <button class="release-order-btn" data-toggle="modal" data-target="#myModal">我已付款</button>
+                                    </div>
+                                </div>
+
+                                <div class="release-order-footer">
+                                    <p>付款参考号：<span>841256489</span></p>
+                                </div>
+                            </li>
+                            <li class="release-order-item">
+                                <div class="release-order-header">
+                                    <span>2018-6-24</span>
+                                    <span>订单号：#5489843116454</span>
+                                    <span>类型：买入</span>
+                                </div>
+                                <div class="release-order-table">
+                                    <table>
+                                        <colgroup style="width: 28%;"></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup style="width: 10%;"></colgroup>
+                                        	<thead class="release-order-th">
+                                        	    <tr>
+                                        	        <th>收款信息</th>
+                                        	        <th>价格</th>
+                                        	        <th>数量</th>
+                                        	        <th>交易金额</th>
+                                        	        <th></th>
+                                        	    </tr>
+                                        	</thead>
+                                        	<tbody>
+                                        	    <tr class="release-order-tr">
+                                        	        <td style="text-align: left;">
+                                        	            <span style="margin-right: 33px;">谭某</span>
+                                        	            <span>6227 0037 6163 0694 511</span>
+                                        	        </td>
+                                        	        <td>0.549</td>
+                                        	        <td>3000</td>
+                                        	        <td>50000.00</td>
+                                        	        <td>
+                                        	            <span class="danger">待卖方确认</span>
+                                        	        </td>
+                                        	    </tr>
+                                        	</tbody>
+                                    </table>
+                                </div>
+
+                                <div class="clearfix release-order-type">
+                                    <div class="left"><span>中国建设银行</span></div>
+                                    <div class="right">
+                                        <button type="button" class="release-order-fill" onclick="_ss()">申诉</button>
+                                    </div>
+                                </div>
+
+                                <div class="release-order-footer">
+                                    <p>付款参考号：<span>841256489</span></p>
+                                </div>
+                            </li>
+
+                            <li class="release-order-item">
+                                <div class="release-order-header">
+                                    <span>2018-6-24</span>
+                                    <span>订单号：#5489843116454</span>
+                                    <span>类型：买入</span>
+                                </div>
+                                <div class="release-order-table">
+                                    <table>
+                                        <colgroup style="width: 28%;"></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup style="width: 10%;"></colgroup>
+                                            <thead class="release-order-th">
+                                                <tr>
+                                                    <th>收款信息</th>
+                                                    <th>价格</th>
+                                                    <th>数量</th>
+                                                    <th>交易金额</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="release-order-tr">
+                                                    <td style="text-align: left;">
+                                                        <span style="margin-right: 33px;">谭某</span>
+                                                        <span>6227 0037 6163 0694 511</span>
+                                                    </td>
+                                                    <td>0.549</td>
+                                                    <td>3000</td>
+                                                    <td>50000.00</td>
+                                                    <td>
+                                                        <span class="danger">申诉中</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="clearfix release-order-type">
+                                    <div class="left">
+                                        <span>支付宝</span>
+                                        <img src="img/demo_03.jpg" alt="" />
+                                    </div>
+                                </div>
+
+                                <div class="release-order-footer">
+                                    <p>付款参考号：<span>841256489</span></p>
+                                </div>
+                            </li>
+
+                            <li class="release-order-item">
+                                <div class="release-order-header">
+                                    <span>2018-6-24</span>
+                                    <span>订单号：#5489843116454</span>
+                                    <span>类型：买入</span>
+                                </div>
+                                <div class="release-order-table">
+                                    <table>
+                                        <colgroup style="width: 28%;"></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup></colgroup>
+                                        <colgroup style="width: 10%;"></colgroup>
+                                        	<thead class="release-order-th">
+                                        	    <tr>
+                                        	        <th>收款信息</th>
+                                        	        <th>价格</th>
+                                        	        <th>数量</th>
+                                        	        <th>交易金额</th>
+                                        	        <th></th>
+                                        	    </tr>
+                                        	</thead>
+                                        	<tbody>
+                                        	    <tr class="release-order-tr">
+                                        	        <td style="text-align: left;">
+                                        	            <span style="margin-right: 33px;">谭某</span>
+                                        	            <span>6227 0037 6163 0694 511</span>
+                                        	        </td>
+                                        	        <td>0.549</td>
+                                        	        <td>3000</td>
+                                        	        <td>50000.00</td>
+                                        	        <td>
+                                        	            <span class="hint">已完成</span>
+                                        	        </td>
+                                        	    </tr>
+                                        	</tbody>
+                                    </table>
+                                </div>
+
+                                <div class="clearfix release-order-type">
+                                    <div class="left">
+                                        <span>支付宝</span>
+                                        <img src="img/demo_03.jpg" alt="" />
+                                    </div>
+                                </div>
+
+                                <div class="release-order-footer">
+                                    <p>付款参考号：<span>841256489</span></p>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <div class="col-xs-12" style="text-align: center; margin-top: 80px;">
+                            <ul class="pagination">
+                                <li><a href="#">&laquo;</a></li>
+                                <li><a href="#" class="active">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">&raquo;</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background: #27262E;">
+            <div class="modal-dialog" style="background: #27262E;">
+                <div class="modal-content"  style="background: #27262E;">
+                    <div class="modal-header" style="border: 0;">
+                        <button style="text-shadow:none;opacity: 1;color: #6B6C7E;" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body" style="text-align: center;font-size: 24px; background: #27262E;margin-top: 20px;">是否已付款</div>
+                    <div class="modal-footer" style="margin-top: 20px; text-align: center;background: #27262E;border: 0;box-shadow:none;">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="border: 0; padding: 0; background: transparent;line-height: 48px;margin-right: 20px;box-shadow: none;color: #666;margin-bottom: 15px;">关闭</button>
+                        <a href="###" class="btn btn-primary" style="padding:0;background: #3473C9;width: 100px; height: 38px;line-height: 38px;margin-bottom: 15px;">确定</a>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+        <div class="modal fade" id="myModal_01" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background: #27262E;">
+            <div class="modal-dialog" style="background: #27262E;">
+                <div class="modal-content"  style="background: #27262E;">
+                    <div class="modal-header" style="border: 0;">
+                        <button style="text-shadow:none;opacity: 1;color: #6B6C7E;" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body" style="text-align: center;font-size: 24px; background: #27262E;margin-top: 20px;">是否取消交易</div>
+                    <div class="modal-footer" style="margin-top: 20px; text-align: center;background: #27262E;border: 0;box-shadow:none;">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" style="border: 0; padding: 0; background: transparent;line-height: 48px;margin-right: 20px;box-shadow: none;color: #666;margin-bottom: 15px;">关闭</button>
+                        <a href="###" class="btn btn-primary" style="padding:0;background: #3473C9;width: 100px; height: 38px;line-height: 38px;margin-bottom: 15px;">确定</a>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+
+        {template "header.html"}
+        
+        <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="/statics/c2c/layui/layui.all.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+                   function _switch(e){
+                       var _this = $(e.target);
+                       $(".merchandise-header .left a").removeClass("active");
+                       _this.addClass("active");
+                   }
+
+                   function _ss(){
+                       layer.msg("申诉成功");
+                   }
+        </script>
+	</body>
+</html>

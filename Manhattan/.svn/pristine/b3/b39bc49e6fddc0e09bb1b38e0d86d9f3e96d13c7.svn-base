@@ -1,0 +1,34 @@
+//
+//  XHHTradPayMessageCell.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/30.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHTradPayMessageCell.h"
+@interface XHHTradPayMessageCell ()
+
+@property (weak, nonatomic) IBOutlet UILabel *payTypeLable;//支付方式
+
+@property (weak, nonatomic) IBOutlet UILabel *nameLable;//姓名
+
+@property (weak, nonatomic) IBOutlet UILabel *numberLable;//账号
+
+@end
+
+
+@implementation XHHTradPayMessageCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

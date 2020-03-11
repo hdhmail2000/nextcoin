@@ -1,0 +1,18 @@
+PHP后台
+http://www.biex.io/admin.php adminphp adminphp
+
+
+
+http://47.74.251.91:8080/admin/login.html admin RelangAdmin66
+
+java后台   清空redis 是清空redis里全部记录（慎用），重置redis是把保存在mysql里的配置信息全部保存进redis
+
+dep.tar 是充值程序 在钱包服务器
+安装 一个 Mysql ruby ruby-mysql 就可以了
+定时扫描区块充值 crontab 在钱包服务器
+
+hotcoin-exchange-zuixin 是java
+nextcoin-zuixinn php
+锁仓功能 定时任务在website服务器
+
+

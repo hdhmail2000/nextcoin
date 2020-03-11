@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">lib_common</string>
+    <string name="load_footer_no_more">没有更多了</string>
+    <string name="load_footer_loading">正在加载...</string>
+    <string name="load_footer_network_error">网络不可用</string>
+
+</resources>

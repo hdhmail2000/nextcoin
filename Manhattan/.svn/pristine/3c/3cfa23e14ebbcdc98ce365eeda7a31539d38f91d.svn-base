@@ -1,0 +1,113 @@
+//
+//  XHHMineTableHeadView.m
+//  FuturePurse
+//
+//  Created by 葛志豪 on 18/7/18.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHMineTableHeadView.h"
+#import "XHHUserMessageController.h"
+@interface XHHMineTableHeadView()
+
+@property (strong, nonatomic) UIImageView *headImageView;
+
+@property (strong, nonatomic) UIImageView *rightImageView;
+
+@property (strong, nonatomic) UILabel     *nameLable;
+
+@property (strong, nonatomic) UILabel     *moodLable;
+
+@end
+
+
+@implementation XHHMineTableHeadView
+
+-(instancetype)init{
+    self = [super init];
+    if (self) {
+        
+        [self zh_setupUI];
+    }
+    return self;
+}
+
+-(void)zh_setupUI{
+
+    [self addSubview:self.headImageView];
+    [self.headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self).offset(30);
+        make.centerY.equalTo(self);
+        make.size.mas_equalTo(CGSizeMake(55, 55));
+    }];
+    
+    [self addSubview:self.nameLable];
+    [self.nameLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.headImageView);
+        make.left.equalTo(self.headImageView.mas_right).offset(15);
+        make.right.equalTo(self).offset(-30);
+    }];
+    
+    [self addSubview:self.moodLable];
+    [self.moodLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.headImageView);
+        make.left.right.equalTo(self.nameLable);
+    }];
+    
+    [self addSubview:self.rightImageView];
+    [self.rightImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self).offset(-16);
+        make.centerY.equalTo(self);
+        make.size.mas_equalTo(CGSizeMake(15, 15 ));
+    }];
+}
+-(void)setUserModel:(XHHUserModelCenter *)userModel{
+    self.nameLable.text = userModel.floginname;
+    self.moodLable.text = [NSString stringWithFormat:@"邀请码:%@",[APPControl sharedAPPControl].user.fid];
+    if(ChZ_StringIsEmpty(userModel.favatar))
+    {
+        [self.headImageView sd_setImageWithURL:[NSURL URLWithString:userModel.favatar]];
+    }
+}
+-(UIImageView *)headImageView{
+    if (!_headImageView) {
+        _headImageView = [[UIImageView alloc] init];
+        _headImageView.image = [UIImage imageNamed:@"mine_home_NorMalHead"];
+        _headImageView.layer.cornerRadius = 27.5;
+        _headImageView.layer.masksToBounds = YES;
+    } 
+    return _headImageView;
+} 
+-(UIImageView *)rightImageView{
+    if (!_rightImageView) {
+        _rightImageView = [[UIImageView alloc] init];
+        _rightImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _rightImageView.image = [UIImage imageNamed:@"mine_normal_right"];
+    }
+    return _rightImageView;
+}
+-(UILabel *)nameLable{
+    if (!_nameLable) {
+        _nameLable = [UILabel newSingleFrame:CGRectZero title:@"John Doe" fontS:24.0 color:[UIColor colorWithHexString:@"ffffff"]];
+    }
+    return _nameLable;
+}
+-(UILabel *)moodLable{
+    if (!_moodLable) {
+        _moodLable = [UILabel newSingleFrame:CGRectZero title:@"" fontS:12.0 color:[UIColor colorWithHexString:@"8F8F8F"]];
+    }
+    return _moodLable;
+}
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    XHHUserMessageController *vc = [XHHUserMessageController initWithStoryboard:@"MineStroy"];
+    [self.viewController.navigationController pushViewController:vc animated:YES];
+}
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+@end

@@ -1,0 +1,628 @@
+//
+//  TradViewController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/14.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "TradViewController.h"
+#import "XHHPublicItemsView.h"
+#import "XHHTradHomeCell.h"
+#import "XHHTradHomeTableHeadView.h"
+#import "XHHMyDealController.h"
+#import "XHHPublicNavView.h"
+
+#import "ChZMarketListModel.h"
+#import "HCMarketAreaModel.h"
+#import "ChZGroupMarketModel.h"
+#import "XHHSwitchViewController.h"
+static NSString *cellIdentifier = @"XHHTradHomeCell";
+
+@interface TradViewController ()<UITableViewDelegate,UITableViewDataSource,XHHPublicItemsViewProtocol,XHHPublicNavViewProtocol>
+
+@property (strong, nonatomic) XHHPublicItemsView          *itemsView;
+
+@property (nonatomic , strong) XHHPublicNavView           *navView;
+
+@property (strong, nonatomic) NSArray                     *dataArray;
+
+@property (strong, nonatomic) UITableView                 *tableView;
+
+@property (strong, nonatomic) NSArray                     *dataSource;
+
+@property (strong, nonatomic) NSArray                     *typeArray;
+
+@property (nonatomic , strong) NSString                   *coinId;
+
+@property (nonatomic , assign) BOOL                       isAllIconPrice;
+
+@property (nonatomic , strong) NSString                   *typeName;
+
+@property (nonatomic, assign) BOOL                        isHadCollect;
+
+@property (nonatomic, strong) NSArray                    *collectArray;
+
+@property (nonatomic, assign) NSInteger                  currItemsIndex;
+
+@property (nonatomic , strong) NSArray                   *notesArray;
+
+@end
+
+@implementation TradViewController
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self requestCollectList];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.noHiddenNav = YES;
+    
+    [self zh_setupUI];
+}
+-(void)zh_setupUI{
+    
+    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+    [self.view addSubview:self.navView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self.view);
+        make.height.mas_equalTo(navHeight +64);
+    }];
+    [self.view addSubview:self.itemsView];
+    [self.itemsView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.navView.mas_bottom);
+        make.height.mas_equalTo(46);
+    }];
+    [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.itemsView.mas_bottom);
+        make.bottom.equalTo(self.view).offset(-navHeight-50);
+    }];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+-(XHHPublicNavView *)navView{
+    if (!_navView) {
+        _navView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPublicNavView" owner:nil options:nil] lastObject];
+        [_navView setLeftButtonTitle:@"交易" image:nil];
+        [_navView setrightButtonTitles:nil images:@[@"trad_home_rightNav"]];
+        _navView.delegete = self;
+    }
+    return _navView;
+}
+-(XHHPublicItemsView *)itemsView{
+    if (!_itemsView) {
+        _itemsView = [[XHHPublicItemsView alloc] init];
+        _itemsView.delegate = self;
+    }
+    return _itemsView;
+}
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.backgroundColor = bgColor;
+        _tableView.rowHeight = 70;
+        [self setupRefreshWithView:self.tableView refreshHeadAction:@selector(beginRefresh) refreshFooterAction:nil];
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        //        [_tableView setSeparatorColor:[UIColor clearColor]];
+        [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
+        [_tableView registerNib:[UINib nibWithNibName:@"XHHTradHomeCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+    }
+    return _tableView;
+}
+-(void)beginRefresh
+{
+    if (self.isHadCollect && self.currItemsIndex == 0)
+    {
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
+    }else
+    {
+        [self requestMarketList];
+    }
+}
+-(void)itemsClickIndex:(NSInteger)index{
+//    [self.tableView.mj_header endRefreshing];
+//    HCMarketAreaModel *mode = self.typeArray[index];
+//    self.coinId = mode.code;
+//    self.typeName = mode.name;
+//    self.isAllIconPrice = index == 0 ? YES : NO;
+//    [self.tableView.mj_header beginRefreshing];
+    
+    self.currItemsIndex = index;
+    if (self.isHadCollect && index == 0)
+    {
+        self.typeName = @"自选";
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
+    }else
+    {
+        HCMarketAreaModel *mode;
+        if(self.isHadCollect){
+            mode =  self.typeArray[index-1];
+        }else{
+            mode =  self.typeArray[index];
+        }
+        self.coinId = mode.code;
+        self.typeName = mode.name;
+        self.isAllIconPrice = index == 0 ? YES : NO;
+        [self.tableView.mj_header beginRefreshing];
+    }
+    
+}
+- (void)rightButtonActionIndex:(NSInteger)index{
+    XHHMyDealController *vc = [[XHHMyDealController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (self.isHadCollect && self.currItemsIndex == 0)
+    {
+        return self.collectArray.count;
+    }else
+    {
+        return self.dataArray.count;
+    }
+    
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    XHHTradHomeCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell _removeTimer];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (self.isHadCollect && self.currItemsIndex == 0)
+    {
+        ChZRealCoinInfoModel *model = self.collectArray[indexPath.row];
+        cell.coinModel = model;
+        [cell _removeTimer];
+    }else
+    {
+        if (self.dataArray.count > indexPath.section)
+        {
+            ChZMarketListModel *model = self.dataArray[indexPath.row];
+            [cell reloadCellWithModel:model];
+//            ChZGroupMarketModel *groupModel = [self.dataArray objectAtIndex:indexPath.section];
+//            if (groupModel.list.count > indexPath.row)
+//            {
+//                ChZMarketListModel *model = groupModel.list[indexPath.row];
+//                [cell reloadCellWithModel:model];
+//                [cell _loadTimer];
+//            }
+        }
+        
+    }
+//    if (self.isHadCollect && self.currItemsIndex == 0)
+//    {
+//
+//    }else
+//    {
+//
+//    }
+//    ChZMarketListModel *model = self.dataArray[indexPath.row];
+//    [cell reloadCellWithModel:model];
+    return cell;
+}
+//-(CGFloat)tableView:(UITableView *)tableView heightF orHeaderInSection:(NSInteger)section{
+//    if ([self.dataArray[section][@"title"] length] == 0) {
+//        return CGFLOAT_MIN;
+//    }else{
+//        return 40;
+//    }
+//}
+//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+//    return CGFLOAT_MIN;
+//}
+//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+//    XHHTradHomeTableHeadView *v = [[[NSBundle mainBundle] loadNibNamed:@"XHHTradHomeTableHeadView" owner:nil options:nil] lastObject];
+//    if (section == 0) {
+//        v.lineView.hidden = YES;
+//    }
+//    v.titleLable.text = self.dataArray[section][@"title"];
+//    if (v.titleLable.text.length > 0) {
+//        return v;
+//    }else{
+//        return nil;
+//    }
+//}
+//-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+//    return nil;
+//}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    XHHSwitchViewController *vc = [[XHHSwitchViewController alloc] init];
+    if (self.isHadCollect && self.currItemsIndex == 0)
+    {
+        ChZRealCoinInfoModel *model = self.collectArray[indexPath.row];
+        vc.symblId = model.tradeId;
+        vc.sellName = model.sellSymbol;
+        vc.buyName = model.buySymbol;
+        vc.buyCoinId = model.tradeId;
+    }else{
+        ChZMarketListModel *model = self.dataArray[indexPath.row];
+        vc.symblId = model.fid;
+        vc.sellName = model.sellShortName;
+        vc.buyName = self.typeName;
+        vc.buyCoinId = model.buyCoinId;
+    }
+    [self.navigationController pushViewController:vc animated:YES];
+}
+-(void)requestCoinList{
+    
+    @weakify(self);
+    [ChZHomeRequest requestAreaSuccessBlock:^(id dataSource)
+     {
+         @strongify(self);
+         self.typeArray = dataSource;
+         NSMutableArray *itemArray = [NSMutableArray array];
+         for(HCMarketAreaModel *mode in dataSource)
+         {
+             [itemArray addObject:mode.name];
+         }
+         if (self.isHadCollect) {
+             [itemArray insertObject:@"自选" atIndex:0];
+             self.typeName = @"自选";
+         }else{
+             HCMarketAreaModel *mode = self.typeArray[0];
+             self.coinId = mode.code;
+             self.typeName = mode.name;
+             self.isAllIconPrice = YES;
+         }
+         [self.itemsView zh_setupUIWithItems:itemArray];
+         [self.tableView.mj_header beginRefreshing];
+     } errorBlock:^(int code, NSString *error)
+     {
+         ChZ_MBError(error)
+     }];
+}
+-(void)requestMarketList{
+    @weakify(self);
+    
+    [ChZHomeRequest requestAreaList:self.coinId successBlock:^(id dataSource)
+     {
+         @strongify(self);
+         self.dataArray = dataSource;
+         [self.tableView reloadData];
+         [self.tableView.mj_header endRefreshing];
+     } errorBlock:^(int code, NSString *error)
+     {
+         @strongify(self);
+         [self.tableView.mj_header endRefreshing];
+         
+     }];
+    
+}
+-(void)requestCollectList{
+    @weakify(self);
+    [ChZHomeRequest requestTradCollectListUid:[APPControl sharedAPPControl].user.fid successBlock:^(id dataSource)
+    {
+        @strongify(self);
+        self.collectArray= dataSource;
+        if (self.collectArray.count)
+        {
+            self.isHadCollect = YES;
+            self.currItemsIndex = 0;
+            
+        }else{
+            self.isHadCollect = NO;
+        }
+        [self requestCoinList];
+    } errorBlock:^(int code, NSString *error) {
+        @strongify(self);
+        self.isHadCollect = NO;
+        [self requestCoinList];
+        NSLog(@"%@",error);
+    }];
+}
+//- (void)viewDidLoad {
+//    [super viewDidLoad];
+//
+//    self.noHiddenNav = YES;
+//
+//    self.currItemsIndex = 0;
+//
+//    [self requestCollectList];
+//
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(collectNotifion) name:@"COLLECTACTION" object:nil];
+//
+//    [self zh_setupUI];
+//}
+//-(void)zh_setupUI{
+//
+//    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+//    [self.view addSubview:self.navView];
+//    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.top.right.equalTo(self.view);
+//        make.height.mas_equalTo(navHeight +64);
+//    }];
+//    [self.view addSubview:self.itemsView];
+//    [self.itemsView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.equalTo(self.view);
+//        make.top.equalTo(self.navView.mas_bottom);
+//        make.height.mas_equalTo(46);
+//    }];
+//    [self.view addSubview:self.tableView];
+//    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.equalTo(self.view);
+//        make.top.equalTo(self.itemsView.mas_bottom);
+//        make.bottom.equalTo(self.view).offset(-navHeight-50);
+//    }];
+//}
+//-(void)collectNotifion{
+//    [self requestCollectList];
+//}
+//- (void)didReceiveMemoryWarning {
+//    [super didReceiveMemoryWarning];
+//    // Dispose of any resources that can be recreated.
+//}
+//-(XHHPublicNavView *)navView{
+//    if (!_navView) {
+//        _navView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPublicNavView" owner:nil options:nil] lastObject];
+//        [_navView setLeftButtonTitle:@"交易" image:nil];
+//        [_navView setrightButtonTitles:nil images:@[@"trad_home_rightNav"]];
+//        _navView.delegete = self;
+//    }
+//    return _navView;
+//}
+//-(XHHPublicItemsView *)itemsView{
+//    if (!_itemsView) {
+//        _itemsView = [[XHHPublicItemsView alloc] init];
+//        _itemsView.delegate = self;
+//    }
+//    return _itemsView;
+//}
+//-(UITableView *)tableView{
+//    if (!_tableView) {
+//        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+//        _tableView.delegate = self;
+//        _tableView.dataSource = self;
+//        _tableView.backgroundColor = bgColor;
+//        _tableView.rowHeight = 70;
+//        [self setupRefreshWithView:self.tableView refreshHeadAction:@selector(beginRefresh) refreshFooterAction:nil];
+//        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+////        [_tableView setSeparatorColor:[UIColor clearColor]];
+//        [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
+//        [_tableView registerNib:[UINib nibWithNibName:@"XHHTradHomeCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+//    }
+//    return _tableView;
+//}
+//-(void)beginRefresh
+//{
+//    if (self.isHadCollect && self.currItemsIndex == 0)
+//    {
+//        [self.tableView reloadData];
+//        [self.tableView.mj_header endRefreshing];
+//    }else
+//    {
+//        [self requestMarketList];
+//    }
+//}
+//-(void)itemsClickIndex:(NSInteger)index{
+//    self.currItemsIndex = index;
+//    if (self.isHadCollect && index == 0) {
+//        self.typeName = @"自选";
+//        [self.tableView reloadData];
+//        [self.tableView.mj_header endRefreshing];
+//    }else{
+//        HCMarketAreaModel *mode;
+//        if(self.isHadCollect){
+//            mode =  self.typeArray[index-1];
+//        }else{
+//            mode =  self.typeArray[index];
+//        }
+//        self.coinId = mode.code;
+//        self.typeName = mode.name;
+//        self.isAllIconPrice = index == 0 ? YES : NO;
+//        [self.tableView.mj_header beginRefreshing];
+//    }
+//
+//}
+//- (void)rightButtonActionIndex:(NSInteger)index{
+//    XHHMyDealController *vc = [[XHHMyDealController alloc] init];
+//    [self.navigationController pushViewController:vc animated:YES];
+//}
+//-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+//    if (self.isHadCollect && self.currItemsIndex == 0)
+//    {
+//        return 1;
+//    }else{
+//        return self.dataArray.count;
+//    }
+//}
+//-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+//    if (self.isHadCollect && self.currItemsIndex == 0)
+//    {
+//        return self.collectArray.count;
+//    }else
+//    {
+//        if (self.dataArray.count > section)
+//        {
+//            ChZGroupMarketModel *groupModel = [self.dataArray objectAtIndex:section];
+//            return groupModel.list.count;
+//        }
+//
+//    }
+//    return 0;
+//}
+//-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+//    XHHTradHomeCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+//    [cell _removeTimer];
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    if (self.isHadCollect && self.currItemsIndex == 0)
+//    {
+//        ChZRealCoinInfoModel *model = self.collectArray[indexPath.row];
+//        cell.coinModel = model;
+//        [cell _removeTimer];
+//    }else{
+//        if (self.dataArray.count > indexPath.section)
+//        {
+//            ChZGroupMarketModel *groupModel = [self.dataArray objectAtIndex:indexPath.section];
+//            if (groupModel.list.count > indexPath.row)
+//            {
+//                ChZMarketListModel *model = groupModel.list[indexPath.row];
+//                [cell reloadCellWithModel:model];
+//                [cell _loadTimer];
+//            }
+//        }
+//
+//    }
+//    return cell;
+//}
+//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+//    if (self.isHadCollect && self.currItemsIndex == 0)return CGFLOAT_MIN;
+//    return 40;
+//}
+//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+//    return CGFLOAT_MIN;
+//}
+//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+//    if (self.isHadCollect && self.currItemsIndex == 0)return nil;
+//    XHHTradHomeTableHeadView *v = [[[NSBundle mainBundle] loadNibNamed:@"XHHTradHomeTableHeadView" owner:nil options:nil] lastObject];
+//    if (section == 0) {
+//        v.lineView.hidden = YES;
+//    }
+//    if (self.dataArray.count > section)
+//    {
+//        ChZGroupMarketModel *groupModel = [self.dataArray objectAtIndex:section];
+//        v.titleLable.text = groupModel.groupName;
+//    }
+//    return v;
+//}
+//-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+//    return nil;
+//}
+//-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+//    ChZMarketListModel *model = self.dataArray[indexPath.row];
+//    XHHSwitchViewController *vc = [[XHHSwitchViewController alloc] init];
+//    vc.model = model;
+//    vc.areaArray = self.dataArray;
+//    vc.typeName = self.typeName;
+//    [self.navigationController pushViewController:vc animated:YES];
+//}
+//-(void)requestCoinList{
+//    @weakify(self);
+//    [ChZHomeRequest requestAreaSuccessBlock:^(id dataSource)
+//     {
+//         @strongify(self);
+//         self.typeArray = dataSource;
+//         [APPControl sharedAPPControl].areaArray = dataSource;
+//         [[APPControl sharedAPPControl] requestUSDT:dataSource];
+//         NSMutableArray *itemArray = [NSMutableArray array];
+//         for(HCMarketAreaModel *mode in dataSource)
+//         {
+//             [itemArray addObject:mode.name];
+//         }
+//         if (self.isHadCollect) {
+//             [itemArray insertObject:@"自选" atIndex:0];
+//             self.typeName = @"自选";
+//         }else{
+//             HCMarketAreaModel *mode = self.typeArray[0];
+//             self.coinId = mode.code;
+//
+//             ChZ_DebugLog(@"%@--",self.coinId);
+//             self.typeName = mode.name;
+//         }
+//         [self.itemsView zh_setupUIWithItems:itemArray];
+//         [self.tableView.mj_header beginRefreshing];
+//     } errorBlock:^(int code, NSString *error)
+//     {
+//         ChZ_MBError(error)
+//     }];
+//}
+//
+//
+//- (void)handleGroupData:(NSArray *)array
+//{
+//    if (array == nil || array.count == 0)
+//    {
+//        self.dataArray = nil;
+//        return ;
+//    }
+//    NSMutableArray *group  = [NSMutableArray array];
+//    for (ChZMarketListModel *model in array)
+//    {
+//        if (ChZ_StringIsEmpty(model.blockName))
+//        {
+//            BOOL isAdd = NO;
+//            for (ChZGroupMarketModel *groupmodel in group)
+//            {
+//                if ([groupmodel.groupName isEqualToString:model.blockName])
+//                {
+//                    [groupmodel.list addObject:model];
+//                    isAdd = YES;
+//                    break;
+//                }
+//            }
+//            if (isAdd == NO)
+//            {
+//                ChZGroupMarketModel *groupmodel = ChZGroupMarketModel.new;
+//                groupmodel.groupName = model.blockName;
+//                groupmodel.list = [NSMutableArray array];
+//                [groupmodel.list addObject:model];
+//                [group addObject:groupmodel];
+//            }
+//
+//        }
+//    }
+//    self.dataArray = group;
+//
+//}
+//-(void)requestMarketList{
+//    @weakify(self);
+//    [ChZHomeRequest requestAreaList:self.coinId successBlock:^(id dataSource)
+//     {
+//         @strongify(self);
+//         self.dataSource = dataSource;
+//         [self handleGroupData:dataSource];
+//         [self.tableView reloadData];
+//         [self.tableView.mj_header endRefreshing];
+//     } errorBlock:^(int code, NSString *error)
+//     {
+//         @strongify(self);
+//         [self.tableView.mj_header endRefreshing];
+//     }];
+//}
+//
+//-(void)requestCollectList{
+//    @weakify(self);
+//    [ChZHomeRequest requestTradCollectListUid:[APPControl sharedAPPControl].user.fid successBlock:^(id dataSource) {
+//        @strongify(self);
+//        self.collectArray= dataSource;
+//        if (self.collectArray.count)
+//        {
+//            self.isHadCollect = YES;
+//            self.currItemsIndex = 0;
+//
+//        }else{
+//            self.isHadCollect = NO;
+//        }
+//        [self requestCoinList];
+//    } errorBlock:^(int code, NSString *error) {
+//        @strongify(self);
+//        self.isHadCollect = NO;
+//        [self requestCoinList];
+//        NSLog(@"%@",error);
+//    }];
+//}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

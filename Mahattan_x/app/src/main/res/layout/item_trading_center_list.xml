@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <ImageView
+        android:id="@+id/image_item_quotes_list"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/text_item_quotes_list_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/image_item_quotes_list"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/textSize14"
+        android:textStyle="bold"
+        tools:text="ETH" />
+
+    <TextView
+        android:id="@+id/text_item_quotes_list_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/text_item_quotes_list_name"
+        android:layout_below="@id/text_item_quotes_list_name"
+        android:layout_toRightOf="@id/image_item_quotes_list"
+        android:textColor="@color/colorGrayText"
+        android:textSize="@dimen/textSize10"
+        tools:text="ETH" />
+
+    <TextView
+        android:id="@+id/text_item_quotes_list_rise"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/text_item_quotes_list_message"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/text_item_quotes_list_name"
+        android:background="@drawable/shape_rise_bg_less"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/textSize12"
+        android:textStyle="bold"
+        tools:text="-4.54%" />
+
+    <TextView
+        android:id="@+id/text_item_quotes_list_price_dollar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/text_item_quotes_list_name"
+        android:layout_marginRight="12dp"
+        android:layout_toLeftOf="@id/text_item_quotes_list_rise"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/textSize14"
+        android:textStyle="bold"
+        tools:text="$1993.00" />
+
+    <TextView
+        android:id="@+id/text_item_quotes_list_price_rmb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/text_item_quotes_list_message"
+        android:layout_alignRight="@id/text_item_quotes_list_price_dollar"
+        android:layout_toLeftOf="@id/text_item_quotes_list_rise"
+        android:textColor="@color/colorGrayText"
+        android:textSize="@dimen/textSize10"
+        tools:text="¥1993.00" />
+</RelativeLayout>

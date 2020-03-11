@@ -1,0 +1,175 @@
+//
+//  XHHSwithExplictViewController.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/8/29.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHSwithExplictViewController.h"
+#import "XHHEntrustBuyTypeView.h"
+#import "XHHEntrustCell.h"
+#import "ChZMarketTxsOrderItemModel.h"
+static NSString *cellIndienfiter = @"XHHEntrustCell";
+@interface XHHSwithExplictViewController ()<UITableViewDelegate,UITableViewDataSource,XHHEntrustBuyTypeViewProtocol>
+
+@property (strong, nonatomic) XHHEntrustBuyTypeView *typeView;
+
+@property (nonatomic , strong) UITableView          *tableView;
+
+@property (nonatomic , strong) NSArray              *dataArray;
+
+@property (nonatomic , strong) NSArray              *objArray;
+@end
+
+@implementation XHHSwithExplictViewController
+
+-(void)viewWillAppear:(BOOL)animated{
+     [self.tableView.mj_header beginRefreshing];
+}
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self zh_setupUI];
+}
+-(void)zh_setupUI{
+    [self.view addSubview:self.typeView];
+    [self.typeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self.view);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+        make.top.equalTo(self.typeView.mas_bottom);
+    }];
+}
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.rowHeight = 123;
+        [_tableView setSeparatorColor:LineCorlor];
+        _tableView.backgroundColor = bgColor;
+        _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+        [_tableView registerNib:[UINib nibWithNibName:@"XHHEntrustCell" bundle:nil] forCellReuseIdentifier:cellIndienfiter];
+        [self setupRefreshWithView:_tableView refreshHeadAction:@selector(headRefsh) refreshFooterAction:nil];
+    }
+    return _tableView;
+}
+
+-(XHHEntrustBuyTypeView *)typeView{
+    if (!_typeView) {
+        _typeView = [[XHHEntrustBuyTypeView alloc] initWithItems:@[@"全部",@"买入",@"卖出"]];
+        _typeView.delegate = self;
+    }
+    return _typeView;
+}
+-(void)setObjArray:(NSArray *)objArray{
+    _objArray = objArray;
+    self.dataArray = objArray;
+    [self.tableView reloadData];
+}
+-(void)chooseTypeIndex:(NSInteger)index{
+    if (self.objArray == nil || self.objArray.count == 0) {
+        self.objArray = nil;
+        [self.tableView reloadData];
+        return;
+    }
+    if (index == 0) {
+        self.dataArray = self.objArray;
+        [self.tableView reloadData];
+        return;
+    }
+    NSMutableArray *tempArray = [NSMutableArray array];
+    for (ChZMarketTxsOrderItemModel *model in self.objArray)
+    {
+        if (model.type == index - 1 ) {
+            [tempArray addObject:model];
+        }
+    }
+    self.dataArray = tempArray;
+    [self.tableView reloadData];
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataArray.count;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    XHHEntrustCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndienfiter];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.nameLable.text = [NSString stringWithFormat:@"%@/%@",self.sellName,self.buyName];
+    ChZMarketTxsOrderItemModel *model = self.dataArray[indexPath.row];
+    [cell reloadCellWithModel:model];
+    [cell IsDealList:NO];
+    @weakify(self);
+    cell.block = ^(NSInteger index, ChZMarketTxsOrderItemModel *OrderModel, int type)
+    {
+        @strongify(self);
+        [self showTheAlertVCWithStyle:UIAlertControllerStyleAlert
+                                title:nil
+                              message:@"确定停止委托吗?"
+                               title1:@"取消" action1:^{
+            
+        } title2:@"确定" action2:^{
+            @strongify(self);
+            [self canelOrderId:model.fid];
+        } title3:nil action3:nil completion:nil];
+    };
+    return cell;
+}
+-(void)headRefsh
+{
+    [self _setupData];
+}
+- (void)_setupData {
+    NSString *areaAndCoint = [NSString stringWithFormat:@"%@_%@",self.sellName,self.buyName];
+    NSString *name = [areaAndCoint lowercaseString];
+    @weakify(self);
+    [ChZHomeRequest requestTxsOrderListWithSymbol:name type:@"1" successBlock:^(id dataSource)
+    {
+        @strongify(self);
+        self.objArray = dataSource;
+        self.typeView.seleectIndex = 0;
+        [self.tableView.mj_header endRefreshing];
+    } errorBlock:^(int code, NSString *error)
+    {
+        @strongify(self);
+        [self.tableView.mj_header endRefreshing];
+        ChZ_MBError(error)
+        ChZ_DebugLog(@"code = %d error reason: %@", code, error);
+    }];
+}
+-(void)canelOrderId:(NSString *)orderID
+{
+    ChZ_MBMsg(nil)
+    @weakify(self);
+    [ChZHomeRequest requestCancelOrder:orderID successBlock:^(id dataSource)
+    {
+        ChZ_MBDismss;
+        @strongify(self);
+        [self.tableView.mj_header beginRefreshing];
+    } errorBlock:^(int code, NSString *error) {
+        ChZ_MBDismss;
+        ChZ_DebugLog(@"%@",error);
+    }];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

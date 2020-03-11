@@ -1,0 +1,45 @@
+//
+//  XHHLoginPwController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/16.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHLoginPwController.h"
+
+@interface XHHLoginPwController ()
+@property (weak, nonatomic) IBOutlet UITextField *currPw;
+@property (weak, nonatomic) IBOutlet UITextField *nPw;
+@property (weak, nonatomic) IBOutlet UITextField *surePw;
+
+@end
+
+@implementation XHHLoginPwController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [_currPw configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [_nPw configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [_surePw configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    // Do any additional setup after loading the view.
+}
+- (IBAction)back:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

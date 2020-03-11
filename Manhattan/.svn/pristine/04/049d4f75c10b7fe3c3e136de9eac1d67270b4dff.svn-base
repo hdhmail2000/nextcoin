@@ -1,0 +1,96 @@
+//
+//  XHHTSBDetailCell.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/30.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHTSBDetailCell.h"
+
+@interface XHHTSBDetailCell ()
+
+@property (weak, nonatomic) IBOutlet UILabel *typeTitle;
+
+@property (weak, nonatomic) IBOutlet UILabel *payTypeLable;
+
+@property (weak, nonatomic) IBOutlet UILabel *orderPrice;
+@property (weak, nonatomic) IBOutlet UILabel *orderNumber;
+@property (weak, nonatomic) IBOutlet UILabel *orderTime;
+@property (weak, nonatomic) IBOutlet UILabel *orderBuyNumber;
+
+@end
+
+@implementation XHHTSBDetailCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+-(void)setTradtype:(C2CTradType)tradtype
+{
+    _tradtype = tradtype;
+    if (tradtype == C2CTradTypeBuy)
+    {
+//        self.typeTitle.textColor = [UIColor colorWithHexString:@"02C188"];
+        self.typeTitle.text = @"买入";
+    }else
+    if (tradtype == C2CTradTypeSell)
+    {
+//        self.typeTitle.textColor = [UIColor colorWithHexString:@"F7673E"];
+        self.typeTitle.text = @"卖出";
+    }
+}
+
+- (void)setOrderModel:(XHHC2CMyOrderModel *)orderModel
+{
+    _orderModel = orderModel;
+    
+    self.payTypeLable.text = nil;
+    self.orderNumber.text = nil;
+    self.orderPrice.text = nil;
+    self.orderBuyNumber.text = nil;
+    self.orderTime.text = nil;
+    
+    if(ChZ_StringIsEmpty(orderModel.price))self.orderPrice.text = [NSString stringWithFormat:@"￥%.4f",[orderModel.price floatValue]];
+    if(ChZ_StringIsEmpty(orderModel.order_time))self.orderTime.text = [ChZUtil chz_getDateAndTimeWithTimeIntervalSince1970:orderModel.order_time];
+    if(ChZ_StringIsEmpty(orderModel.sn))self.orderNumber.text = orderModel.sn;
+    if (ChZ_StringIsEmpty(orderModel.order_volume))self.orderBuyNumber.text = [NSString stringWithFormat:@"%.4f",[orderModel.order_volume floatValue]];
+    NSInteger type = [orderModel.order_status integerValue];
+    switch (type) {
+        case 1://未付款
+            self.payTypeLable.textColor = [UIColor colorWithHexString:@"FF67D2"];
+            self.payTypeLable.text = @"未付款";
+            break;
+        case 2://待确认
+            self.payTypeLable.textColor = [UIColor colorWithHexString:@"4EE2FE"];
+            self.payTypeLable.text = @"待确认";
+            break;
+        case 3://已完成
+            self.payTypeLable.textColor = [UIColor colorWithHexString:@"4EE2FE"];
+            self.payTypeLable.text = @"已完成";
+            break;
+        case 4://申诉中
+            self.payTypeLable.textColor = [UIColor colorWithHexString:@"4B4B80"];
+            self.payTypeLable.text = @"申诉中";
+            break;
+        case 9://已取消
+            self.payTypeLable.textColor = [UIColor colorWithHexString:@"4B4B80"];
+            self.payTypeLable.text = @"已取消";
+            break;
+            
+        default:
+            break;
+    }
+    
+    self.typeTitle.text = [self.typeTitle.text stringByAppendingString:self.buysmbloName];
+    
+}
+
+@end

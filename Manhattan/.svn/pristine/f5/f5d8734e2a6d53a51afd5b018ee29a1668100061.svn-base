@@ -1,0 +1,156 @@
+//
+//  XHHSalesEntrustView.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHSalesEntrustView.h"
+#import "XHHProgressView.h"
+@interface XHHSalesEntrustView ()
+
+@property (weak, nonatomic) IBOutlet UITextField *priceTextFeild;//价格
+@property (weak, nonatomic) IBOutlet UITextField *muchTextFeild;//数量
+@property (weak, nonatomic) IBOutlet UILabel *presentLable;//比例
+@property (weak, nonatomic) IBOutlet UIView *presentView;//比例view
+@property (weak, nonatomic) IBOutlet UILabel *moneyLable;//交易额
+
+@property (weak, nonatomic) IBOutlet UIButton *buyButton;
+@property (weak, nonatomic) IBOutlet UIButton *sellButton;
+
+
+@property (strong, nonatomic) UISlider        *slier;
+
+@property (nonatomic , strong) UIView *blueView;
+@property (nonatomic , strong) UIView *grayView;
+
+@end
+
+@implementation XHHSalesEntrustView
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+-(void)awakeFromNib{
+    [super awakeFromNib];
+    [self zh_setupUI];
+}
+
+-(void)zh_setupUI{
+    [self.muchTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16] textColor:[UIColor colorWithHexString:@"4B4B80"]];
+    [self.priceTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16] textColor:[UIColor colorWithHexString:@"4B4B80"]];
+    [self.presentView addSubview:self.grayView];
+    [self.grayView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.presentView);
+        make.height.mas_equalTo(30);
+        make.left.equalTo(self.presentView).offset(5);
+        make.right.equalTo(self.presentView).offset(-15);
+    }];
+    [self.presentView addSubview:self.blueView];
+    [self.blueView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.presentView);
+        make.left.equalTo(self.presentView).offset(5);
+        make.height.mas_equalTo(30);
+        make.width.mas_equalTo(0);
+    }];
+    
+    
+    [self.presentView addSubview:self.slier];
+    [self.slier mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.bottom.right.equalTo(self.presentView);
+        make.height.mas_equalTo(30);
+    }];
+    
+    [self.muchTextFeild addTarget:self action:@selector(valueChange:) forControlEvents:UIControlEventEditingChanged];
+    [self.priceTextFeild addTarget:self action:@selector(valueChange:) forControlEvents:UIControlEventEditingChanged];
+}
+-(void)valueChange:(UITextField *)textField{
+    if ([self.muchTextFeild.text length] > 0 && [self.priceTextFeild.text length] > 0) {
+        self.moneyLable.text = [NSString stringWithFormat:@"%.4fCNY",[self.muchTextFeild.text floatValue] * [self.priceTextFeild.text floatValue]];
+    }else{
+        self.moneyLable.text = @"--";
+    }
+}
+-(UISlider *)slier{
+    if (!_slier) {
+        _slier = [[UISlider alloc] init];
+        UIImage *imagea=[self OriginImage:[UIImage imageNamed:@"trad_pay_currpprogress"] scaleToSize:CGSizeMake(25, 25)];
+        [_slier  setThumbImage:imagea forState:UIControlStateNormal];
+        UIImage *rightTrack = [[UIImage imageNamed:@"slidertrack_clear"]
+                               resizableImageWithCapInsets:UIEdgeInsetsMake(0, 14, 0, 14)];
+        
+        [_slier setMaximumTrackImage:rightTrack forState:UIControlStateNormal];
+        [_slier setMinimumTrackTintColor:[UIColor clearColor]];
+        _slier.minimumValue = 0;
+        _slier.maximumValue = 1;
+        _slier.tintColor = [UIColor clearColor];
+        _slier.backgroundColor = [UIColor clearColor];
+        @weakify(self);
+        [[_slier rac_signalForControlEvents:UIControlEventValueChanged] subscribeNext:^(__kindof UIControl * _Nullable x) {
+            @strongify(self);
+            self.presentLable.text = [NSString stringWithFormat:@"%d%%",(int)(self.slier.value * 100)];
+            [self.blueView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.width.mas_equalTo((ChZ_WIDTH-50)*self.slier.value);
+            }];
+        }];
+    }
+    return _slier;
+}
+-(UIView *)blueView{
+    if (!_blueView) {
+        _blueView = [[UIView alloc] init];
+        _blueView.backgroundColor = [UIColor clearColor];
+        _blueView.layer.masksToBounds = YES;
+        UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.image = [UIImage imageNamed:@"slidertrack_blue"];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.frame = CGRectMake(0, 0, ChZ_WIDTH - 45, 30);
+        [_blueView addSubview:imageView];
+    }
+    return _blueView;
+}
+
+-(UIView *)grayView{
+    if (!_grayView) {
+        _grayView = [[UIView alloc] init];
+        UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.image = [UIImage imageNamed:@"slidertrack_gray"];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.frame = CGRectMake(0, 0, ChZ_WIDTH - 45, 30);
+        [_grayView addSubview:imageView];
+    }
+    return _grayView;
+}
+- (IBAction)buyAction:(id)sender {
+    self.buyButton.layer.borderColor = [UIColor colorWithHexString:@"308AF5"].CGColor;
+    [self.buyButton setTitleColor:[UIColor colorWithHexString:@"308AF5"] forState:UIControlStateNormal];
+    self.sellButton.layer.borderColor = [UIColor colorWithHexString:@"4B4B80"].CGColor;
+    [self.sellButton setTitleColor:[UIColor colorWithHexString:@"4B4B80"] forState:UIControlStateNormal];
+    if (self.buySellBlock) {
+        _buySellBlock(NO);
+    }
+}
+- (IBAction)sellAction:(id)sender {
+    self.sellButton.layer.borderColor = [UIColor colorWithHexString:@"308AF5"].CGColor;
+    [self.sellButton setTitleColor:[UIColor colorWithHexString:@"308AF5"] forState:UIControlStateNormal];
+    self.buyButton.layer.borderColor = [UIColor colorWithHexString:@"4B4B80"].CGColor;
+    [self.buyButton setTitleColor:[UIColor colorWithHexString:@"4B4B80"] forState:UIControlStateNormal];
+    if (self.buySellBlock) {
+        _buySellBlock(YES);
+    }
+}
+
+-(UIImage *)OriginImage:(UIImage *)image scaleToSize:(CGSize)size
+{
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0,0, size.width, size.height)];
+    UIImage *scaleImage=UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return scaleImage;
+}
+@end

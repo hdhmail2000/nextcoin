@@ -1,0 +1,74 @@
+{template "header.html" }
+{template "top.html" }
+	<style>
+		.breadcrumb > li {
+			text-shadow: none !important;
+		}
+    body,html{
+      background: #fff
+    }
+	</style>
+        <!--[if lt IE 9]>对不起，浏览器版本太低~！<![endif]-->
+        <div class="container-fluid">
+
+      <!----------------- 路径导航 ------------>
+
+            <div class="row content">
+                 <div class="container">
+                     <div class="row my-breadcrumb-wrap">
+                         <div class="col-xs-12">
+                             <ol class="breadcrumb my-breadcrumb">
+                                <li><a href="/index.php?s=exc&c=ArticleController">{$news.index}</a></li>
+                                <li><a href="/index.php?s=exc&c=ArticleController&id=1">{$news.dynamic}</a></li>
+                                <li>{$news.dynamic}</li>
+                            </ol>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+      <!----------------------- 新闻详情 --------------->
+			{list action=content id=$_GET['id'] module=news}
+            <div class="row new-datail-wrap">
+                <div class="container">
+                    <div class="row new-datail">
+                        <div class="col-xs-12">
+                            <div class="new-datail-text">
+                                <h1>{$t.title}</h1>
+                                <h3>{date('Y-m-d H:i:s',strtotime($t.inputtime))}</h3>
+                            </div>
+                            <div class="new-datail-text">
+                                {$t.content}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/list}
+
+
+            <!------------------------- 页尾 ---------------------------->
+
+        <script type="text/javascript">
+                   $(".weixing-btn").on({
+                    click:function(){
+                        if($(this).hasClass('active')){
+                            $(this).removeClass('active');
+                            $(this).siblings().hide();
+                        }else{
+                            $(this).addClass('active');
+                            $(this).siblings().show();
+                        }
+                        return false;
+                    }
+                })
+
+
+                   $(document).on("click", "*", function(){
+                    $(".window-item-box").hide();
+                    $(".weixing-btn").removeClass('active');
+                });
+
+        </script>
+{template "footer.html" }

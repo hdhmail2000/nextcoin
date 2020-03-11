@@ -1,0 +1,160 @@
+//
+//  XHHTrunOutController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/17.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHTrunOutController.h"
+#import "XHHPublicNavView.h"
+#import "XHHTrunOutView.h"
+#import "XHHPWInputView.h"
+#import <IQKeyboardManager.h>
+@interface XHHTrunOutController ()<YXTextFieldDelegate>
+@property (nonatomic , strong) XHHPublicNavView           *navView;
+@property (nonatomic , strong) XHHTrunOutView *trunOutView;
+@property (nonatomic , strong) XHHPWInputView *pwInputView;
+// 输入框的透明背景视图
+@property (strong, nonatomic) UIView *inputBackgroundView;
+@end
+
+@implementation XHHTrunOutController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self zh_setupUI];
+}
+
+-(void)zh_setupUI{
+    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+    
+    [self.view addSubview:self.navView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self.view);
+        make.height.mas_equalTo(navHeight +64);
+    }];
+    
+    [self.view addSubview:self.trunOutView];
+    [self.trunOutView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+        make.top.equalTo(self.navView.mas_bottom);
+    }];
+    
+    
+}
+-(XHHTrunOutView *)trunOutView{
+    if (!_trunOutView) {
+        _trunOutView = [[[NSBundle mainBundle] loadNibNamed:@"XHHTrunOutView" owner:nil options:nil] lastObject];
+        @weakify(self);
+        _trunOutView.sendBlock = ^{
+            @strongify(self);
+            [self.pwInputView clearValue];
+            [UIView animateWithDuration:0.2 animations:^{
+                self.inputBackgroundView.hidden = NO;
+                self.pwInputView.frame = CGRectMake(0, CGRectGetHeight(self.inputBackgroundView.frame) - 247, CGRectGetWidth(self.inputBackgroundView.frame), 247);
+                [self.pwInputView makeFirstInputBecomeFirstResponder];
+            }];
+        };
+    }
+    return _trunOutView;
+}
+-(XHHPWInputView *)pwInputView{
+    if (!_pwInputView) {
+        _pwInputView = [XHHPWInputView initXibFileWithDelegate:self];
+        _pwInputView.backgroundColor = [UIColor colorWithHexString:@"16263E"];
+        _pwInputView.frame = CGRectMake(0, CGRectGetMaxY(self.view.frame), CGRectGetWidth(self.view.frame), 247);
+        [self.inputBackgroundView addSubview:_pwInputView];
+        @weakify(self);
+        _pwInputView.closeBlock = ^{
+            @strongify(self);
+            [self hideInputBackgroundViewAndInputView];
+        };
+        _pwInputView.finishBlock = ^{
+             @strongify(self);
+            [self hideInputBackgroundViewAndInputView];
+        };
+        
+    }
+    return _pwInputView;
+}
+-(XHHPublicNavView *)navView{
+    if (!_navView) {
+        _navView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPublicNavView" owner:nil options:nil] lastObject];
+        [_navView setLeftButtonTitle:@"发送BTC" image:@"public_nav_leftBack"];
+        _navView.leftWithd.constant += 60;
+    }
+    return _navView;
+}
+#pragma mark - 视图创建
+/**
+ *  输入视图的背景视图
+ *
+ */
+- (UIView *)inputBackgroundView{
+    if(_inputBackgroundView == nil){
+        _inputBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+        _inputBackgroundView.backgroundColor = [UIColor clearColor];
+        [self.view addSubview:_inputBackgroundView];
+    }
+    return _inputBackgroundView;
+}
+
+
+/**
+ *  隐藏输入视图
+ */
+- (void)hideInputBackgroundViewAndInputView{
+    [self.view endEditing:YES];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.pwInputView.frame = CGRectMake(0, CGRectGetMaxY(self.view.frame), CGRectGetWidth(self.view.frame), 400);
+    }];
+    self.inputBackgroundView.hidden = YES;
+}
+
+#pragma mark - 代理
+// 输入框代理
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+    
+    
+    if([string isEqualToString:@""]){// 删除
+        [self.pwInputView clearValue];
+        [self.pwInputView makeFirstInputBecomeFirstResponder];
+    }else{// 填写
+        textField.text = string;
+        [self.pwInputView moveFirstResponder];
+    }
+    if([self.pwInputView isSixthInputFinished]){
+        // 密码输入完成，网络请求提现
+        // 密码是
+        NSString *cashPwd = [NSString stringWithFormat:@"%@%@%@%@%@%@", [self.pwInputView returnFirstInputViewValue], [self.pwInputView returnSecondInputViewValue], [self.pwInputView returnThirdInputViewValue], [self.pwInputView returnFourthInputViewValue], [self.pwInputView returnFifthInputViewValue], [self.pwInputView returnSixthInputViewValue]];
+        NSLog(@"cashPwd is %@", cashPwd);
+        
+        [self hideInputBackgroundViewAndInputView];
+    }
+    return NO;
+}
+- (void)textFieldDidDeleteBackward:(UITextField *)textField {
+    
+    [self.pwInputView clearValue];
+    [self.pwInputView makeFirstInputBecomeFirstResponder];
+    
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

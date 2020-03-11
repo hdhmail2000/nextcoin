@@ -1,0 +1,24 @@
+//
+//  ChZRealCoinInfoModel.h
+//  FuturePurse
+//
+//  Created by Howe on 2018/8/8.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "BaseObject.h"
+
+@interface ChZRealCoinInfoModel : BaseObject
+
+@property (nonatomic, copy) NSString * symbol;
+@property (nonatomic, copy) NSString * sellSymbol;
+@property (nonatomic, copy) NSString * total;
+@property (nonatomic, copy) NSString * buySymbol;
+@property (nonatomic, copy) NSString * p_open;
+@property (nonatomic, copy) NSString * p_new;
+@property (nonatomic, copy) NSString * buy;
+@property (nonatomic, copy) NSString * sell;
+
+@property (nonatomic, copy) NSString * iconURL;
+
+@end

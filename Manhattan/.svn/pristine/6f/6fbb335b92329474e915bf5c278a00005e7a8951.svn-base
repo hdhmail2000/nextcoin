@@ -1,0 +1,166 @@
+//
+//  XHHSwitchPayViewController.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/8/29.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHSwitchPayViewController.h"
+#import "XHHSalesView.h"
+//#import "XHHPayPwView.h"
+@interface XHHSwitchPayViewController ()
+@property (strong, nonatomic) UIScrollView                *bgScrollView;
+//@property (strong, nonatomic) XHHPayPwView              *passWordView;//输入交易密码视图
+
+@property (nonatomic , assign) BOOL isBuy;
+@property (nonatomic , assign) double price;
+@property (nonatomic , assign) double num;
+@property (strong, nonatomic) NSString *password;
+
+@property (nonatomic , copy) NSString *canUseMoney;
+@end
+
+@implementation XHHSwitchPayViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self requestCanUseMoney];
+    
+    [self zh_setupUI];
+    // Do any additional setup after loading the view.
+}
+-(void)zh_setupUI{
+    //背景滚动视图
+    UIScrollView *bgScrollView = [[UIScrollView alloc]init];
+    bgScrollView.showsVerticalScrollIndicator = NO;
+    [self.view addSubview:bgScrollView];
+    self.bgScrollView = bgScrollView;
+    [bgScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+    
+    [bgScrollView addSubview:self.salesView];
+    [self.salesView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(self.bgScrollView).insets(UIEdgeInsetsZero);
+        make.width.equalTo(self.bgScrollView);
+        make.bottom.mas_equalTo(self.salesView.volumeView);
+    }];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+-(XHHSalesView *)salesView{
+    if (!_salesView) {
+        _salesView = [[XHHSalesView alloc] init];
+        _salesView.model = self.model;
+        _salesView.typeName = self.typeName;
+        _salesView.numberTypeName = self.numberTypeName;
+        @weakify(self);
+        _salesView.buySellBlock = ^(BOOL isBuy, NSString *price, NSString *num) {
+            @strongify(self);
+            self.isBuy = isBuy;
+            self.price = [price doubleValue];
+            self.num = [num doubleValue];
+            if (self.price <= 0 || self.num <= 0)
+            {
+                ChZ_MBError(@"委托价格或数量不能为零");
+                return;
+            }
+//            [self.passWordView showInView:self.view];
+//            self.passWordView.height = self.view.bounds.size.height;
+        };
+    }
+    return _salesView;
+}
+//- (XHHPayPwView *)passWordView{
+//    if (!_passWordView) {
+//        _passWordView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPayPwView" owner:nil options:nil] lastObject];
+//        _passWordView.delegate = self;
+//    }
+//    return _passWordView;
+//}
+-(void)payViewSure:(NSString *)pwd{
+    self.password = pwd;
+    if (self.isBuy)
+    {
+        [self buyCoin];
+    }else{
+        [self sellCoin];
+    }
+}
+
+
+- (void)buyCoin
+{
+    double price = self.price;
+    double number = self.num;
+    NSString *passwrod = self.password;
+    NSString *areaAndCoint = [NSString stringWithFormat:@"%@_%@",self.model.sellShortName,self.model.buyShortName];
+    NSString *name = [areaAndCoint lowercaseString];
+    ChZ_MBMsg(nil)
+    [ChZHomeRequest requestCreateOrder:name number:number price:price type:@"buy" tradePwd:passwrod successBlock:^(id dataSource) {
+        ChZ_MBDismssSuccess(@"成功!")
+    } errorBlock:^(int code, NSString *error) {
+        ChZ_MBDismssError(error)
+    }];
+}
+
+- (void)sellCoin
+{
+    double price = self.price;
+    double number = self.num;
+    NSString *passwrod = self.password;
+    NSString *areaAndCoint = [NSString stringWithFormat:@"%@_%@",self.model.sellShortName,self.model.buyShortName];
+    NSString *name = [areaAndCoint lowercaseString];
+    ChZ_MBMsg(nil)
+    [ChZHomeRequest requestCreateOrder:name number:number price:price type:@"sell" tradePwd:passwrod successBlock:^(id dataSource) {
+        ChZ_MBDismssSuccess(@"成功!")
+    } errorBlock:^(int code, NSString *error) {
+        ChZ_MBDismssError(error)
+    }];
+}
+
+-(void)requestCanUseMoney{
+    @weakify(self);
+    [ChZHomeRequest requestUserAssets:self.model.fid successBlock:^(id dataSource) {
+        @strongify(self);
+//        buyCoin =     {
+//            borrow = 0;
+//            frozen = 0;
+//            id = 33;
+//            total = 0;
+//        };
+//        score = 2100;
+//        sellCoin =     {
+//            borrow = 0;
+//            frozen = 0;
+//            id = 31;
+//            total = 2;
+//        }
+        
+        //可用余额 sellCoin --- total
+        NSLog(@"%@---",dataSource);
+        self.canUseMoney = dataSource[@"sellCoin"][@"total"];
+        if (self.canUseMoney)
+        {
+            self.salesView.progressValue = [self.canUseMoney doubleValue];
+        }
+        NSLog(@"%@--",self.canUseMoney);
+    } errorBlock:^(int code, NSString *error) {
+        NSLog(@"%@----",error);
+    }];
+}
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

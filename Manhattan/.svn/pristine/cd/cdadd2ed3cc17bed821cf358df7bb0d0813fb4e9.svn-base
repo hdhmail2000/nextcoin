@@ -1,0 +1,44 @@
+//
+//  XHHWalletCell.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/16.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHWalletCell.h"
+#import "NSString+Custom.h"
+@interface XHHWalletCell ()
+
+@property (weak, nonatomic) IBOutlet UIImageView *typeImage;
+@property (weak, nonatomic) IBOutlet UILabel *nameLable;
+@property (weak, nonatomic) IBOutlet UILabel *moneyLable;
+@property (weak, nonatomic) IBOutlet UILabel *aboutLable;
+
+@end
+
+@implementation XHHWalletCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+-(void)setModel:(WalletListModel *)model{
+    _model = model;
+    if(ChZ_StringIsEmpty(model.logo)){
+        [self.typeImage sd_setImageWithURL:[NSURL URLWithString:model.logo]];
+    }
+    self.nameLable.text = [NSString stringWithFormat:@"%@",model.shortName];
+    self.moneyLable.text = [NSString stringWithFormat:@"%.4f",model.total.floatValue];
+    NSString *moneyString = [NSString stringWithFormat:@"%.4f",model.total.floatValue * [[APPControl sharedAPPControl].cny floatValue]];
+    
+    self.aboutLable.text = [NSString stringWithFormat:@"≈ $%@",[NSString moneyFormat:moneyString]];
+    
+}
+@end

@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_page_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_actionbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:background="@drawable/shape_round_363672_4"
+        android:paddingBottom="16dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/status_text_view"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_mine_area_status_bg"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="0dp"
+            android:paddingBottom="2dp"
+            android:paddingTop="4dp"
+            android:text="投入中"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/textSize10" />
+
+        <TextView
+            android:id="@+id/title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@id/status_text_view"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/textSize14"
+            android:text="MHT-X矿区" />
+
+        <TextView
+            android:id="@+id/sum_num_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/title_text_view"
+            android:layout_below="@id/title_text_view"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/colorBlueText"
+            android:textSize="@dimen/textSize12"
+            android:textStyle="bold"
+            android:text="20" />
+
+        <TextView
+            android:id="@+id/unit_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_text_view"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="12dp"
+            android:layout_toRightOf="@id/sum_num_text_view"
+            android:textColor="@color/colorGrayText"
+            android:textSize="@dimen/textSize12"
+            android:text="万MHT-X" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/MineAreaProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_below="@id/sum_num_text_view"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="6dp"
+            tools:progress="20" />
+
+        <TextView
+            android:id="@+id/num_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/title_text_view"
+            android:layout_below="@id/progress_bar"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/colorBlueText"
+            android:textSize="@dimen/textSize12"
+            android:textStyle="bold"
+            tools:text="20" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progress_bar"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/num_text_view"
+            android:textColor="@color/colorGrayText"
+            android:textSize="@dimen/textSize12"
+            android:text="已投" />
+
+        <TextView
+            android:id="@+id/scale_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/status_text_view"
+            android:layout_below="@id/progress_bar"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/colorBlueText"
+            android:textSize="@dimen/textSize12"
+            android:textStyle="bold"
+            tools:text="%" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progress_bar"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="6dp"
+            android:layout_toLeftOf="@id/scale_text_view"
+            android:textColor="@color/colorGrayText"
+            android:textSize="@dimen/textSize12"
+            android:text="月产出" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/num_text_view"
+            android:layout_marginTop="14dp"
+            android:background="@color/colorDivider" />
+
+        <Button
+            android:id="@+id/submit_button"
+            android:layout_width="76dp"
+            android:layout_height="32dp"
+            android:layout_alignLeft="@id/title_text_view"
+            android:layout_below="@id/num_text_view"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/selector_button_bg_mine_area"
+            android:text="立即投入"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+
+        <com.ifenduo.mahattan_x.widget.switchbutton.SwitchButton
+            android:id="@+id/switch_button"
+            android:layout_width="38dp"
+            android:layout_height="20dp"
+            android:layout_alignRight="@id/status_text_view"
+            android:layout_below="@id/num_text_view"
+            android:layout_marginTop="38dp"
+            app:kswAnimationDuration="300"
+            app:kswBackDrawable="@drawable/selector_switch_button_bg_mine_area"
+            app:kswThumbColor="@color/colorWhite"
+            app:kswThumbMargin="1dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/switch_button"
+            android:layout_alignTop="@id/switch_button"
+            android:layout_below="@id/num_text_view"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@id/switch_button"
+            android:gravity="center"
+            android:textColor="@color/colorGrayText"
+            android:textSize="@dimen/textSize12"
+            android:text="一键复投" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shape_round_363672_4"
+        android:paddingBottom="16dp"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/status_text_view_"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector_mine_area_status_bg"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="0dp"
+            android:paddingBottom="2dp"
+            android:paddingTop="4dp"
+            tools:text="投入中"
+            android:enabled="false"
+            android:textColor="#7fffffff"
+            android:textSize="@dimen/textSize10" />
+
+        <TextView
+            android:id="@+id/title_text_view_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@id/status_text_view_"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/textSize14"
+            android:text="USDT矿区" />
+
+        <TextView
+            android:id="@+id/sum_num_text_view_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/title_text_view_"
+            android:layout_below="@id/title_text_view_"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/colorTabTextNormal"
+            android:textSize="@dimen/textSize12"
+            android:text="不限MHT-X额度" />
+
+        <TextView
+            android:id="@+id/unit_text_view_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_text_view_"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            android:layout_toRightOf="@id/sum_num_text_view_"
+            android:textColor="@color/colorTabTextNormal"
+            android:textSize="@dimen/textSize12"
+            android:text="不限MHT-X额度" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_"
+            style="@style/MineAreaProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_below="@id/sum_num_text_view_"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="6dp"
+            tools:progress="20" />
+
+        <TextView
+            android:id="@+id/num_text_view_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/title_text_view_"
+            android:layout_below="@id/progress_bar_"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/colorBlueText"
+            android:textSize="@dimen/textSize12"
+            android:textStyle="bold"
+            tools:text="20" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progress_bar_"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@id/num_text_view_"
+            android:textColor="@color/colorGrayText"
+            android:textSize="@dimen/textSize12"
+            android:text="已投" />
+
+        <TextView
+            android:id="@+id/scale_text_view_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/status_text_view_"
+            android:layout_below="@id/progress_bar_"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/colorBlueText"
+            android:textSize="@dimen/textSize12"
+            android:textStyle="bold"
+            tools:text="%" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progress_bar_"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="6dp"
+            android:layout_toLeftOf="@id/scale_text_view_"
+            android:textColor="@color/colorGrayText"
+            android:textSize="@dimen/textSize12"
+            android:text="月产出" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/num_text_view_"
+            android:layout_marginTop="14dp"
+            android:background="@color/colorDivider" />
+
+        <Button
+            android:id="@+id/submit_button_"
+            android:layout_width="76dp"
+            android:layout_height="32dp"
+            android:layout_alignLeft="@id/title_text_view_"
+            android:layout_below="@id/num_text_view_"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/selector_button_bg_mine_area"
+            android:text="立即投入"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+
+        <com.ifenduo.mahattan_x.widget.switchbutton.SwitchButton
+            android:id="@+id/switch_button_"
+            android:layout_width="38dp"
+            android:layout_height="20dp"
+            android:layout_alignRight="@id/status_text_view_"
+            android:layout_below="@id/num_text_view_"
+            android:layout_marginTop="38dp"
+            app:kswAnimationDuration="300"
+            app:kswBackDrawable="@drawable/selector_switch_button_bg_mine_area"
+            app:kswThumbColor="@color/colorWhite"
+            app:kswThumbMargin="1dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/switch_button_"
+            android:layout_alignTop="@id/switch_button_"
+            android:layout_below="@id/num_text_view_"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@id/switch_button_"
+            android:gravity="center"
+            android:textColor="@color/colorGrayText"
+            android:textSize="@dimen/textSize12"
+            android:text="一键复投" />
+    </RelativeLayout>
+</LinearLayout>

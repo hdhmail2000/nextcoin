@@ -1,0 +1,213 @@
+//
+//  TradViewController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/14.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "TradViewController.h"
+#import "XHHPublicItemsView.h"
+#import "XHHTradHomeCell.h"
+#import "XHHTradHomeTableHeadView.h"
+#import "XHHTradExplicitController.h"
+#import "XHHMyDealController.h"
+#import "XHHPublicNavView.h"
+
+#import "ChZMarketListModel.h"
+#import "HCMarketAreaModel.h"
+static NSString *cellIdentifier = @"XHHTradHomeCell";
+
+@interface TradViewController ()<UITableViewDelegate,UITableViewDataSource,XHHPublicItemsViewProtocol,XHHPublicNavViewProtocol>
+
+@property (strong, nonatomic) XHHPublicItemsView          *itemsView;
+
+@property (nonatomic , strong) XHHPublicNavView           *navView;
+
+@property (strong, nonatomic) NSArray                     *dataArray;
+
+@property (strong, nonatomic) UITableView                 *tableView;
+
+@property (strong, nonatomic) NSArray                     *typeArray;
+
+@property (nonatomic , strong) NSString                   *coinId;
+
+@end
+
+@implementation TradViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.noHiddenNav = YES;
+    
+     [self requestCoinList];
+    
+    [self zh_setupUI];
+}
+-(void)zh_setupUI{
+    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+    
+    [self.view addSubview:self.navView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self.view);
+        make.height.mas_equalTo(navHeight +64);
+    }];
+    [self.view addSubview:self.itemsView];
+    [self.itemsView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.navView.mas_bottom);
+        make.height.mas_equalTo(46);
+    }];
+    [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.itemsView.mas_bottom);
+        make.bottom.equalTo(self.view).offset(-navHeight-50);
+    }];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+-(XHHPublicNavView *)navView{
+    if (!_navView) {
+        _navView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPublicNavView" owner:nil options:nil] lastObject];
+        [_navView setLeftButtonTitle:@"交易" image:nil];
+        [_navView setrightButtonTitles:nil images:@[@"trad_home_rightNav"]];
+        _navView.delegete = self;
+    }
+    return _navView;
+}
+-(XHHPublicItemsView *)itemsView{
+    if (!_itemsView) {
+        _itemsView = [[XHHPublicItemsView alloc] init];
+        _itemsView.delegate = self;
+    }
+    return _itemsView;
+}
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.backgroundColor = bgColor;
+        _tableView.rowHeight = 70;
+        [self setupRefreshWithView:self.tableView refreshHeadAction:@selector(beginRefresh) refreshFooterAction:nil];
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//        [_tableView setSeparatorColor:[UIColor clearColor]];
+        [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
+        [_tableView registerNib:[UINib nibWithNibName:@"XHHTradHomeCell" bundle:nil] forCellReuseIdentifier:cellIdentifier];
+    }
+    return _tableView;
+}
+-(void)beginRefresh
+{
+    [self requestMarketList];
+    
+}
+-(void)itemsClickIndex:(NSInteger)index{
+    HCMarketAreaModel *mode = self.typeArray[index];
+    self.coinId = mode.code;
+    [self.tableView.mj_header beginRefreshing];
+    
+}
+- (void)rightButtonActionIndex:(NSInteger)index{
+    XHHMyDealController *vc = [[XHHMyDealController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataArray.count;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    XHHTradHomeCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    ChZMarketListModel *model = self.dataArray[indexPath.row];
+    [cell reloadCellWithModel:model];
+    return cell;
+}
+//-(CGFloat)tableView:(UITableView *)tableView heightF orHeaderInSection:(NSInteger)section{
+//    if ([self.dataArray[section][@"title"] length] == 0) {
+//        return CGFLOAT_MIN;
+//    }else{
+//        return 40;
+//    }
+//}
+//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+//    return CGFLOAT_MIN;
+//}
+//-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+//    XHHTradHomeTableHeadView *v = [[[NSBundle mainBundle] loadNibNamed:@"XHHTradHomeTableHeadView" owner:nil options:nil] lastObject];
+//    if (section == 0) {
+//        v.lineView.hidden = YES;
+//    }
+//    v.titleLable.text = self.dataArray[section][@"title"];
+//    if (v.titleLable.text.length > 0) {
+//        return v;
+//    }else{
+//        return nil;
+//    }
+//}
+//-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
+//    return nil;
+//}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    ChZMarketListModel *model = self.dataArray[indexPath.row];
+    XHHTradExplicitController *vc = [[XHHTradExplicitController alloc] init];
+    vc.model = model;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+-(void)requestCoinList{
+    @weakify(self);
+    [ChZHomeRequest requestAreaSuccessBlock:^(id dataSource)
+     {
+         @strongify(self);
+         self.typeArray = dataSource;
+         NSMutableArray *itemArray = [NSMutableArray array];
+         for(HCMarketAreaModel *mode in dataSource)
+         {
+             [itemArray addObject:mode.name];
+         }
+         [self.itemsView zh_setupUIWithItems:itemArray];
+         if (self.typeArray.count)
+         {
+             HCMarketAreaModel *mode = self.typeArray[0];
+             self.coinId = mode.code;
+         }
+         [self.tableView.mj_header beginRefreshing];
+     } errorBlock:^(int code, NSString *error)
+     {
+         ChZ_MBError(error)
+     }];
+}
+-(void)requestMarketList{
+    @weakify(self);
+    [ChZHomeRequest requestAreaList:self.coinId successBlock:^(id dataSource)
+     {
+         @strongify(self);
+         self.dataArray = dataSource;
+         [self.tableView reloadData];
+         [self.tableView.mj_header endRefreshing];
+     } errorBlock:^(int code, NSString *error)
+     {
+         @strongify(self);
+         [self.tableView.mj_header endRefreshing];
+         
+     }];
+    
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

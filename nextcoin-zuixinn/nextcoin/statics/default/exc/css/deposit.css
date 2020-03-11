@@ -1,0 +1,773 @@
+.dw {
+    min-width: 1200px;
+    margin-bottom: 15px;
+}
+.dw-title {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    color: #333;
+}
+.dw-body>.f-fl, .dw-body>.f-fr {
+    width: 638px;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    min-height: 200px;
+}
+.depositBox .asset-info, .withdrawBox .asset-info {
+    padding: 38px 58px 20px;
+}
+.selectBox {
+    position: relative;
+    width: 100%;
+    padding-right: 35px;
+    box-sizing: border-box;
+    height: 34px;
+}
+.selectBox.selectAsset {
+    padding-right: 0;
+}
+.selectBox .selectIpt {
+    background: #fff;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    padding: 0 10px;
+    line-height: 32px;
+}
+.selectBox .selectIpt {
+    font-size: 12px;
+    color: #666;
+}
+.selectBox.selectAsset .selectIpt {
+    padding-right: 35px;
+}
+.selectBox .selectIpt {
+    font-size: 12px;
+    color: #666;
+}
+.selectBox>.iconfont {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 34px;
+    height: 34px;
+    border: 1px solid #e6e6e6;
+    text-align: center;
+    line-height: 32px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #999;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-right: 0;
+    background: #fff;
+}
+.selectBox.selectAsset>.iconfont {
+    background: none;
+    border: none;
+}
+.selectBox ul {
+    width: 100%;
+    max-height: 314px;
+    overflow-y: auto;
+    position: absolute;
+    left: 0;
+    top: 35px;
+    z-index: 9999;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+.selectBox ul li {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    border-bottom: 1px solid #e6e6e6;
+    cursor: pointer;
+    position: relative;
+}
+.selectBox .filterIpt {
+    height: auto;
+    line-height: 100%;
+    padding: 10px;
+}
+.selectBox ul li:last-of-type {
+    border: none;
+}
+.selectBox .filterIpt input[type=text] {
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #e6e6e6;
+    padding: 0 10px;
+    height: 28px;
+}
+.dw-body>.f-fr {
+    width: 538px;
+}
+.lists .lists-title, .lists .lists-body li {
+    line-height: 30px;
+    border-bottom: 1px solid #f0f0f0;
+}
+.lists .lists-title {
+    background: #f4f4f4;
+    font-size: 12px;
+    color: #999;
+    border: none;
+}
+.lists.deposit .lists-title, .lists.deposit .lists-body li {
+    padding: 0 14px;
+}
+.lists .lists-title a.more, .lists .lists-title a.more:visited {
+    float: right;
+    color: #333;
+    line-height: 30px;
+}
+.deposit-fail {
+    margin: 7px 10px;
+    line-height: 14px;
+    text-align: center;
+    border-right: 1px solid #dcdcdc;
+    padding: 0 10px;
+    position: relative;
+    cursor: pointer;
+    color: #e8b342;
+}
+.deposit-tip {
+    position: absolute;
+    top: 23px;
+    left: 50%;
+    font-size: 12px;
+    text-align: left;
+    color: #333;
+    width: 265px;
+    padding: 10px 16px;
+    background: #fff;
+    line-height: 20px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    display: none;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    z-index: 99px;
+}
+.deposit-tip span {
+    display: block;
+    width: 0;
+    height: 0;
+    border-width: 0 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent #fff;
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    margin-left: -10px;
+}
+.deposit-tip em {
+    display: block;
+    width: 0;
+    height: 0;
+    border-width: 0 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent #fff;
+    position: absolute;
+    top: 5px;
+    left: -10px;
+}
+.deposit-tip a {
+    color: #e8b342;
+    margin-left: 5px;
+}
+.nodata {
+    text-align: center;
+    margin: 20px;
+}
+.nodata img {
+    width: 60px;
+}
+.nodata p {
+    font-size: 14px;
+    color: #999;
+    margin: 10px 0 0 10px;
+    line-height: 100%;
+}
+.scrollStyle::-webkit-scrollbar {
+    width: 5px;
+}
+.selectBox ul li.coinInfo img {
+    vertical-align: text-bottom;
+    height: 16px;
+    margin-right: 3px;
+    position: absolute;
+    left: 10px;
+    top: 7px;
+}
+.selectBox ul li.coinInfo strong {
+    font-size: 16px;
+}
+.selectBox ul li.coinInfo span {
+    font-size: 14px;
+}
+.selectBox ul li.coinInfo span.notallowed {
+    float: right;
+    font-size: 12px;
+    color: #999;
+    margin-right: 35px;
+}
+.selectBox ul li.coinInfo{
+    padding-left:32px
+}
+.depositBox .curAsset, .withdrawBox .curAsset {
+    width: 300px;
+    margin: 5px 0 20px;
+}
+caption, th {
+    text-align: left;
+    font-weight: normal;
+}
+.depositBox .curAsset td, .withdrawBox .curAsset td {
+    text-align: right;
+}
+.depositBox .curAsset th, .depositBox .curAsset td, .withdrawBox .curAsset td, .withdrawBox .curAsset th {
+    padding: 2px 0;
+    font-size: 12px;
+    color: #666;
+}
+.asset-info .binanceInfo, .asset-info .binanceInfo:visited {
+    font-size: 12px;
+    color: #333;
+    position: absolute;
+    right: 0;
+    top: 42px;
+}
+.asset-info .binanceInfo .iconfont {
+    font-size: 14px;
+    color: #e8b342;
+    margin-right: 3px;
+}
+.speBox {
+    background: #f8f8f8;
+    border: 1px solid #e6e6e6;
+    padding: 15px 20px;
+}
+.importants {
+    font-size: 12px;
+    color: #b48728;
+}
+.importants strong {
+    display: inline-block;
+    margin-bottom: 6px;
+}
+.importants ul {
+    padding-left: 14px;
+}
+.importants ul li {
+    list-style-type: disc;
+    line-height: 14px;
+    margin-bottom: 6px;
+}
+.depositAddress {
+    margin-top: 15px;
+}
+.depositAddress strong {
+    font-size: 12px;
+    color: #333;
+    line-height: 100%;
+    display: inline-block;
+}
+.depositAddress .chargeAddress {
+    display: inline-block;
+    width: 100%;
+    border-sizing: border-box;
+    border: 1px solid #e6e6e6;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    background: #f8f8f8;
+    margin: 6px 0;
+    line-height: 32px;
+    padding: 5px 10px;
+}
+.depositAddress .chargeAddress.text {
+    box-sizing: border-box;
+    word-break: break-all;
+    text-align: left;
+    padding: 12px 24px;
+    line-height: 18px;
+}
+.depositAddress .btn {
+    background: #fff;
+    font-size: 12px;
+}
+.depositAddress .f-fr.btn {
+    margin-left: 5px;
+    display: block;
+}
+.f-cb:after, .f-cbli li:after {
+    display: block;
+    clear: both;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    content: ".";
+}
+.tips {
+    margin-top: 20px;
+}
+.tips strong {
+    color: #333;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 6px;
+}
+.tips ul {
+    padding-left: 15px;
+}
+.tips ul li {
+    list-style-type: disc;
+    font-size: 12px;
+    color: #666;
+    line-height: 20px;
+}
+.yellow {
+    color: #e8b342!important;
+}
+.asset-link {
+    padding: 25px 58px;
+    border-top: 1px solid #e6e6e6;
+}
+.asset-link strong {
+    font-size: 14px;
+    color: #333;
+}
+.asset-link .pairs {
+    margin-top: 10px;
+}
+.asset-link .pairs a, .asset-link .pairs a:visited {
+    font-size: 12px;
+    color: #333;
+    margin-right: 25px;
+}
+
+.coinInfo-data{
+    display: none;
+}
+.withdrawalForm {
+    margin-top: 15px;
+}
+.withdrawalForm .label {
+    line-height: 100%;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 6px;
+}
+.withdrawalForm .label strong {
+    color: #333;
+}
+.selectBox {
+    position: relative;
+    width: 100%;
+    padding-right: 35px;
+    box-sizing: border-box;
+    height: 34px;
+}
+.selectBox .selectIpt {
+    background: #fff;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    padding: 0 10px;
+    line-height: 32px;
+}
+.selectBox .selectIpt {
+    font-size: 12px;
+    color: #666;
+}
+.withdrawalForm .filed input[type="text"] {
+    background: #fff;
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    padding: 0 10px;
+    line-height: 32px;
+}
+.f-nomargin {
+    margin: 0!important;
+}
+.Validform_checktip {
+    margin-left: 68px;
+    color: #999;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+}
+.Validform_wrong {
+    color: #ff5252;
+    white-space: nowrap;
+}
+.withdrawalForm .Validform_checktip {
+    height: 24px;
+    line-height: 24px;
+}
+.label{
+    background: transparent;
+}
+.selectBox ul {
+    width: 100%;
+    max-height: 314px;
+    overflow-y: auto;
+    position: absolute;
+    left: 0;
+    top: 35px;
+    z-index: 9999;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+.selectBox ul li {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    border-bottom: 1px solid #e6e6e6;
+    cursor: pointer;
+    position: relative;
+}
+.selectBox ul li:last-of-type {
+    border: none;
+}
+.selectBox ul li.address, .selectBox ul li.addAddress {
+    font-size: 12px;
+    color: #333;
+    padding-right: 31px;
+}
+.selectBox ul li.addAddress .iconfont {
+    vertical-align: middle;
+    margin-top: -2px;
+    display: inline-block;
+}
+.withdrawalForm .filed .newAddress {
+    margin-top: 3px;
+    display: none;
+}
+.withdrawalForm .filed input[type="text"] {
+    background: #fff;
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    padding: 0 10px;
+    line-height: 32px;
+}
+.withdrawalForm .filed input[type="text"] {
+    background: #fff;
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    padding: 0 10px;
+    line-height: 32px;
+}
+.inputGroup {
+    padding-right: 74px;
+    position: relative;
+    line-height: 34px;
+}
+.withdrawalForm .filed input[type="text"] {
+    background: #fff;
+    display: inline-block;
+    width: 100%;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    padding: 0 10px;
+    line-height: 32px;
+    border-radius: 0;
+}
+.inputGroup .unit {
+    display: inline-block;
+    width: 74px;
+    height: 34px;
+    box-sizing: border-box;
+    text-align: center;
+    background: #f3f3f3;
+    border: 1px solid #e6e6e6;
+    border-left: none;
+    font-size: 12px;
+    color: #999;
+    font-weight: bold;
+    position: absolute;
+    right: 0;
+    top: 0px;
+}
+.available {
+    height: 30px;
+    line-height: 30px;
+    background: #fff;
+    position: absolute;
+    top: 2px;
+    right: 84px;
+    font-size: 12px;
+    color: #999;
+}
+.available label {
+    font-weight: normal!important;
+    color: #999!important;
+}
+.withdrawalForm .filed label {
+    font-weight: bold;
+    color: #333;
+    display: inline;
+}
+.available span {
+    display: inline-block;
+}
+.btn {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    padding: 9px 12px;
+    border: 1px solid #d4d4d4;
+    line-height: 100%;
+    background: #f5f5f5;
+}
+.btn-block {
+    padding: 9px 0;
+    width: 100%;
+    text-align: center;
+}
+.btn-orange {
+    background: #e8b342!important;
+    border-color: #e8b342!important;
+    color: #fff!important;
+}
+.withdrawalForm .btn-block {
+    font-size: 14px;
+    color: #fff;
+}
+.withdrawalForm .total {
+    font-size: 12px;
+    color: #333;
+    line-height: 100%;
+    margin-bottom: 15px;
+}
+.withdrawalForm .filed input[type="text"].disabled {
+    background: #f3f3f3!important;
+}
+.dw-title {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    font-size: 16px;
+    color: #333;
+}
+.history .lists-type {
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+.history .lists-type .type {
+    display: inline-block;
+    height: 30px;
+    box-sizing: border-box;
+    line-height: 30px;
+    padding: 0 20px;
+    font-size: 14px;
+    color: #666;
+    border: 1px solid #e6e6e6;
+    background: #fff;
+    margin-left: -1px;
+    cursor: pointer;
+}
+.history .lists-type .type:first-of-type {
+    margin: 0;
+}
+.history .lists-type .type.cur {
+    background: #e8b342;
+    color: #fff;
+    border-color: #e8b342;
+}
+.history .lists-type .downLoad {
+    float: right;
+    margin-top: 6px;
+}
+.history .lists-type .downLoad a {
+    font-size: 12px;
+    color: #333;
+}
+.history .lists-type .downLoad .iconfont {
+    font-size: 16px;
+    vertical-align: middle;
+}
+.history .lists {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+}
+.lists .lists-body li.th {
+    background: #fafafa;
+    color: #999;
+    padding: 0;
+}
+.lists .lists-body li>div {
+    float: left;
+    font-size: 12px;
+    color: #666;
+    text-align: left;
+    padding: 0 14px;
+}
+.lists .lists-body li.th>div {
+    border-right: 1px solid #e6e6e6;
+    padding: 0 12px;
+    color: #999;
+}
+.lists .lists-body li>div.status {
+    width: 110px;
+}
+.history .lists .lists-body li>div {
+    box-sizing: border-box;
+}
+.history .lists .lists-body li>div.status {
+    width: 140px;
+}
+.history .lists .lists-body li>div.name {
+    width: 112px;
+}
+.history .lists .lists-body li>div.amount {
+    width: 170px;
+}
+.history .lists .lists-body li>div.date {
+    width: 152px;
+}
+.history .lists .lists-body li>div.info {
+    width: 505px;
+}
+.history .lists .lists-body li>div.ctr {
+    width: 108px;
+}
+.itemBox {
+    width: 100%;
+    margin-bottom: 45px;
+}
+.itemBox .itemTitle {
+    font-size: 16px;
+    color: #333;
+    height: 42px;
+    line-height: 42px;
+    position: relative;
+}
+
+.table th, .table td {
+    padding: 11px 15px;
+    line-height: 100%;
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    border-top: 1px solid #e6e6e6;
+}
+.table th {
+    color: #999;
+    background: #fafafa;
+    border: none;
+}
+.table-head th {
+    border: 1px solid #e6e6e6;
+    border-bottom: none;
+}
+.table.table-striped th, .table.table-striped td {
+    padding: 0 10px !important;
+    height: 29px;
+    line-height: 29px;
+}
+.filters {
+    margin-bottom: 7px;
+    position: relative;
+}
+.filters .filed {
+    float: left;
+    margin-right: 15px;
+}
+.filters .filed label {
+    line-height: 26px;
+    font-size: 12px;
+    color: #666;
+    display: inline;
+}
+.filters .date {
+    width: 108px!important;
+    background: url(/resources/img/date.png)no-repeat 97px center;
+    padding-right: 21px;
+    outline:0;
+}
+.filters .filed input[type=text] {
+    display: inline-block;
+    width: 73px;
+    height: 24px;
+    line-height: 24px;
+    padding: 0 5px;
+    border: 1px solid #d4d4d4;
+    vertical-align: middle;
+    margin: 0;
+}
+.filters .filed .select {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+.filters .filed .select ul {
+    box-sizing: border-box;
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    width: 100%;
+    max-height: 140px;
+    background: #fff;
+    border: 1px solid #d4d4d4;
+    overflow-y:scroll;
+    z-index: 100;
+}
+.filters .filed .select ul li {
+    line-height: 24px;
+    border-bottom: 1px solid #d4d4d4;
+    cursor: pointer;
+    padding: 0 5px;
+    font-size: 13px;
+    color: #333;
+}
+.filters .btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    color: #333;
+    vertical-align: middle;
+    margin-right: 5px;
+    background: none;
+}
+.filters .filed .select .iconfont {
+    position: absolute;
+    right: 4px;
+    top: 5px;
+    font-size: 14px;
+    margin-right: 0;
+    color: #333;
+}
+::-webkit-scrollbar-track {
+    /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); */
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    background: #e6e6e6;
+}
+.tradeHistory-export {
+    position: absolute;
+    top: 5px;
+    right: 0;
+}

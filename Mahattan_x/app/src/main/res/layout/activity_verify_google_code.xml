@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_page_bg"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_actionbar" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="请输入有效的谷歌验证码"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSize14" />
+
+    <com.ifenduo.mahattan_x.widget.PasswordEditText
+        android:id="@+id/psd_input_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginTop="70dp"
+        android:inputType="number"
+        app:bottomLineColorHasValue="@color/colorTabTextSelected"
+        app:bottomLineColorNormal="@color/colorTabTextNormal"
+        app:maxCount="6"
+        app:pointColor="@color/colorTabTextSelected"
+        app:psdType="bottomLine" />
+</LinearLayout>

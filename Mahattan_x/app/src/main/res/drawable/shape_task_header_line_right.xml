@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:gravity="left">
+        <shape android:shape="oval">
+            <padding android:left="10dp" />
+            <size
+                android:width="4dp"
+                android:height="4dp" />
+            <solid android:color="@color/colorWhite" />
+        </shape>
+    </item>
+
+    <item android:gravity="right|center_vertical" android:height="1dp">
+        <shape android:shape="rectangle">
+            <padding android:right="10dp" />
+            <size android:height="1dp" />
+            <gradient
+                android:startColor="@color/colorWhite"
+                android:endColor="#20273A" />
+        </shape>
+    </item>
+
+</layer-list>

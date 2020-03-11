@@ -1,0 +1,142 @@
+//
+//  XHHMyRleaseListViewController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/9/11.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHMyRleaseListViewController.h"
+#import "XHHTradReleaseView.h"
+
+@interface XHHMyRleaseListViewController ()
+
+@property (strong, nonatomic) XHHTradReleaseView          *releaseView;
+
+@end
+
+@implementation XHHMyRleaseListViewController
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    for(UIView *v in self.slideSwitch.subviews)
+    {
+        for(UIView *t in v.subviews){
+            if ([t isKindOfClass:[UIScrollView class]])
+            {
+                UIScrollView *scrll = (UIScrollView *)t;
+                scrll.scrollEnabled = NO;
+                
+            }
+        }
+    }
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    for(UIView *v in self.slideSwitch.subviews){
+        
+        for(UIView *t in v.subviews){
+            if ([t isKindOfClass:[UIScrollView class]])
+            {
+                UIScrollView *scrll = (UIScrollView *)t;
+                scrll.scrollEnabled = YES;
+                
+            }
+        }
+    }
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self.releaseView.tableView.mj_header beginRefreshing];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orderCanel) name:@"ORDERCANLE" object:nil];
+    
+    [self zh_setupUI];
+}
+-(void)orderCanel{
+    
+    [self.releaseView.tableView.mj_header beginRefreshing];
+}
+
+-(void)zh_setupUI{
+    //背景滚动视图
+    [self.view addSubview:self.releaseView];
+    [self.releaseView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+-(XHHTradReleaseView *)releaseView{
+    if (!_releaseView) {
+        _releaseView = [[XHHTradReleaseView alloc] init];
+        [self setupRefreshWithView:_releaseView.tableView refreshHeadAction:@selector(headRefresh) refreshFooterAction:@selector(footRefresh)];
+        @weakify(self);
+        _releaseView.downLineIdBlock = ^(NSString *downLineId)
+        {
+            @strongify(self);
+            [self requestDownLineReleaseId:downLineId];
+        };
+    }
+    return _releaseView;
+}
+-(void)headRefresh{
+    [self requestMyReleas:YES];
+    
+}
+-(void)footRefresh{
+    [self requestMyReleas:NO];
+}
+-(void)requestMyReleas:(BOOL)isRefresh
+{
+    int page = 0;
+    if (isRefresh == NO) {
+        page = (int) ceil(self.releaseView.dataArray.count/10.0f) + 1;
+    }
+    @weakify(self);
+    [ChZHomeRequest requestC2CMyReleaseUid:[APPControl sharedAPPControl].user.fid page:page successBlock:^(NSArray *array) {
+        @strongify(self);
+        if (isRefresh) [self.releaseView.dataArray removeAllObjects];
+        if (array)[self.releaseView.dataArray addObjectsFromArray:array];
+        [self.releaseView.tableView reloadData];
+        [self.releaseView.tableView.mj_footer endRefreshing];
+        [self.releaseView.tableView.mj_header endRefreshing];
+    } errorBlock:^(int code, NSString *error) {
+        @strongify(self);
+        [self.releaseView.tableView.mj_footer endRefreshing];
+        [self.releaseView.tableView.mj_header endRefreshing];
+    }];
+}
+-(void)requestDownLineReleaseId:(NSString *)releasId{
+    
+    @weakify(self);
+    [self showTheAlertVCWithStyle:UIAlertControllerStyleAlert title:@"提示" message:@"是否确定下线?" title1:@"取消" action1:^{
+        
+    } title2:@"下线" action2:^{
+        ChZ_MBMsg(nil);
+        [ChZHomeRequest requestReleaseDownLineUid:[APPControl sharedAPPControl].user.fid releaseId:releasId successBlock:^(id dataSource) {
+            @strongify(self);
+            ChZ_MBDismssSuccess(@"下线成功");
+            [self requestMyReleas:YES];
+        } errorBlock:^(int code, NSString *error)
+         {
+             ChZ_MBDismssError(error);
+         }];
+    } title3:nil action3:nil completion:nil];
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

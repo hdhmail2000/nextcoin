@@ -1,0 +1,256 @@
+{template "header.html" }
+{template "top.html" }
+		<style type="text/css">
+        	       .content-form-hint{
+        	           color: #E53434;
+        	           font-size: 12px;
+        	           margin-top: 10px;
+        	       }
+        	       .content-form-item select{
+        	           background: #27262E;
+        	           width: 100%;
+        	           border: 1px solid #474652;
+        	           height: 48px;
+        	           line-height: 48px;
+        	       }
+        	       .content-form-code{
+        	           position: absolute;
+        	           right: 10px;
+        	           top: 18px;
+        	           font-size: 12px;
+        	           color: #3473C9;
+        	       }
+        	       .content-form-code:hover{
+        	           cursor: pointer;
+        	           text-decoration: underline;
+        	       }
+        </style>
+
+		<input type="hidden" id="userBankId" value="0">
+        <div class="container" style="min-height: 800px;padding-bottom: 60px;">
+            <div class="row">
+                <div class="col-xs-12 bind-header">
+                    <div class="col-xs-12 bind-header-tetil">
+                        <h2>{$finance.withdraw_addCard}</h2>
+                    </div>
+                    <div class="col-xs-12 bind-header-nav">
+                        <ol class="breadcrumb">
+                          <li><a href="/index.php?s=exc&c=financeController">{$finance.account_center}</a></li>
+                          <li class="active">{$finance.withdraw_addCard}</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 content-form-wrap">
+                    <div class="col-xs-12 content-form-tetil">
+                        <h3>{$finance.withdraw_addCard}</h3>
+                    </div>
+                    <div class="col-xs-12 content-form">
+                        <div class="clearfix content-form-box">
+                            <div class="col-xs-12 content-form-item">
+                                <p>{$finance.withdraw_accountName}</p>
+                                <label for="">
+                                    <input type="text"  id="payeeAddr" value=""/>
+                                </label>
+                                <div class="content-form-hint">* 银行卡账户名必须与您的实名认证一致</div>
+                            </div>
+                            <div class="col-xs-12 content-form-item">
+                                <p>{$finance.withdraw_cardNumber}</p>
+                                <label for="">
+                                    <input type="text"  id="withdrawAccountAddr" value=""/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 content-form-item">
+                                <p>{$finance.withdraw_resureCard}</p>
+                                <label for="">
+                                    <input type="text" id="withdrawAccountAddr2" value=""/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 content-form-item">
+                                <p>{$finance.withdraw_openBank}</p>
+                                <label for="">
+                                    <select id="openBankTypeAddr">
+                                        	<option value="-1">{$finance.withdraw_chioceBank}</option>
+                                        	{loop $data.bankTypes $bank}
+                                        <option value="{{$bank['fid']}}">{$bank['fcnname']}</option>
+                                        {/loop}
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 content-form-item" id="prov_city">
+                                <p>{$finance.withdraw_openaddress}</p>
+                                <div class="clearfix" style="margin-bottom: 15px;">
+                                    <label class="col-xs-4 add-code-item" style="padding: 0 8px 0 0;">
+                                        <select name="" id="prov">
+		                                    <option selected>{$finance.withdraw_chioce}</option>
+		                                </select>
+                                    </label>
+                                    <label class="col-xs-4 add-code-item" style="padding: 0 4px 0 4px;">
+                                        <select name="" id="city">
+		                                    <option >{$finance.withdraw_chioce}</option>
+		                                </select>
+                                    </label>
+                                    <label class="col-xs-4 add-code-item" style="padding: 0 0px 0 8px;">
+                                        <select name="" id="dist">
+		                                    <option >{$finance.withdraw_chioce}</option>
+		                                </select>
+                                    </label>
+                                </div>
+                                <label for="">
+                                    <input type=""  id="address" value="" placeholder="{$finance.withdraw_placeholder1}"/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 content-form-item">
+                                <p>{$finance.withdraw_smsCode}</p>
+                                <label for="" style="position: relative;">
+                                    <input type="" name="" id="addressPhoneCode" value="" style="padding-right: 80px;"/>
+                                    <span type="button" id="send-msg" class="msg-button-inline" style="position: absolute;right:10px; top: 18px;cursor: pointer; ">{$finance.withdraw_getSms}</span>
+                                    <!--<span class="content-form-code">发送短信</span>-->
+                                </label>
+                            </div>
+                            <div class="col-xs-12 content-form-item">
+                                <p>{$finance.withdraw_topCode}</p>
+                                <label for="">
+                                    <input type="text" id="addressTotpCode"  />
+                                </label>
+                            </div>
+                            <div class="model-form-item">
+		                        <p id="binderrortips" style="font-size: 12px; color:red;"></p>
+		                    </div>
+                            <div class="col-xs-12 content-form-item">
+                                <button type="button" class="content-form-btn" id="withdrawCnyAddrBtn1">{$finance.withdraw_submit}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script src="{HOME_THEME_PATH}exc/js/plugin/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/comm/util.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/plugin/jquery.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/finance/account.withdraw.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/custom.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/finance/jquery.cityselect.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/finance/city.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+//      		$('#send-msg').click(function(){
+//		        var obj = this;
+//		        var url = "/user/send_bank_sms.html";
+//		        var param = {
+//		
+//		        };
+//		        var callback = function(data) {
+//		            if( data.code ==200){
+//		                util.counter(obj,120,'重新发送');
+//		               util.layerAlert('','发送成功',1,function(){})
+//		            } else{
+//		                util.layerAlert('',data.msg,2,function(){})
+//		            }
+//		        };
+//		        util.network({url : url,
+//		            param : param,
+//		            success : callback});
+//		    });
+		    
+
+		    var withdraw = {
+			    cny : {
+			        addCnyAddress : function(that) {
+			            var payeeAddr = $("#payeeAddr").val();
+			            var openBankTypeAddr = $("#openBankTypeAddr").val();
+			            var withdrawAccount = util.trim($("#withdrawAccountAddr").val());
+			            var address = util.trim($("#address").val());
+			            var userBankId = util.trim($("#userBankId").val());
+			            var prov = util.trim($("#prov").val());
+			            var city = util.trim($("#city").val() == null ? "" : $("#city").val());
+			            var dist = util.trim($("#dist").val() == null ? "" : $("#dist").val());
+			            var totpCode = 0;
+			            var phoneCode = 0;
+			            if (payeeAddr == "") {
+			                util.showerrortips("binderrortips", util.getLan("finance.tips.1"));
+			                return;
+			            }
+			            if (openBankTypeAddr == -1) {
+			                util.showerrortips("binderrortips", util.getLan("finance.tips.2"));
+			                return;
+			            }
+			            var reg = /^(\d{16}|\d{17}|\d{18}|\d{19})$/;
+			            if (!reg.test(withdrawAccount)) {
+			                // 银行卡号不合法
+			                util.showerrortips("binderrortips", util.getLan("finance.tips.3"));
+			                return;
+			            }
+			            if (withdrawAccount == "" || withdrawAccount.length > 200) {
+			                util.showerrortips("binderrortips", util.getLan("finance.tips.3"));
+			                return;
+			            }
+			            var withdrawAccount2 = util.trim($("#withdrawAccountAddr2").val());
+			            if (withdrawAccount != withdrawAccount2) {
+			                util.showerrortips("binderrortips", util.getLan("finance.tips.5"));
+			                return;
+			            }
+			            if ((prov == "" || prov == "请选择") || (city == "" || city == "请选择") || address == "") {
+			                util.showerrortips("binderrortips", util.getLan("finance.tips.6"));
+			                return;
+			            }
+			            if (address.length > 300) {
+			                util.showerrortips("binderrortips", util.getLan("finance.tips.6"));
+			                return;
+			            }
+			            if ($("#addressTotpCode").length > 0) {
+			                totpCode = util.trim($("#addressTotpCode").val());
+			                if (!/^[0-9]{6}$/.test(totpCode)) {
+			                    util.showerrortips("binderrortips", util.getLan("comm.tips.2"));
+			                    $("#addressTotpCode").val("");
+			                    return;
+			                }
+			            }
+			            if ($("#addressPhoneCode").length > 0) {
+			                phoneCode = util.trim($("#addressPhoneCode").val());
+			                if (!/^[0-9]{6}$/.test(phoneCode)) {
+			                    util.showerrortips("binderrortips", util.getLan("comm.tips.3"));
+			                    $("#addressPhoneCode").val("");
+			                    return;
+			                }
+			            }
+			            util.hideerrortips("binderrortips");
+			            var url = "/index.php?s=exc&c=financeController&m=saveBankInfo";
+			            var param = {
+			                account : withdrawAccount,
+			                openBankType : openBankTypeAddr,
+			                totpCode : totpCode,
+			                phoneCode : phoneCode,
+			                address : address,
+			                prov : prov,
+			                city : city,
+			                dist : dist,
+			                payeeAddr : payeeAddr,
+			                bankId : userBankId
+			            };
+			            var callback = function(result) {
+			                if (result.code == 200) {
+			                		layer.msg('添加成功');
+			                    window.location.reload(true);
+			                } else {
+			                    util.showerrortips("binderrortips", result.msg);
+			                }
+			            };
+			            util.network({
+			                             btn : that,
+			                             url : url,
+			                             param : param,
+			                             success : callback,
+			                         });
+			        },
+			    },
+			
+			};
+			
+			$("#withdrawCnyAddrBtn1").on("click", function() {
+		        withdraw.cny.addCnyAddress(this);
+		    });
+		    
+		    
+        </script>
+{template "footer.html" }

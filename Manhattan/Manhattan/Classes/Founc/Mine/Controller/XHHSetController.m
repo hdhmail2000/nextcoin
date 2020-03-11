@@ -1,0 +1,65 @@
+//
+//  XHHSetController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/16.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHSetController.h"
+
+@interface XHHSetController ()
+@property (weak, nonatomic) IBOutlet UILabel *payTypeLable;
+@property (weak, nonatomic) IBOutlet UILabel *currAcountLable;
+
+@end
+
+@implementation XHHSetController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self showAlertTitle];
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning { 
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+-(void)showAlertTitle{
+    NSString *username = [NSString chz_getObjForKey:kv_LOGIN_USERNAME];
+    if (ChZ_StringIsEmpty(username))
+    {
+        if (username.length == 11)
+        {
+            self.currAcountLable.text = [NSString stringWithFormat:@"+86 %@****%@",[username substringToIndex:3],[username substringFromIndex:7]];
+        }
+    }
+}
+- (IBAction)back:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (IBAction)exitOut:(id)sender {
+    [self showTheAlertVCWithStyle:UIAlertControllerStyleAlert title:nil message:@"您确定要退出吗?" title1:@"取消" action1:^{
+        
+    } title2:@"确定" action2:^{
+        [[APPControl sharedAPPControl] toLogin];
+    } title3:nil action3:nil completion:nil];
+    
+    
+}
+- (IBAction)payType:(id)sender {
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

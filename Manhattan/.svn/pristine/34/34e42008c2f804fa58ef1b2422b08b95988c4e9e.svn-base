@@ -1,0 +1,56 @@
+//
+//  XHHSafeCenterController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/16.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHSafeCenterController.h"
+#import "XHHPayPwController.h"
+#import "XHHLoginPwController.h"
+#import "XHHAuthViewController.h"
+#import "XHHAuthViewController.h"
+@interface XHHSafeCenterController ()
+
+@end
+
+@implementation XHHSafeCenterController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+- (IBAction)back:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (IBAction)loginPwAction:(id)sender {
+    XHHLoginPwController *vc = [XHHLoginPwController initWithStoryboard:@"MineStroy"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+- (IBAction)payPwAction:(id)sender {
+    XHHPayPwController *vc = [XHHPayPwController initWithStoryboard:@"MineStroy"];
+    vc.type = 1;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+- (IBAction)authAction:(id)sender {
+    XHHAuthViewController *vc = [XHHAuthViewController initWithStoryboard:@"LoginStroy"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

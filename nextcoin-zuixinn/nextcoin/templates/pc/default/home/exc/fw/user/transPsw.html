@@ -1,0 +1,60 @@
+{template "header.html" }
+{template "top.html" }
+
+		<div class="container" style="min-height: 800px;">
+            <div class="row">
+                <div class="col-xs-12 bind-header">
+                    <div class="col-xs-12 bind-header-tetil">
+                        <h2>{$user.security_setTrade}</h2>
+                    </div>
+                    <div class="col-xs-12 bind-header-nav">
+                        <ol class="breadcrumb">
+                          <li><a href="/index.php?s=exc&c=securityController">{$user.account_security}</a></li>
+                          <li class="active">{$user.security_setTrade}</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-xs-12 bind-form-wrap">
+                    <div class="col-xs-12 bind-form-header">
+                        <h3>{$user.security_setTrade}</h3>
+                    </div>
+                    <div class="col-xs-12 bind-form">
+                        <div class="clearfix">
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_tradePassword}</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="password"  id="unbindtradepass-newpass" value=""/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_reTradePassword}</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="password"  id="unbindtradepass-confirmpass" value=""/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_topCode}</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="text"  id="unbindtradepass-googlecode" value=""/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <button class="bind-form-btn" id="unbindtradepass-Btn">{$user.security_submit}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<script src="{HOME_THEME_PATH}exc/js/plugin/jquery.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="{HOME_THEME_PATH}exc/js/user/user.security.js" type="text/javascript" charset="utf-8"></script>
+<script src="{HOME_THEME_PATH}exc/js/comm/msg.js" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }
+
+

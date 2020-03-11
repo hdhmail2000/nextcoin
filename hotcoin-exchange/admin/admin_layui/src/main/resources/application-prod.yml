@@ -1,0 +1,37 @@
+redis:
+  host: 172.21.225.226
+  port: 6379
+  password: relang123
+  timeout: 5000
+  pool:
+    minIdle: 50
+    maxIdle: 50
+    maxTotal: 200
+    maxWaitMillis: 5000
+    testWhileIdle: true
+    testOnBorrow: true
+    testOnReturn: true
+
+aliyun:
+  mq:
+    accessKey: LTAIstodqiF1WIiq
+    secretKey: oNnb2xKdLJWTySGNaHOymEhw47xtyb
+    onsAddr: http://ap-southeastaddr-internal.aliyun.com:8080/rocketmq/nsaddr4client-internal
+    topic:
+      entrust_state: SG_HOTCOIN_ENTRUST_STATE_RELANG
+      user_action: SG_HOTCOIN_USER_ACTION_RELANG
+      admin_action: SG_HOTCOIN_ADMIN_ACTION_RELANG
+      validate: SG_HOTCOIN_VALIDATE_RELANG
+      score: SG_HOTCOIN_SCORE_RELANG
+    pid:
+      entrustState: PID_SG_HOTCOIN_ENTRUST_STATE_RELANG
+      validate: PID_SG_HOTCOIN_VALIDATE_RELANG
+      score: PID_SG_HOTCOIN_SCORE_RELANG
+      userAction: PID_SG_HOTCOIN_USER_ACTION_RELANG
+      adminAction: PID_SG_HOTCOIN_ADMIN_ACTION_RELANG
+    cid:
+      entrustState: CID_SG_HOTCOIN_ENTRUST_STATE_RELANG
+      validate: CID_SG_HOTCOIN_VALIDATE_RELANG
+      score: CID_SG_HOTCOIN_SCORE_RELANG
+      userAction: CID_SG_HOTCOIN_USER_ACTION_RELANG
+      adminAction: CID_SG_HOTCOIN_ADMIN_ACTION_RELANG

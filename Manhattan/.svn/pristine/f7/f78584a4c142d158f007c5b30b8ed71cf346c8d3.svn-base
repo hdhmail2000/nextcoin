@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ChZPopQRCodeView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YQm-XQ-ghQ">
+                    <rect key="frame" x="47" y="152" width="280" height="362"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5df-u4-cbe">
+                            <rect key="frame" x="0.0" y="0.0" width="280" height="280"/>
+                            <color key="backgroundColor" red="0.73725490199999999" green="0.74509803919999995" blue="0.76862745099999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="5df-u4-cbe" secondAttribute="height" multiplier="1:1" id="ECT-wb-lOl"/>
+                            </constraints>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZMf-V0-ja1">
+                            <rect key="frame" x="0.0" y="280" width="280" height="82"/>
+                            <state key="normal" image="trad_qrcode_colose"/>
+                            <connections>
+                                <action selector="closeAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="smY-ni-frB"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="5df-u4-cbe" firstAttribute="top" secondItem="YQm-XQ-ghQ" secondAttribute="top" id="5ay-UM-SIZ"/>
+                        <constraint firstAttribute="width" secondItem="YQm-XQ-ghQ" secondAttribute="height" multiplier="17:22" id="6Yj-Rb-eLm"/>
+                        <constraint firstAttribute="bottom" secondItem="ZMf-V0-ja1" secondAttribute="bottom" id="GbG-Hq-oCV"/>
+                        <constraint firstItem="5df-u4-cbe" firstAttribute="leading" secondItem="YQm-XQ-ghQ" secondAttribute="leading" id="Qro-YN-DE8"/>
+                        <constraint firstAttribute="width" constant="280" id="RdP-ot-KbR"/>
+                        <constraint firstAttribute="trailing" secondItem="ZMf-V0-ja1" secondAttribute="trailing" id="VHO-Au-muI"/>
+                        <constraint firstAttribute="trailing" secondItem="5df-u4-cbe" secondAttribute="trailing" id="ckb-rq-lL1"/>
+                        <constraint firstItem="ZMf-V0-ja1" firstAttribute="leading" secondItem="YQm-XQ-ghQ" secondAttribute="leading" id="mtu-ob-DS7"/>
+                        <constraint firstItem="ZMf-V0-ja1" firstAttribute="top" secondItem="5df-u4-cbe" secondAttribute="bottom" id="xSY-yD-ux3"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="YQm-XQ-ghQ" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="5W2-10-piy"/>
+                <constraint firstItem="YQm-XQ-ghQ" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="WAI-Eg-uoe"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="contentView" destination="YQm-XQ-ghQ" id="tBb-nj-hs8"/>
+                <outlet property="qrImgView" destination="5df-u4-cbe" id="TdN-l6-5Rp"/>
+            </connections>
+        </view>
+    </objects>
+    <resources>
+        <image name="trad_qrcode_colose" width="40" height="40"/>
+    </resources>
+</document>

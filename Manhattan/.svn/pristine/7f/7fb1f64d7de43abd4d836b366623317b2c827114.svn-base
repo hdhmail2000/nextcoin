@@ -1,0 +1,190 @@
+//
+//  XHHTradExplicit Controller.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/26.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHTradExplicitController.h"
+#import "XHHPublicItemsView.h"
+#import "XHHTadTypeChooesView.h"
+#import "XHHExplictiContentView.h"
+#import "XHHTradDealContentView.h"
+#import "XHHSalesView.h"
+#import "XHHEntrustContentView.h"
+#import "XHHPublicNavView.h"
+@interface XHHTradExplicitController ()<XHHPublicItemsViewProtocol>
+
+@property (strong, nonatomic) UIButton                    *navViewButton;
+
+@property (strong, nonatomic) UIScrollView                *bgScrollView;
+
+@property (strong, nonatomic) XHHPublicItemsView          *itemsView;
+
+@property (nonatomic , strong) XHHPublicNavView           *navView;
+
+@property (strong, nonatomic) XHHExplictiContentView      *explicitContentView;
+
+@property (strong, nonatomic) XHHEntrustContentView       *entrustContentView;
+
+@property (strong, nonatomic) XHHSalesView                *salesView;
+
+@property (strong, nonatomic) XHHTadTypeChooesView        *typeChooseView;
+
+@property (strong, nonatomic) XHHTradDealContentView      *dealContentView;
+
+@property (assign, nonatomic) NSInteger                   currIndex;
+
+
+@end
+
+@implementation XHHTradExplicitController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.currIndex = 10;
+    
+    [self zh_setupUI];
+}
+
+-(void)zh_setupUI{
+    
+    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+    
+    [self.view addSubview:self.navView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self.view);
+        make.height.mas_equalTo(navHeight +64);
+    }];
+    
+    [self.view addSubview:self.itemsView];
+    [self.itemsView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.navView.mas_bottom);
+        make.height.mas_equalTo(46);
+    }];
+    //背景滚动视图
+    UIScrollView *bgScrollView = [[UIScrollView alloc]init];
+    bgScrollView.showsVerticalScrollIndicator = NO;
+    [self.view addSubview:bgScrollView];
+    self.bgScrollView = bgScrollView;
+    [bgScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.itemsView.mas_bottom);
+        make.bottom.equalTo(self.view).offset(-navHeight);
+    }];
+    
+    [bgScrollView addSubview:self.explicitContentView];
+    [self.explicitContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.bottom.right.equalTo(bgScrollView).insets(UIEdgeInsetsZero);
+        make.width.equalTo(bgScrollView);
+        make.bottom.equalTo(self.explicitContentView.bottomBuyView);
+    }];
+}
+-(XHHPublicNavView *)navView{
+    if (!_navView) {
+        _navView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPublicNavView" owner:nil options:nil] lastObject];
+        [_navView setLeftButtonTitle:@"BTC/USDT" image:@"public_nav_leftBack"];
+    }
+    return _navView;
+}
+-(XHHPublicItemsView *)itemsView{
+    if (!_itemsView) {
+        _itemsView = [[XHHPublicItemsView alloc] init];
+        [_itemsView zh_setupUIWithItems:@[@"详情",@"交易",@"当前委托",@"成交记录"]];
+        _itemsView.delegate = self;
+    }
+    return _itemsView;
+}
+-(XHHExplictiContentView *)explicitContentView{
+    if (!_explicitContentView) {
+        _explicitContentView = [[XHHExplictiContentView alloc] init];
+        _explicitContentView.modle = self.model;
+        [_explicitContentView configureData];
+    }
+    return _explicitContentView;
+}
+-(XHHEntrustContentView *)entrustContentView{
+    if (!_entrustContentView) {
+        _entrustContentView = [[XHHEntrustContentView alloc] init];
+    }
+    return _entrustContentView;
+}
+-(XHHTradDealContentView *)dealContentView{
+    if (!_dealContentView) {
+        _dealContentView = [[XHHTradDealContentView alloc] init];
+    }
+    return _dealContentView;
+}
+-(XHHTadTypeChooesView *)typeChooseView{
+    if (!_typeChooseView) {
+        _typeChooseView = [[XHHTadTypeChooesView alloc] init];
+    }
+    return _typeChooseView;
+}
+-(XHHSalesView *)salesView{
+    if (!_salesView) {
+        _salesView = [[XHHSalesView alloc] init];
+    }
+    return _salesView;
+}
+-(void)itemsClickIndex:(NSInteger)index{
+    if (self.currIndex == index) {
+        return;
+    }
+    for(UIView *view in self.bgScrollView.subviews){
+        [view removeFromSuperview];
+    }
+    if (index == 0) {
+        [self.bgScrollView addSubview:self.explicitContentView];
+        [self.explicitContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.bottom.right.equalTo(self.bgScrollView).insets(UIEdgeInsetsZero);
+            make.width.equalTo(self.bgScrollView);
+            make.bottom.equalTo(self.explicitContentView.bottomBuyView);
+        }];
+        
+    }else if (index == 1){
+        [self.bgScrollView addSubview:self.salesView];
+        [self.salesView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.bottom.right.equalTo(self.bgScrollView).insets(UIEdgeInsetsZero);
+            make.width.equalTo(self.bgScrollView);
+            make.bottom.mas_equalTo(self.salesView.volumeView);
+        }];
+        
+    }else if (index == 2){
+        [self.bgScrollView addSubview:self.entrustContentView];
+        [self.entrustContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.bottom.right.equalTo(self.bgScrollView).insets(UIEdgeInsetsZero);
+            make.width.equalTo(self.bgScrollView);
+            make.bottom.mas_equalTo(self.entrustContentView.tableView);
+        }];
+        
+    }else{
+        [self.bgScrollView addSubview:self.dealContentView];
+        [self.dealContentView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.bottom.right.equalTo(self.bgScrollView).insets(UIEdgeInsetsZero);
+            make.width.equalTo(self.bgScrollView);
+            make.bottom.mas_equalTo(self.dealContentView.tableView);
+        }];
+    }
+    self.currIndex = index;
+   
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

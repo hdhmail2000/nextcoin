@@ -1,0 +1,137 @@
+{template nheader.html}
+{php $_pages=$pages;}
+<div class="page-bar">
+	<ul class="page-breadcrumb mylink">
+		{$menu.link}
+
+	</ul>
+	<ul class="page-breadcrumb myname">
+		{$menu.name}
+	</ul>
+	<div class="page-toolbar">
+		<div class="btn-group pull-right">
+			<button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false" data-hover="dropdown"> {fc_lang('操作菜单')}
+				<i class="fa fa-angle-down"></i>
+			</button>
+			<ul class="dropdown-menu pull-right" role="menu">
+				{loop $menu.quick $t}
+				<li>
+					<a href="{$t.url}">{$t.icon} {$t.name}</a>
+				</li>
+				{/loop}
+				<li class="divider"> </li>
+				<li>
+					<a href="javascript:window.location.reload();">
+						<i class="icon-refresh"></i> {fc_lang('刷新页面')}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<div class="mytopsearch">
+	<form method="post" action="" name="searchform" id="searchform">
+		<label>状态：</label>
+		<label>
+			<select class="form-control" name="fstatus">
+				<option value="-1"> -- </option>
+				<option value="0">待审核</option>
+				<option value="1">审核通过</option>
+				<option value="2">驳回</option>
+				
+			</select>
+		</label>
+		<label>
+			真实姓名
+		</label>
+		<label><input type="text" class="form-control" value="{$fcode}" placeholder="{fc_lang('请输入查找内容')}" name="fcode" /></label>
+		<label><button type="submit" class="btn green btn-sm"> <i class="fa fa-search"></i> {fc_lang('搜索')}</button></label>
+	</form>
+</div>
+
+<form action="" method="post" name="myform" id="myform">
+	<input name="action" id="action" type="hidden" value="del" />
+	<div class="portlet mylistbody">
+		<div class="portlet-body">
+			<div class="table-scrollable">
+
+				<table class="mytable table table-striped table-bordered table-hover table-checkable dataTable">
+
+		<thead>
+		<tr>
+			<th width="10"></th>
+			<th class="{ns_sorting('username')}" name="username" >用户ID</th>
+			<th class="{ns_sorting('groupid')}" name="groupid" >真实姓名</th>
+			<th class="{ns_sorting('experience')}" name="experience">状态</th>
+			<th class="{ns_sorting('score')}" name="score">证件类型</th>
+			<th class="{ns_sorting('money')}" name="money">国家</th>
+			<th class="{ns_sorting('regtime')}" name="regtime" >证件编号</th>
+			<th class="{ns_sorting('regtime')}" name="regtime" >提交时间</th>
+			<th class="{ns_sorting('regtime')}" name="regtime" >审核时间</th>
+			<th class="dr_option">{fc_lang('操作')}</th>
+			<th class="{ns_sorting('regtime')}" name="regtime" >照片信息</th>
+		</tr>
+		</thead>
+		<tbody>
+		{loop $list $t}
+		<tr id="dr_row_{$t.uid}">
+			<td><input name="ids[]" type="checkbox" class="dr_select toggle md-check" value="{$t.uid}" /></td>
+			<td>{$t.fuid}</td>
+			<td>{$t.fname}</td>
+			<td>
+			{if $t.fstatus==0 }
+			&nbsp;<font color=red>待审核</font>
+			{else if $t.fstatus==2 }
+			驳回
+			{else}
+			审核通过
+			{/if}
+			</td>
+			<td>{$t.ftype}</td>
+			<td>{$t.fcountry}</td>
+			<td>{$t.fcode}</td>
+			<td>{$t.fcreatetime}</td>
+			<td>{$t.fupdatetime}</td>
+			<td class="dr_option">
+			{if $t.fstatus==0 }
+			<a href="javascript:identity(1, {$t.fuid});">通过</a>
+			<a href="javascript:identity(2, {$t.fuid});">驳回</a>
+			{else if $t.fstatus==1}
+			<a href="javascript:identity(2, {$t.fuid});">驳回</a>
+			{else if $t.fstatus==2}
+			<a href="javascript:identity(1, {$t.fuid});">通过</a>
+			{/if}
+			</td>
+			<td>
+				<img src="{$t.idCardFmImgURL}" onclick="$('#imgpig').attr('src', '{$t.idCardFmImgURL}');$('#imgpig').show();" style="width: 40px;" />
+				<img src="{$t.idCardZmImgURL}" onclick="$('#imgpig').attr('src', '{$t.idCardZmImgURL}');$('#imgpig').show();" style="width: 40px;" />
+				<img src="{$t.idCardScImgURL}" onclick="$('#imgpig').attr('src', '{$t.idCardScImgURL}');$('#imgpig').show();" style="width: 40px;" />
+			</td>
+		</tr> 
+		{/loop}
+		
+		</tbody>
+		</table>
+		</div>
+	</div>
+</div>
+</form>
+<img style="position: fixed; top:0px; width: 500px;" id='imgpig' onclick="$('#imgpig').hide();" />
+<script>
+	function identity(fstatus, fuid) {
+		$.ajax({
+			url:'/admin.php?c=member_identity&m=identity&fstatus='+fstatus+'&fuid='+fuid,
+			dataType:'json',
+			success: function(res) {
+				if (1 == res.code) {
+					alert(res.msg);
+					location.reload();
+				}
+			}
+		});
+	}
+	
+</script>
+<div id="pages"><a>{fc_lang('共%s条', $param['total'])}</a>{$_pages}</div>
+{template nfooter.html}

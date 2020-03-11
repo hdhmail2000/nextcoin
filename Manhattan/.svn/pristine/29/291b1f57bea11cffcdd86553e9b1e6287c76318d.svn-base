@@ -1,0 +1,120 @@
+//
+//  XHHEntrustContentView.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHEntrustContentView.h"
+#import "XHHEntrustBuyTypeView.h"
+#import "XHHEntrustCell.h"
+#import "XHHMyDealController.h"
+#import "ChZMarketTxsOrderItemModel.h"
+static NSString *cellIndienfiter = @"XHHEntrustCell";
+
+@interface XHHEntrustContentView()<UITableViewDelegate,UITableViewDataSource,XHHEntrustBuyTypeViewProtocol>
+
+@property (strong, nonatomic) XHHEntrustBuyTypeView *typeView;
+
+@property (strong, nonatomic) NSArray               *dataArray;
+
+@end
+
+@implementation XHHEntrustContentView
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+-(instancetype)init{
+    self = [super init];
+    if (self) {
+        [self zh_setupUI];
+    }
+    return self;
+}
+-(void)zh_setupUI{
+    [self addSubview:self.typeView];
+    [self.typeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.top.equalTo(self.typeView.mas_bottom);
+        make.height.mas_equalTo(self.dataArray.count * 123);
+    }];
+}
+
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.rowHeight = 123;
+        [_tableView setSeparatorColor:LineCorlor];
+        _tableView.backgroundColor = bgColor;
+        [_tableView registerNib:[UINib nibWithNibName:@"XHHEntrustCell" bundle:nil] forCellReuseIdentifier:cellIndienfiter];
+    }
+    return _tableView;
+}
+
+-(XHHEntrustBuyTypeView *)typeView{
+    if (!_typeView) {
+        _typeView = [[XHHEntrustBuyTypeView alloc] initWithItems:@[@"全部",@"买入",@"卖出"]];
+        _typeView.delegate = self;
+    }
+    return _typeView;
+}
+-(void)setObjArray:(NSArray *)objArray{
+    _objArray = objArray;
+    self.dataArray = objArray;
+    [self.tableView reloadData];
+}
+-(void)chooseTypeIndex:(NSInteger)index{
+    
+    if (self.objArray == nil || self.objArray.count == 0) {
+        self.objArray = nil;
+        [self.tableView reloadData];
+        return;
+    }
+    if (index == 0) {
+        [self.tableView reloadData];
+        return;
+    }
+    NSMutableArray *tempArray = [NSMutableArray array];
+    for (ChZMarketTxsOrderItemModel *model in self.objArray)
+    {
+        if (model.type == index) {
+            [tempArray addObject:model];
+        }
+    }
+    self.dataArray = tempArray;
+    [self.tableView reloadData];
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataArray.count;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    XHHEntrustCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndienfiter];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.nameLable.text = [NSString stringWithFormat:@"%@/%@",self.typeName,self.numberTypeName];
+    ChZMarketTxsOrderItemModel *model = self.dataArray[indexPath.row];
+    [cell reloadCellWithModel:model];
+    [cell IsDealList:NO];
+    return cell;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    XHHMyDealController *vc = [[XHHMyDealController alloc] init];
+    [self.viewController.navigationController pushViewController:vc animated:YES];
+}
+@end

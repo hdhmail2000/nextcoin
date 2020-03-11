@@ -1,0 +1,214 @@
+.alert .iconfont {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 0;
+    right: 10px;
+    text-align: right;
+    line-height: 40px;
+    font-size: 20px;
+}
+.chargeWithdraw-title {
+    box-sizing: border-box;
+    position: relative;
+}
+.chargeWithdraw-title ul.f-fr {
+    position: absolute;
+    right: 0;
+    bottom: -37px;
+}
+.chargeWithdraw-title ul.f-fr li {
+    line-height: 100%;
+    margin-bottom: 10px;
+    color: #666;
+    text-align: right;
+}
+.chargeWithdraw-title ul.f-fr li.total {
+    font-size: 14px;
+}
+.chargeWithdraw-title h3 {
+    font-size: 20px;
+    color: #454545;
+    font-weight: normal;
+    height: 34px;
+    line-height: 34px;
+}
+.checkbox input[type=checkbox] {
+    display: none;
+}
+.checkbox input[type=checkbox]+span {
+    display: inline-block;
+    vertical-align: sub;
+    width: 16px;
+    height: 16px;
+    background: url(../img/checkbox.png)no-repeat 0 -31px;
+    margin-right: 4px;
+}
+.smallAsset>a, .smallAsset>a:visited {
+    color: #666;
+    display: inline-block;
+    padding: 0 15px;
+    text-decoration: none;
+}
+.smallAsset>a:hover span {
+    text-decoration: underline;
+}
+input[type=text]:focus, input[type=password]:focus, input[type=number]:focus, input[type=email]:focus {
+    border-color: #f3ba2e!important;
+}
+.accountInfo-lists {
+    width: 100%;
+    border: 1px solid #e6e6e6;
+}
+.accountInfo-lists li {
+    border-bottom: 1px solid #f5f5f5;
+    padding: 0 28px;
+}
+.accountInfo-lists li {
+    border: none;
+    border-top: 1px solid #f0f0f0;
+    padding: 0;
+}
+.accountInfo-lists li:first-of-type {
+    border-top: none;
+}
+.accountInfo-lists li.th {
+    background: #f4f4f4;
+}
+.accountInfo-lists li .f-cb {
+    padding: 20px 0px;
+    line-height: 34px;
+}
+.accountInfo-lists li .items {
+    padding: 4px 0;
+}
+.accountInfo-lists li .items>div {
+    float: left;
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    box-sizing: border-box;
+    line-height: 22px;
+}
+.accountInfo-lists li .items>div.coin {
+    width: 89px;
+    text-align: left;
+    padding-left: 20px;
+}
+.accountInfo-lists li.th .items>div {
+    color: #999;
+}
+.accountInfo-lists li.th .items>div {
+    color: #999;
+}
+.accountInfo-lists li.th .items>div .iconfont {
+    font-size: 14px;
+    vertical-align: baseline;
+    margin-right: 0;
+}
+.accountInfo-lists li .items>div.fullName {
+    width: 164px;
+}
+.accountInfo-lists li.th .items>div {
+    color: #999;
+}
+.accountInfo-lists li .items>div.total {
+    width: 163px;
+}
+.accountInfo-lists li .items>div.useable {
+    width: 163px;
+}
+.accountInfo-lists li .items>div.locked {
+    width: 163px;
+}
+.accountInfo-lists li .items>div.equalValue {
+    width: 163px;
+}
+.accountInfo-lists li .items>div.f-right {
+    padding-right: 18px;
+}
+.accountInfo-lists li .items>div.action {
+    width: 295px;
+}
+.accountInfo-lists li .items>div .btn {
+    display: inline-block;
+    min-width: 70px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+    color: #666;
+    border: 1px solid #e5e7ea;
+    padding: 0 2px;
+    margin-left: 6px;
+    background: #fff;
+}
+.accountInfo-lists li .items>div.coin img {
+    vertical-align: middle;
+    height: 16px;
+    margin: -4px 6px 0 0;
+}
+.chargeWithdraw {
+    margin-bottom: 45px;
+}
+.checkbox input[type=checkbox]:checked+span {
+    background-position: 0 0px;
+}
+.accountInfo-lists li .items>div.action .enableTip {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.accountInfo-lists li .items>div.action .enableTip .iconfont {
+    color: #b48728;
+    margin-right: 0;
+}
+.accountInfo-lists li .items>div.action .enableTip p {
+    position: absolute;
+    left: 50%;
+    top: -4px;
+    z-index: -1;
+    opacity: 0;
+    min-width: 145px;
+    background: #fdf7ec;
+    font-size: 12px;
+    color: #b48728;
+    text-align: left;
+    line-height: 20px;
+    border: 1px solid #e2c995;
+    padding: 10px 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    -webkit-transform: translate(-50%,-100%);
+    -moz-transform: translate(-50%,-100%);
+    -ms-transform: translate(-50%,-100%);
+    -o-transform: translate(-50%,-100%);
+    transform: translate(-50%,-100%);
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -ms-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    box-sizing: initial;
+}
+.accountInfo-lists li .items>div.action .enableTip:hover p {
+    z-index: 99;
+    opacity: 1;
+}
+.footer-wrap {
+    min-width: 1200px;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+html {
+    height: 100%;
+}
+body {
+    line-height: 100%;
+    position: relative;
+    min-height: 100%;
+    padding-bottom: 124px;
+}

@@ -1,0 +1,457 @@
+//
+//  XHHSellBuyController.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHSellBuyController.h"
+
+#import "XHHTadTypeChooesView.h"
+
+#import "XHHPublicItemsView.h"
+
+#import "XHHWillBuyView.h"
+
+#import "XHHWillSellView.h"
+
+#import "XHHTradReleaseView.h"
+
+#import "XHHPublicNavView.h"
+
+#import "XHHC2CCnyListModel.h"
+
+#import "XHHPayPwView.h"
+
+@interface XHHSellBuyController ()<XHHPublicItemsViewProtocol,UIScrollViewDelegate,YXTextFieldDelegate,XHHPayPwViewProtocol>
+// 输入框的透明背景视图
+@property (strong, nonatomic) UIView *inputBackgroundView;
+
+@property (strong, nonatomic) XHHTadTypeChooesView        *typeChooseView;
+
+@property (strong, nonatomic) XHHPublicItemsView          *itemsView;
+
+@property (strong, nonatomic) XHHPayPwView                *passWordView;//输入交易密码视图
+
+@property (strong, nonatomic) XHHWillBuyView              *buyView;
+
+@property (strong, nonatomic) XHHWillSellView             *sellView;
+
+@property (strong, nonatomic) XHHTradReleaseView          *releaseView;
+
+@property (nonatomic , strong) XHHPublicNavView           *navView;
+
+@property (strong, nonatomic) UIScrollView                *scrollView;
+
+@property (strong, nonatomic) UILabel                     *alertLable;
+
+@property (strong, nonatomic) NSString                    *cnyId;
+
+@property (assign, nonatomic) NSInteger                   page;
+
+@property (nonatomic , strong) NSMutableArray             *dataArray;
+
+@property (assign, nonatomic) NSInteger                   currIndex;
+
+@property (assign, nonatomic) BOOL                        isBuy;
+
+
+@end
+
+@implementation XHHSellBuyController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.currIndex = 0;
+    if (self.cnyList.count) {
+        XHHC2CCnyListModel *model = self.cnyList[0];
+        self.cnyId = model.fid;
+        self.buyView.maxType.text = model.short_name;
+        self.buyView.minType.text = model.short_name;
+        self.buyView.numType.text = model.short_name;
+        self.buyView.cnyTypLable.text = model.short_name;
+        
+        self.sellView.maxType.text = model.short_name;
+        self.sellView.minType.text = model.short_name;
+        self.sellView.numType.text = model.short_name;
+        self.sellView.cnyTypLable.text = model.short_name;
+        [self requestMyHaveCny];
+        [self.releaseView.tableView.mj_header beginRefreshing];
+    }
+    self.sellView.cnyList = self.cnyList;
+    self.buyView.cnyList = self.cnyList;
+    
+    [self zh_setupUI];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orderCanel) name:@"ORDERCANLE" object:nil];
+}
+-(void)orderCanel{
+    
+    [self.releaseView.tableView.mj_header beginRefreshing];
+}
+
+-(void)zh_setupUI{
+    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+    
+    [self.view addSubview:self.navView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self.view);
+        make.height.mas_equalTo(navHeight +64);
+    }];
+    
+    [self.view addSubview:self.itemsView];
+    [self.itemsView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.navView.mas_bottom);
+        make.height.mas_equalTo(46);
+    }];
+    
+    [self.view addSubview:self.scrollView];
+    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.itemsView.mas_bottom);
+        make.bottom.equalTo(self.view).offset(-navHeight);
+    }];
+    [self.scrollView addSubview:self.buyView];
+    [self.scrollView addSubview:self.sellView];
+    [self.scrollView addSubview:self.releaseView];
+    [self.scrollView setContentSize:CGSizeMake(ChZ_WIDTH*3, 0)];
+}
+- (void)viewDidLayoutSubviews{
+    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+    [self.buyView setFrame:CGRectMake(16, 0, ChZ_WIDTH - 32, 460)];
+    [self.sellView setFrame:CGRectMake(16 + ChZ_WIDTH, 0, ChZ_WIDTH - 32, 500)];
+    [self.releaseView setFrame:CGRectMake(2*ChZ_WIDTH, 0, ChZ_WIDTH, ChZ_HEIGHT - 2*navHeight - 46 - 64)];
+}
+-(UIScrollView *)scrollView{
+    if (!_scrollView) {
+        _scrollView = [[UIScrollView alloc] init];
+        _scrollView.showsVerticalScrollIndicator = NO;
+        _scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.pagingEnabled = YES;
+//        _scrollView.scrollEnabled = NO;
+        _scrollView.delegate = self;
+    }
+    return _scrollView;
+}
+-(XHHPublicNavView *)navView{
+    if (!_navView) {
+        _navView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPublicNavView" owner:nil options:nil] lastObject];
+        [_navView setLeftButtonTitle:@"发布" image:@"public_nav_leftBack"];
+    }
+    return _navView;
+}
+-(UILabel *)alertLable{
+    if (!_alertLable) {
+        _alertLable = [UILabel newSingleFrame:CGRectZero title:@"发布成功" fontS:14.0 color:[UIColor colorWithHexString:@"FFFFFF"]];
+        _alertLable.textAlignment = NSTextAlignmentCenter;
+        _alertLable.backgroundColor = [UIColor colorWithHexString:@"363672"];
+    }
+    return _alertLable;
+}
+-(XHHWillSellView *)sellView{
+    if (!_sellView) {
+        _sellView = [[[NSBundle mainBundle] loadNibNamed:@"XHHWillSellView" owner:nil options:nil] lastObject];
+        @weakify(self);
+        _sellView.payBlock = ^{
+            @strongify(self);
+            if (self.sellView.currPrice.text.length ==0) {
+                ChZ_MBError(@"请输入当前价格");
+                return;
+            }
+            if (self.sellView.buyNumber.text.length ==0) {
+                ChZ_MBError(@"请输入出售数量");
+                return;
+            }
+            if (self.sellView.minSellNumber.text.length ==0) {
+                ChZ_MBError(@"请输入最小购买数量");
+                return;
+            }
+            if (self.sellView.maxSellNumber.text.length ==0) {
+                ChZ_MBError(@"请输入最大购买数量");
+                return;
+            }
+            if (self.sellView.payTypeTextFeild.text.length ==0) {
+                ChZ_MBError(@"请选择收款方式");
+                return;
+            }
+            self.isBuy = NO;
+            [self.passWordView showInView:self.view];
+            self.passWordView.height = self.view.bounds.size.height;
+        };
+        
+    }
+    return _sellView;
+}
+-(XHHWillBuyView *)buyView{
+    if (!_buyView) {
+        _buyView = [[[NSBundle mainBundle] loadNibNamed:@"XHHWillBuyView" owner:nil options:nil] lastObject];
+        @weakify(self);
+        _buyView.payBlock = ^{
+            @strongify(self);
+            if (self.buyView.currPrice.text.length ==0) {
+                ChZ_MBError(@"请输入当前价格");
+                return;
+            }
+            if (self.buyView.buyNumber.text.length ==0) {
+                ChZ_MBError(@"请输入购买数量");
+                return;
+            }
+            if (self.buyView.minSellNumber.text.length ==0) {
+                ChZ_MBError(@"请输入最小出售数量");
+                return;
+            }
+            if (self.buyView.maxSellNumber.text.length ==0) {
+                ChZ_MBError(@"请输入最大出售数量");
+                return;
+            }
+            if (self.buyView.payTypeTextFeild.text.length ==0) {
+                ChZ_MBError(@"请选择支付方式");
+                return;
+            }
+            self.isBuy = YES;
+            [self.passWordView showInView:self.view];
+            self.passWordView.height = self.view.bounds.size.height;
+        };
+    }
+    return _buyView;
+}
+-(XHHTradReleaseView *)releaseView{
+    if (!_releaseView) {
+        _releaseView = [[XHHTradReleaseView alloc] init];
+        [self setupRefreshWithView:_releaseView.tableView refreshHeadAction:@selector(headRefresh) refreshFooterAction:@selector(footRefresh)];
+        @weakify(self);
+        _releaseView.downLineIdBlock = ^(NSString *downLineId)
+        {
+            @strongify(self);
+            [self requestDownLineReleaseId:downLineId];
+        };
+    }
+    return _releaseView;
+}
+-(XHHPublicItemsView *)itemsView{
+    if (!_itemsView) {
+        _itemsView = [[XHHPublicItemsView alloc] init];
+        [_itemsView zh_setupUIWithItems:@[@"买入",@"卖出",@"我的发布"]];
+        _itemsView.delegate = self;
+    }
+    return _itemsView;
+}
+-(XHHTadTypeChooesView *)typeChooseView{
+    if (!_typeChooseView) {
+        _typeChooseView = [[XHHTadTypeChooesView alloc] init];
+    }
+    return _typeChooseView;
+}
+-(void)itemsClickIndex:(NSInteger)index{
+    
+    switch (index) {
+        case 0:
+            [self.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
+            break;
+        case 1:
+            [self.scrollView setContentOffset:CGPointMake(ChZ_WIDTH, 0) animated:YES];
+            break;
+        case 2:
+            [self.scrollView setContentOffset:CGPointMake(2*ChZ_WIDTH, 0) animated:YES];
+            break;
+            
+        default:
+            break;
+    }
+}
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    
+    if (scrollView.contentOffset.x == 0) {
+        [self.itemsView setItemSelectedIndex:0];
+        [self.scrollView setContentSize:CGSizeMake(ChZ_WIDTH*3, 500)];
+        self.scrollView.scrollEnabled = YES;
+    }else if (scrollView.contentOffset.x == ChZ_WIDTH){
+        [self.itemsView setItemSelectedIndex:1];
+        [self.scrollView setContentSize:CGSizeMake(ChZ_WIDTH*3, 500)];
+        self.scrollView.scrollEnabled = YES;
+    }else if (scrollView.contentOffset.x == ChZ_WIDTH*2){
+        [self.itemsView setItemSelectedIndex:2];
+        [self.scrollView setContentSize:CGSizeMake(ChZ_WIDTH*3, 0)];
+        self.scrollView.scrollEnabled = NO;
+    }
+}
+- (XHHPayPwView *)passWordView{
+    if (!_passWordView)
+    {
+        _passWordView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPayPwView" owner:nil options:nil] lastObject];
+        _passWordView.delegate = self;
+    }
+    return _passWordView;
+}
+-(void)payViewSure:(NSString *)pwd{
+    if (self.isBuy)
+    {
+        [self requestBuyWithPassWord:pwd];
+    }else{
+        [self requestSellWithPassWord:pwd];
+    }
+}
+-(void)showPaySuccessView{
+    self.itemsView.hidden = YES;
+    [self.view addSubview:self.alertLable];
+    [self.alertLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view).offset(16);
+        make.top.equalTo(self.navView.mas_bottom);
+        make.right.equalTo(self.view).offset(-16);
+        make.height.mas_equalTo(46);
+    }];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.itemsView.hidden = NO;
+        [self.alertLable removeFromSuperview];
+    });
+}
+-(void)headRefresh{
+    [self requestMyReleas:YES];
+    
+}
+-(void)footRefresh{
+    [self requestMyReleas:NO];
+}
+-(void)requestMyReleas:(BOOL)isRefresh
+{
+    int page = 0;
+    if (isRefresh == NO) {
+        page = (int) ceil(self.releaseView.dataArray.count/10.0f) + 1;
+    }
+    @weakify(self);
+    [ChZHomeRequest requestC2CMyReleaseUid:[APPControl sharedAPPControl].user.fid page:page successBlock:^(NSArray *array) {
+        @strongify(self);
+        if (isRefresh) [self.releaseView.dataArray removeAllObjects];
+        if (array)[self.releaseView.dataArray addObjectsFromArray:array];
+        [self.releaseView.tableView reloadData];
+        [self.releaseView.tableView.mj_footer endRefreshing];
+        [self.releaseView.tableView.mj_header endRefreshing];
+    } errorBlock:^(int code, NSString *error) {
+        @strongify(self);
+        [self.releaseView.tableView.mj_footer endRefreshing];
+        [self.releaseView.tableView.mj_header endRefreshing];
+    }];
+}
+//发布买入
+-(void)requestBuyWithPassWord:(NSString *)passWord{
+    
+    if (!ChZ_StringIsEmpty(passWord))
+    {
+        ChZ_MBError(@"请输入交易密码")
+        return;
+    }
+    ChZ_MBMsg(nil)
+    @weakify(self);
+    [ChZHomeRequest requestC2CSendBuyUid:[APPControl sharedAPPControl].user.fid
+                                passWord:passWord
+                                 country:@"China"
+                                     num:self.buyView.buyNumber.text
+                                   price:self.buyView.currPrice.text
+                                   cnyId:self.cnyId
+                                minValue:self.buyView.minSellNumber.text
+                                maxValue:self.buyView.maxSellNumber.text
+                                 payType:self.buyView.payTypeTextFeild.text
+                            successBlock:^(id dataSource)
+     {
+         //        ChZ_MBDismssSuccess(@"发布买入成功");
+         @strongify(self);
+         self.buyView.buyNumber.text = nil;
+         self.buyView.currPrice.text = nil;
+         self.buyView.minSellNumber.text = nil;
+         self.buyView.maxSellNumber.text = nil;
+         self.buyView.payTypeTextFeild.text = nil;
+         ChZ_MBDismss
+         [self showPaySuccessView];
+     } errorBlock:^(int code, NSString *error) {
+         ChZ_MBDismssError(error);
+     }];
+}
+//发布卖出
+-(void)requestSellWithPassWord:(NSString *)passWord
+{
+    if (!ChZ_StringIsEmpty(passWord))
+    {
+        ChZ_MBError(@"请输入交易密码")
+        return;
+    }
+    NSString *buyNumber = self.sellView.buyNumber.text;
+    NSString *currPrice = self.sellView.currPrice.text;
+    NSString *minSellNumber = self.sellView.minSellNumber.text;
+    NSString *maxSellNumber = self.sellView.maxSellNumber.text;
+    NSString *payType = self.sellView.payTypeTextFeild.text;
+    ChZ_MBMsg(nil)
+    @weakify(self);
+    [ChZHomeRequest requestC2CSendSellUid:[APPControl sharedAPPControl].user.fid
+                                 passWord:passWord
+                                  country:@"China"
+                                      num:buyNumber
+                                    price:currPrice
+                                    cnyId:self.cnyId
+                                 minValue:minSellNumber
+                                 maxValue:maxSellNumber
+                                  payType:payType
+                             successBlock:^(id dataSource)
+     {
+         @strongify(self);
+         //        ChZ_MBSuccess(@"发布卖出成功");
+         self.sellView.buyNumber.text = nil;
+         self.sellView.currPrice.text = nil;
+         self.sellView.minSellNumber.text = nil;
+         self.sellView.maxSellNumber.text = nil;
+         self.sellView.payTypeTextFeild.text = nil;
+         ChZ_MBDismss
+         [self showPaySuccessView];
+     } errorBlock:^(int code, NSString *error) {
+         ChZ_MBDismssError(error);
+     }];
+}
+-(void)requestMyHaveCny{
+    @weakify(self);
+    [ChZHomeRequest requestCnyHaveNumUid:[APPControl sharedAPPControl].user.fid cnyId:self.cnyId successBlock:^(NSString *dataSource) {
+        @strongify(self);
+        
+        if (ChZ_StringIsEmpty(dataSource)) {
+            self.sellView.canSellNumber.text = dataSource;
+        }else{
+            self.sellView.canSellNumber.text = @"0.0000";
+        }
+        
+    } errorBlock:^(int code, NSString *error) {
+        ChZ_MBError(@"查询币种余额失败");
+    }];
+}
+-(void)requestDownLineReleaseId:(NSString *)releasId{
+    @weakify(self);
+    [self showTheAlertVCWithStyle:UIAlertControllerStyleAlert title:@"提示" message:@"是否确定下线?" title1:@"取消" action1:^{
+        
+    } title2:@"下线" action2:^{
+        ChZ_MBMsg(nil);
+        [ChZHomeRequest requestReleaseDownLineUid:[APPControl sharedAPPControl].user.fid releaseId:releasId successBlock:^(id dataSource) {
+            @strongify(self);
+            ChZ_MBDismssSuccess(@"下线成功");
+            [self requestMyReleas:YES];
+        } errorBlock:^(int code, NSString *error)
+         {
+             ChZ_MBDismssError(error);
+         }];
+    } title3:nil action3:nil completion:nil];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin">
+
+    <ImageView
+        android:id="@+id/image_item_coin"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="12dp"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/image_test_eth" />
+
+    <TextView
+        android:id="@+id/text_item_with_draw_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@id/image_item_coin"
+        android:layout_marginRight="24dp"
+        android:layout_toLeftOf="@id/image_item_coin"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/textSize14"
+        tools:text="火币" />
+
+    <TextView
+        android:id="@+id/text_item_with_draw_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/text_item_with_draw_name"
+        android:layout_below="@id/text_item_with_draw_name"
+        android:layout_marginRight="24dp"
+        android:layout_toLeftOf="@id/image_item_coin"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/colorGrayText"
+        android:textSize="@dimen/textSize12"
+        tools:text="0x1651sa65d1as65d1as6d5das5" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/text_item_with_draw_code"
+        android:layout_marginTop="12dp"
+        android:background="@color/colorDivider" />
+</RelativeLayout>

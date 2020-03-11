@@ -1,0 +1,15 @@
+//
+//  XHHMineTableHeadView.h
+//  FuturePurse
+//
+//  Created by 葛志豪 on 18/7/18.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "XHHUserModelCenter.h"
+@interface XHHMineTableHeadView : UIView
+
+@property (nonatomic , strong) XHHUserModelCenter *userModel;
+
+@end

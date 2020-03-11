@@ -1,0 +1,179 @@
+{template nheader.html}
+{php $_pages=$pages;}
+<div class="page-bar">
+	<ul class="page-breadcrumb mylink">
+		{$menu.link}
+	</ul>
+	<ul class="page-breadcrumb myname">
+		{$menu.name}
+	</ul>
+	<div class="page-toolbar">
+		<div class="btn-group pull-right">
+			<button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false" data-hover="dropdown"> {fc_lang('操作菜单')}
+				<i class="fa fa-angle-down"></i>
+			</button>
+			<ul class="dropdown-menu pull-right" role="menu">
+				{loop $menu.quick $t}
+				<li>
+					<a href="{$t.url}">{$t.icon} {$t.name}</a>
+				</li>
+				{/loop}
+				<li class="divider"> </li>
+				<li>
+					<a href="javascript:window.location.reload();">
+						<i class="icon-refresh"></i> {fc_lang('刷新页面')}</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<div class="mytopsearch">
+	<form method="post" action="" name="searchform" id="searchform">
+		<label>{fc_lang('用户')}：</label>
+
+		<label>
+			<select class="form-control" name="data[field]">
+				{loop $field $t}
+				<option value="{$t.fieldname}" {if $param.field==$t.fieldname}selected{/if}>{$t.name}</option>
+				{/loop}
+			</select>
+		</label>
+		<label><input type="text" class="form-control" value="{$param.keyword}" placeholder="{fc_lang('输入与用户信息')}" name="data[keyword]" /></label>
+		<label><button type="submit" class="btn green btn-sm"> <i class="fa fa-search"></i> {fc_lang('搜索')}</button></label>
+	</form>
+</div>
+
+<form action="" method="post" name="myform" id="myform">
+	<input name="action" id="action" type="hidden" value="del" />
+	<div class="portlet mylistbody">
+		<div class="portlet-body">
+			<div class="table-scrollable">
+
+				<table class="mytable table table-striped table-bordered table-hover table-checkable dataTable">
+
+					<thead>
+					<tr>
+						<th width="10"></th>
+						<th>Uid</th>
+						<th class="{ns_sorting('username')}" name="username" >{fc_lang('会员')}</th>
+						<!--<th class="{ns_sorting('groupid')}" name="groupid" >{fc_lang('会员组')}</th>-->
+						<!--<th class="{ns_sorting('experience')}" name="experience">{SITE_EXPERIENCE}</th>
+                        <th class="{ns_sorting('score')}" name="score">{SITE_SCORE}</th>
+                        <th class="{ns_sorting('money')}" name="money">{SITE_MONEY}</th>-->
+						<th class="{ns_sorting('phone')}" name="regtime" >{fc_lang('phone')}</th>
+						<th class="{ns_sorting('email')}" name="regtime" >{fc_lang('email')}</th>
+						<!--<th class="{ns_sorting('trade_status')}" name="regtime" >{fc_lang('C2C交易状态')}</th>-->
+						<th class="{ns_sorting('regtime')}" name="regtime" >{fc_lang('注册时间')}</th>
+						<!--<th class="dr_option">{fc_lang('操作')}</th>-->
+					</tr>
+					</thead>
+					<tbody>
+					<tr id="dr_row_{$list.fid}">
+						<td><input name="ids[]" type="checkbox" class="dr_select toggle md-check" value="{$list.fid}" /></td>
+						<td>{$list.fid}</td>
+						<td>
+							<a onclick="dr_dialog_member('{$list.fid}')" href="javascript:;">
+								{$list.frealname}
+							</a>
+						</td>
+						<td>{$list.ftelephone}</td>
+						<td>{$list.femail}</td>
+						<td>{$list.fregistertime}</td>
+					</tr>
+					</tbody>
+				</table>
+				<table class="mytable table table-striped table-bordered table-hover table-checkable dataTable">
+
+					<thead>
+					<tr>
+						{loop $coinlist $t}
+						<th colspan ="2">{$t.short_name}</th>
+						{/loop}
+					</tr>
+					<tr>
+						{loop $coinlist $t}
+						<th>可用</th>
+						<th>冻结</th>
+						{/loop}
+					</tr>
+					</thead>
+					<tbody>
+					<tr id="">
+						{loop $coinlist $t}
+						<td>{$t.total}</td>
+						<td>{$t.frozen}</td>
+						{/loop}
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</form>
+<form method="post" action="/admin.php?c=Member_lock&m=lockcoin" name="dongjiepost" id="dongjiepost">
+	<label>{fc_lang('用戶id')}：</label>
+	<label><input type="text" class="form-control" value="" placeholder="{fc_lang('用戶id')}" name="data[userid]" /></label>
+	<label>
+		<select class="form-control" name="data[coinid]">
+			{loop $cointype $t}
+			<option value="{$t.id}">{$t.short_name}</option>
+			{/loop}
+		</select>
+	</label>
+	<label>
+		<select class="form-control" name="data[ruleid]">
+			{loop $rulelist $t}
+			<option value="{$t.id}">{$t.title}</option>
+			{/loop}
+		</select>
+	</label>
+	<label><input type="text" class="form-control" value="" placeholder="{fc_lang('冻结数量')}" name="data[coinnum]" /></label>
+	<!--<label><input type="number" min="1" class="form-control" value="" placeholder="{fc_lang('冻结天数')}" name="data[coinday]" /></label>-->
+	<!--<label><button type="submit" class="btn green btn-sm" onClick="$('#action').val('user2yes');dr_confirm_set_all('{fc_lang('您确定要这样操作吗？')}')"> <i class="fa fa-search"></i> {fc_lang('冻结')}</button></label>-->
+	<label><button type="submit" class="btn green btn-sm" name="option"> {fc_lang('冻结')}</button></label>
+</form>
+<form action="" method="post" name="" >
+	<input name="action"  type="hidden" value="del" />
+	<div class="portlet mylistbody">
+		<div class="portlet-body">
+			<div class="table-scrollable">
+
+				<table class="mytable table table-striped table-bordered table-hover table-checkable dataTable">
+
+					<thead>
+					<tr>
+						<th>id</th>
+						<th>Uid</th>
+						<th>币种</th>
+						<th>数量</th>
+						<th>锁仓规则名称</th>
+						<th>锁仓规则</th>
+						<th>锁仓时间</th>
+						<th>解锁进度</th>
+
+					</tr>
+					</thead>
+					<tbody>
+					{loop $userrulelist $t}
+					<tr >
+						<td>{$t.id}</td>
+						<td>{$t.uid}</td>
+						<td>{$t.short_name}</td>
+						<td>{$t.total}</td>
+						<td>{$t.title}</td>
+						<td>{$t.rule}</td>
+						<td>{date('Y-m-d H:i:s',$t.time)}</td>
+						<td>{$t.unlock_level}/{$t.rule_level}</td>
+					</tr>
+					{/loop}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</form>
+
+<div id="pages"><a>{fc_lang('共%s条', $param['total'])}</a>{$_pages}</div>
+{template nfooter.html}

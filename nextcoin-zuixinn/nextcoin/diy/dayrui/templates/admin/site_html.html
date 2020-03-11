@@ -1,0 +1,282 @@
+{template nheader.html}
+
+
+<script type="text/javascript">
+    $(function() {
+        $(".select-cat").click(function(){
+            var action = $(this).attr("action");
+            var childs = $(this).attr("childs");
+            var catid = $(this).attr("catid");
+            var catids= new Array(); //定义一数组
+            catids = childs.split(","); //字符分割
+            if (action == 'close') {
+                $.cookie('dr_{SITE_ID}_share_{$this->ci->router->class}_'+catid, null,{path:"/",expires: -1});
+                $(this).attr("action", "open");
+                $(this).html("[-]");
+                for (i=0;i<catids.length ;i++ ) {
+                    if (catids[i] != catid) {
+                        $(".dr_catid_"+catids[i]).show();
+                    }
+                }
+            } else {
+                // 关闭状态存储cookie
+                $.cookie('dr_{SITE_ID}_share_{$this->ci->router->class}_'+catid, 1);
+                $(this).attr("action", "close");
+                $(this).html("[+]");
+                for (i=0;i<catids.length ;i++ ) {
+                    if (catids[i] != catid) {
+                        $(".dr_catid_"+catids[i]).hide();
+                    }
+                }
+            }
+        });
+        $(".select-cat").each(function(){
+            var childs = $(this).attr("childs");
+            var catid = $(this).attr("catid");
+            var cache = $.cookie('dr_{SITE_ID}_share_{$this->ci->router->class}_'+catid);
+            if (cache) {
+                $(this).attr("action", "close");
+                $(this).html("[+]");
+                var catids= new Array(); //定义一数组
+                catids = childs.split(","); //字符分割
+                for (i=0;i<catids.length ;i++ ) {
+                    if (catids[i] != catid) {
+                        $(".dr_catid_"+catids[i]).hide();
+                    }
+                }
+            }
+        });
+    });
+</script>
+<form action="" class="form-horizontal" method="post" name="myform" id="myform" onsubmit="return dr_form_check()">
+    <div class="page-bar">
+        <ul class="page-breadcrumb mylink">
+            {$menu.link}
+
+        </ul>
+        <ul class="page-breadcrumb myname">
+            {$menu.name}
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false" data-hover="dropdown"> {fc_lang('操作菜单')}
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    {loop $menu.quick $t}
+                    <li>
+                        <a href="{$t.url}">{$t.icon} {$t.name}</a>
+                    </li>
+                    {/loop}
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="javascript:window.location.reload();">
+                            <i class="icon-refresh"></i> {fc_lang('刷新页面')}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <h3 class="page-title">
+        <small>{fc_lang('个性化URL结构设置，给全站自定义URL链接')}</small>
+    </h3>
+
+    <div class="portlet light bordered myfbody">
+        <div class="portlet-title tabbable-line">
+            <input type="hidden" name="page" id="mypage" value="{$page}">
+            <ul class="nav nav-tabs" style="float:left;">
+                <li class="{if $page==0}active{/if}">
+                    <a href="#tab_0" data-toggle="tab" onclick="$('#mypage').val('0')"> <i class="fa fa-cog"></i> {fc_lang('通用')} </a>
+                </li>
+                <li class="{if $page==1}active{/if}">
+                    <a href="#tab_1" data-toggle="tab" onclick="$('#mypage').val('1')"> <i class="fa fa-list-ul"></i> {fc_lang('共享栏目')} </a>
+                </li>
+                {loop $module $i $t}
+                <li class="{if $page==$i}active{/if}">
+                    <a href="#tab_{$i}" data-toggle="tab" onclick="$('#mypage').val('{$i}')"> <i class="{$t.icon}"></i> {fc_lang($t.name)} </a>
+                </li>
+                {/loop}
+            </ul>
+        </div>
+        <div class="portlet-body">
+            <div class="tab-content">
+
+                <div class="tab-pane {if $page==0}active{/if}" id="tab_0">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{fc_lang('移动端静态')}：</label>
+                            <div class="col-md-9">
+                                <input type="checkbox" name="data[SITE_MOBILE_HTML]" value="1" {if $data['SITE_MOBILE_HTML']}checked{/if} data-on-text="{fc_lang('开启')}" data-off-text="{fc_lang('关闭')}" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+                                <span class="help-block">{fc_lang('若移动端需要支持静态生成，那么就绑定到/mobile目录')}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{fc_lang('站点URL规则')}：</label>
+                            <div class="col-md-9">
+                                <label>
+                                    <select class="form-control" name="data[SITE_REWRITE]">
+                                        <option value="0"> -- </option>
+                                        {list action=cache name=urlrule return=u}
+                                        {if $u.type==4}<option value="{$u.id}" {if $u.id==$data['SITE_REWRITE']}selected{/if}> {$u.name} </option>{/if}
+                                        {/list}
+                                    </select>
+                                </label>
+                                <label>&nbsp;&nbsp;<a href="{dr_url('urlrule/index')}" style="color:blue !important">{fc_lang('[URL规则管理]')}</a></label>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+
+                <div class="tab-pane {if $page==1}active{/if}" id="tab_1">
+                    <div class="form-body">
+
+                        <table class="mytable table table-striped table-bordered table-hover table-checkable dataTable">
+
+                            <thead>
+                            <tr>
+                                <th width="100">Id</th>
+                                <th width="250">{fc_lang('栏目名称')}</th>
+                                <th width="250">{fc_lang('栏目目录')}</th>
+                                <th width="100">{fc_lang('静态')}</th>
+                                <th class="dr_option">{fc_lang('URL规则')}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {$category}
+                            </tbody>
+                        </table>
+
+
+
+                    </div>
+                </div>
+
+                {loop $module $i $t}
+                <div class="tab-pane {if $page==$i}active{/if}" id="tab_{$i}">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{fc_lang('模块')}：</label>
+                            <div class="col-md-9">
+                                <div class="form-control-static"><label>{$t.name}（{$t.dirname}）</label></div>
+                            </div>
+                        </div>
+                        {if $t.share}
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{fc_lang('URL规则')}：</label>
+                            <div class="col-md-9">
+                                <label>
+                                    <select class="form-control" name="data[module][{$t.dirname}][urlrule]">
+                                        <option value="0"> -- </option>
+                                        {list action=cache name=urlrule return=u}
+                                        {if $u.type==2}<option value="{$u.id}" {if $u.id== $data['module'][$t.dirname]['site'][SITE_ID]['urlrule']}selected{/if}> {$u.name} </option>{/if}
+                                        {/list}
+                                    </select>
+                                </label>
+                                <label>&nbsp;&nbsp;<a href="{dr_url('urlrule/index')}" style="color:blue !important">{fc_lang('[URL规则管理]')}</a></label>
+                            </div>
+                        </div>
+                        {else}
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{fc_lang('生成静态')}：</label>
+                            <div class="col-md-9">
+                                <input type="checkbox" name="data[module][{$t.dirname}][html]" value="1" {if $data['module'][$t.dirname]['site'][SITE_ID]['html']}checked{/if} data-on-text="{fc_lang('开启')}" data-off-text="{fc_lang('关闭')}" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{fc_lang('URL规则')}：</label>
+                            <div class="col-md-9">
+                                <label>
+                                    <select class="form-control" name="data[module][{$t.dirname}][urlrule]">
+                                        <option value="0"> -- </option>
+                                        {list action=cache name=urlrule return=u}
+                                        {if $u.type==1}<option value="{$u.id}" {if $u.id== $data['module'][$t.dirname]['site'][SITE_ID]['urlrule']}selected{/if}> {$u.name} </option>{/if}
+                                        {/list}
+                                    </select>
+                                </label>
+                                <label>&nbsp;&nbsp;<a href="{dr_url('urlrule/index')}" style="color:blue !important">{fc_lang('[URL规则管理]')}</a></label>
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <label class="col-md-2 control-label">{fc_lang('电脑端域名')}：</label>
+                            <div class="col-md-9">
+                                <label><input class="form-control" type="text" name="data[module][{$t.dirname}][domain]" value="{$data['module'][$t.dirname]['site'][$sid]['domain']}" ></label>
+                                {if $data['module'][$t.dirname]['site'][$sid]['domain']}
+                                {if $data['module'][$t.dirname]['site'][$sid]['domain'] == SITE_DOMAIN}
+                                <div class="onError">{fc_lang('此域名【%s】不能与当前站点域名相同', $data['module'][$t.dirname]['site'][$sid]['domain'])}</div>
+                                {else}
+                                <script>
+                                    $.get("{dr_url('home/domain', array('domain' => $data['module'][$t.dirname]['site'][$sid]['domain']))}", function(data){
+                                        if (data) {
+                                            $("#dr_domian_{$sid}").html(data);
+                                        } else {
+                                            $("#dr_domian_{$sid}").hide();
+                                        }
+                                    });
+                                </script>
+                                <span id="dr_domian_{$sid}" class="help-block"></span>
+                                {/if}
+                                {else}
+                                <span class="help-block">{fc_lang('格式：xxx.domain.com')}</span>
+                                {/if}
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-md-2 control-label">{fc_lang('移动端域名')}：</label>
+                            <div class="col-md-9">
+                                <label><input class="form-control" type="text" name="data[module][{$t.dirname}][mobile_domain]" value="{$data['module'][$t.dirname]['site'][$sid]['mobile_domain']}" ></label>
+                                {if $data['module'][$t.dirname]['site'][$sid]['mobile_domain']}
+                                {if $data['module'][$t.dirname]['site'][$sid]['mobile_domain'] == SITE_DOMAIN}
+                                <div class="onError">{fc_lang('此域名【%s】不能与当前站点域名相同', $data['module'][$t.dirname]['site'][$sid]['mobile_domain'])}</div>
+                                {else}
+                                <script>
+                                    $.get("{dr_url('home/domain', array('domain' => $data['module'][$t.dirname]['site'][$sid]['mobile_domain']))}", function(data){
+                                        if (data) {
+                                            $("#dr_mobile_domain_{$sid}").html(data);
+                                        } else {
+                                            $("#dr_mobile_domain_{$sid}").hide();
+                                        }
+                                    });
+                                </script>
+                                <span id="dr_mobile_domain_{$sid}" class="help-block"></span>
+                                {/if}
+                                {else}
+                                <span class="help-block">{fc_lang('格式：xxx.domain.com')}</span>
+                                {/if}
+                            </div>
+                        </div>
+
+                        {/if}
+
+                    </div>
+                </div>
+                {/loop}
+
+            </div>
+        </div>
+    </div>
+
+    <div class="myfooter">
+        <div class="row">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn green"> <i class="fa fa-save"></i> {fc_lang('保存')}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+{template nfooter.html}

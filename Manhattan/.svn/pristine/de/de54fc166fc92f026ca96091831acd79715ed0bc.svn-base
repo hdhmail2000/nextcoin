@@ -1,0 +1,202 @@
+//
+//  XHHPayPwController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/16.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHPayPwController.h"
+
+
+@interface XHHPayPwController ()<YXTextFieldDelegate>
+@property (weak, nonatomic) IBOutlet UITextField *textFeildOne;
+@property (weak, nonatomic) IBOutlet UITextField *TextFeildTwo;
+@property (weak, nonatomic) IBOutlet UITextField *textFeildThree;
+@property (weak, nonatomic) IBOutlet UITextField *textFeildFoure;
+@property (weak, nonatomic) IBOutlet UITextField *textFeildFive;
+@property (weak, nonatomic) IBOutlet UITextField *textFeildSix;
+@property (weak, nonatomic) IBOutlet UILabel *alertLable;
+@property (weak, nonatomic) IBOutlet UIView *codeView;
+@property (weak, nonatomic) IBOutlet UIButton *codeButton;
+@property (weak, nonatomic) IBOutlet UIButton *forgrtButton;
+@property (weak, nonatomic) IBOutlet UILabel *typeTitle;
+
+@property (nonatomic , copy) NSString *fristPw;
+@property (nonatomic , copy) NSString *secondPw;
+
+@property (nonatomic , copy) NSString *code;
+
+@end
+
+@implementation XHHPayPwController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    switch (self.type) {
+        case 1:
+            self.codeView.hidden = YES;
+            self.forgrtButton.hidden = YES;
+            self.typeTitle.text = @"设置交易密码";
+            break;
+        case 2:
+            self.codeView.hidden = YES;
+            self.alertLable.text = @"为了您的账户安全，请输入原支付密码确认身份";
+            self.typeTitle.text = @"重置交易密码";
+            break;
+        case 3:
+            self.codeView.hidden = YES;
+            self.typeTitle.text = @"忘记交易密码";
+            break;
+            
+        default:
+            break;
+    }
+    
+    
+    
+    _textFeildOne.delegate = self;
+    _TextFeildTwo.delegate = self;
+    _textFeildThree.delegate = self;
+    _textFeildFoure.delegate = self;
+    _textFeildFive.delegate = self;
+    _textFeildSix.delegate = self;
+    
+    [self setUpAllTextFeild];
+}
+- (IBAction)textChange:(UITextField *)sender {
+    if (sender.text.length>0) {
+        sender.text = [sender.text substringToIndex:1];
+        if (self.type == 1) {
+            if ([self.alertLable.text isEqualToString:@"再次输入"])
+            {
+                if (_secondPw.length == 0) {
+                    self.secondPw = sender.text;
+                }else{
+                    self.secondPw = [self.secondPw stringByAppendingString:sender.text];
+                }
+                
+            }else{
+                if (_fristPw.length == 0) {
+                    self.fristPw = sender.text;
+                }else{
+                    self.fristPw = [self.fristPw stringByAppendingString:sender.text];
+                }
+                
+            }
+            if (sender.tag  != 16) {
+                UITextField *textfeild = (UITextField *)[self.view viewWithTag:sender.tag + 1];
+                textfeild.userInteractionEnabled = YES;
+                [textfeild becomeFirstResponder];
+            }else{
+                self.alertLable.text = @"再次输入";
+                if (self.secondPw.length == 6)
+                {
+                    if ([self.fristPw isEqualToString:self.secondPw])
+                    {
+                        
+                        [self.navigationController popViewControllerAnimated:YES];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            ChZ_MBSuccess(@"设置交易密码成功");
+                        });
+                    }else
+                    {
+                        ChZ_MBError(@"密码不一致请重新输入");
+                        self.alertLable.text = @"为账户+86 139****6341设置6位数字的支付密码";
+                        self.fristPw = @"";
+                        self.secondPw = @"";
+                        [self setUpAllTextFeild];
+                    }
+                }else
+                {
+                    [self setUpAllTextFeild];
+                }
+            }
+        }else{
+            if (_code.length == 0) {
+                self.code = sender.text;
+            }else{
+                self.code = [self.code stringByAppendingString:sender.text];
+            }
+            if (sender.tag  != 16) {
+                UITextField *textfeild = (UITextField *)[self.view viewWithTag:sender.tag + 1];
+                textfeild.userInteractionEnabled = YES;
+                [textfeild becomeFirstResponder];
+            }else{
+                if (self.code.length == 6)
+                {
+                    //验证密码  短信
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        ChZ_MBSuccess(@"验证密码、短信成功");
+                        [self setUpAllTextFeild];
+                        self.type = 1;
+                    });
+
+                }else
+                {
+                    [self setUpAllTextFeild];
+                }
+            }
+            
+            
+            
+        }
+        
+        
+        
+        NSLog(@"%@---%@",self.fristPw,self.secondPw);
+    }
+}
+- (IBAction)back:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+- (void)textFieldDidDeleteBackward:(UITextField *)textField {
+    
+    if ([self.alertLable.text isEqualToString:@"再次输入"])
+    {
+        self.secondPw = @"";
+    }else{
+        self.fristPw = @"";
+    }
+    
+    [self setUpAllTextFeild];
+    
+}
+
+-(void)setUpAllTextFeild{
+    for(int tag = 11;tag < 17;tag ++){
+        UITextField *textfeild = (UITextField *)[self.view viewWithTag:tag];
+        textfeild.userInteractionEnabled = YES;
+        textfeild.text = @"";
+        if (textfeild.tag == 11){
+            [textfeild becomeFirstResponder];
+        }else{
+            textfeild.userInteractionEnabled = NO;
+        }
+    }
+}
+- (IBAction)forgetAction:(UIButton *)sender {
+    sender.hidden = YES;
+    self.codeView.hidden = NO;
+    self.alertLable.text = @"验证码已发送至+86 139*****6341";
+    [self.codeButton startWithTime:59 title:@"获取验证码" countDownTitle:@" s后重新发送" mainColor:[UIColor colorWithHexString:@"308AF5"] countColor:[UIColor colorWithHexString:@"4B4B80"]];
+}
+- (IBAction)codeAction:(UIButton *)sender {
+    [sender startWithTime:59 title:@"获取验证码" countDownTitle:@" s后重新发送" mainColor:[UIColor colorWithHexString:@"308AF5"] countColor:[UIColor colorWithHexString:@"4B4B80"]];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

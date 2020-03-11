@@ -1,0 +1,77 @@
+//
+//  ChZTabBarController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/14.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "ChZTabBarController.h"
+#import "MineViewController.h"
+#import "MiningViewController.h"
+#import "MHCityViewController.h"
+#import "TradViewController.h"
+@interface ChZTabBarController ()
+
+@end
+
+@implementation ChZTabBarController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self loadControllers];
+    
+    self.tabBar.backgroundImage = [UIImage imageWithColor:[UIColor clearColor]];
+//    UIImage *img = [UIImage imageWithColor:[UIColor clearColor]]
+    self.tabBar.shadowImage = [[UIImage alloc]init];
+    
+    [[APPControl sharedAPPControl] isSetPayPassword];
+}
+- (void)loadControllers
+{
+    MiningViewController *oneVC = [MiningViewController initWithStoryboard:@"MiningStroy"];
+    BaseNavigationController *oneNac = [[BaseNavigationController alloc]initWithRootViewController:oneVC];
+    [self addChildViewController:oneNac image:[UIImage imageNamed:@"tabbar_main_onegray"] selectedImage:[UIImage imageNamed:@"tabbar_main_oneblue"] title:@"挖矿"];
+    
+    
+    TradViewController *twoVC = [[TradViewController alloc]init];
+    BaseNavigationController *twoNav = [[BaseNavigationController alloc]initWithRootViewController:twoVC];
+    [self addChildViewController:twoNav image:[UIImage imageNamed:@"tabbar_main_twogray"] selectedImage:[UIImage imageNamed:@"tabbar_main_twoblue"] title:@"交易"];
+    
+    MHCityViewController *threeVC = [MHCityViewController initWithStoryboard:@"MHCityStroy"];
+    BaseNavigationController *threeNac = [[BaseNavigationController alloc]initWithRootViewController:threeVC];
+    [self addChildViewController:threeNac image:[UIImage imageNamed:@"tabbar_main_threegray"] selectedImage:[UIImage imageNamed:@"tabbar_main_threeblue"] title:@"曼哈顿城"];
+    
+    MineViewController *fourVC = [[MineViewController alloc]init];
+    BaseNavigationController *foureNav  = [[BaseNavigationController alloc]initWithRootViewController:fourVC];
+    [self addChildViewController:foureNav image:[UIImage imageNamed:@"tabbar_main_fouregray"] selectedImage:[UIImage imageNamed:@"tabbar_main_foureblue"] title:@"我的"];
+}
+- (void)addChildViewController:(UIViewController *)controller image:(UIImage *)image selectedImage:(UIImage *)selectImage title:(NSString *)title
+{
+    controller.tabBarItem.image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    controller.tabBarItem.selectedImage = [selectImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    controller.tabBarItem.title = title;
+    
+    [controller.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithHexString:@"4EE2FE"]} forState:UIControlStateSelected];
+    [controller.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorWithHexString:@"4B4B80"]} forState:UIControlStateNormal];
+    controller.tabBarItem.titlePositionAdjustment = UIOffsetMake(0, -2);
+    
+    [self addChildViewController:controller];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

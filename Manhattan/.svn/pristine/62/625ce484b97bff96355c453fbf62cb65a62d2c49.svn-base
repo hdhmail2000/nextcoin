@@ -1,0 +1,243 @@
+//
+//  XHHTrandVolumeView.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/27.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHTrandVolumeView.h"
+#import "TrandVolumeHeadView.h"
+#import "TrandVolumeCell.h"
+
+static NSString *cellIdentifie = @"TrandVolumeCell";
+@interface XHHTrandVolumeView ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (strong, nonatomic) TrandVolumeHeadView   *tableHeadView;
+
+@property (strong, nonatomic) TrandVolumeHeadView   *rightTableHeadView;
+
+@property (strong, nonatomic) UITableView           *tableView;
+
+@property (strong, nonatomic) NSArray               *dataArray;
+
+@property (strong, nonatomic) UITableView           *righttableView;
+
+@property (strong, nonatomic) NSArray               *rightdataArray;
+
+@property (strong, nonatomic) UIView                *lineView;
+
+@property (nonatomic , strong) NSArray *leftArray;
+@property (nonatomic , strong) NSArray *rightArray;
+
+@end
+
+
+@implementation XHHTrandVolumeView
+
+-(instancetype)init{
+    self = [super init];
+    if (self) {
+        [self zh_setupUI];
+    }
+    return self;
+}
+
+-(void)zh_setupUI{
+    [self addSubview:self.lineView];
+    [self.lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self);
+        make.height.mas_equalTo(10);
+    }];
+    
+    [self addSubview:self.tableHeadView];
+    [self.tableHeadView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self);
+        make.top.equalTo(self.lineView.mas_bottom);
+        make.width.equalTo(self);
+        make.height.mas_equalTo(40);
+    }];
+    [self addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.height.mas_equalTo(161);
+        make.top.equalTo(self.tableHeadView.mas_bottom);
+    }];
+    
+    [self addSubview:self.righttableView];
+    [self.righttableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.height.mas_equalTo(161);
+        make.top.equalTo(self.tableView.mas_bottom);
+    }];
+}
+
+-(TrandVolumeHeadView *)tableHeadView{
+    if (!_tableHeadView) {
+        _tableHeadView = [[[NSBundle mainBundle] loadNibNamed:@"TrandVolumeHeadView" owner:nil options:nil] lastObject];
+        [_tableHeadView setFrame:CGRectMake(0, 0, ChZ_WIDTH/2, 0)];
+    }
+    return _tableHeadView;
+}
+-(TrandVolumeHeadView *)rightTableHeadView{
+    if (!_rightTableHeadView) {
+        _rightTableHeadView = [[[NSBundle mainBundle] loadNibNamed:@"TrandVolumeHeadView" owner:nil options:nil] lastObject];
+        [_rightTableHeadView setFrame:CGRectMake(0, 0, ChZ_WIDTH/2, 0)];
+    }
+    return _rightTableHeadView;
+}
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.rowHeight = 23;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        [_tableView setSeparatorColor:[UIColor clearColor]];
+        _tableView.scrollEnabled = NO;
+        _tableView.backgroundColor = bgColor;
+        [_tableView registerNib:[UINib nibWithNibName:@"TrandVolumeCell" bundle:nil] forCellReuseIdentifier:cellIdentifie];
+    }
+    return _tableView;
+}
+-(void)setDataDic:(NSDictionary *)dataDic{
+    NSArray *lArr = dataDic[@"depth"][@"asks"];
+    NSArray *rArr = dataDic[@"depth"][@"bids"];
+    
+    NSMutableArray *lmArray = [NSMutableArray array];
+    NSMutableArray *rmArray = [NSMutableArray array];
+    if (lArr)
+    {
+        if (lArr.count) {
+            CGFloat sum = 0.0;
+            for(int i = 0; i < lArr.count; i++)
+            {
+                if (i == 7) {
+                    break;
+                }
+                sum = sum + [lArr[i][0] floatValue];
+            }
+            for(int i = 0; i < lArr.count ; i ++){
+                if (i == 7)
+                {
+                    break;
+                }
+                CGFloat volume = 0.0;
+                for(int j = 0; j <= i; j ++){
+                    volume += [lArr[j][0] floatValue];
+                    
+                }
+                NSArray *ttArrar = lArr[i];
+                [lmArray addObject:@{@"row":[NSString stringWithFormat:@"买%d",i+1],
+                                     @"much":[NSString stringWithFormat:@"%@",ttArrar[0]],
+                                     @"volume":[NSString stringWithFormat:@"%@",ttArrar[1]],
+                                     @"mulitpy":[NSString stringWithFormat:@"%.2f",volume/sum]}];
+                
+                
+            }
+            self.leftArray = lmArray;
+            [self.tableView reloadData];
+        }
+        
+    }
+    
+    if (rArr)
+    {
+        
+        if (rArr.count) {
+            CGFloat sum = 0.0;
+            for(int i = 0; i < rArr.count; i++)
+            {
+                if (i == 7) {
+                    break;
+                }
+                sum = sum + [rArr[i][0] floatValue];
+            }
+            
+            
+            
+            for(int i = 0; i < rArr.count ; i ++){
+                if (i == 7)
+                {
+                    break;
+                }
+                CGFloat volume = 0.0;
+                for(int j = 0; j <= i; j ++){
+                    volume += [rArr[j][0] floatValue];
+                    
+                }
+                NSArray *ttArrar = rArr[i];
+                [rmArray addObject:@{@"row":[NSString stringWithFormat:@"卖%d",i+1],
+                                     @"much":[NSString stringWithFormat:@"%@",ttArrar[0]],
+                                     @"volume":[NSString stringWithFormat:@"%@",ttArrar[1]],
+                                     @"mulitpy":[NSString stringWithFormat:@"%.2f",volume/sum]}];
+                
+                
+            }
+            NSArray *a = (NSMutableArray *)[[rmArray reverseObjectEnumerator] allObjects];
+            self.rightArray = a;
+            
+            
+            [self.righttableView reloadData];
+        }
+        
+    }
+}
+-(UITableView *)righttableView{
+    if (!_righttableView) {
+        _righttableView = [[UITableView alloc] init];
+        _righttableView.delegate = self;
+        _righttableView.dataSource = self;
+        _righttableView.rowHeight = 23;
+        _righttableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+        _righttableView.scrollEnabled = NO;
+        _righttableView.backgroundColor = [UIColor colorWithHexString:@"1A1560"];
+        [_righttableView registerNib:[UINib nibWithNibName:@"TrandVolumeCell" bundle:nil] forCellReuseIdentifier:cellIdentifie];
+    }
+    return _righttableView;
+}
+-(UIView *)lineView{
+    if (!_lineView) {
+        _lineView = [[UIView alloc] init];
+        _lineView.backgroundColor = [UIColor colorWithHexString:@"0F131C"];
+    }
+    return _lineView;
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 7;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    TrandVolumeCell  *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifie];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if (tableView == self.tableView)
+    {
+        if (self.leftArray.count > indexPath.row)
+        {
+            NSDictionary *dic1 = self.leftArray[indexPath.row];
+            [cell reloadLeftCellWithDic:dic1];
+        }
+        
+    }else
+    {
+        if (self.rightArray.count > indexPath.row)
+        {
+             NSDictionary *dic2 = self.rightArray[indexPath.row];
+            [cell reloadRightCellWithDic:dic2];
+        }
+        
+    }
+    return cell;
+}
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+@end

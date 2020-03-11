@@ -1,0 +1,966 @@
+{template "header.html" }
+{template "top.html" }
+        
+
+        <style type="text/css">
+        	.js-swiper-container-enroll{
+        	    height: 48px !important;
+        	}
+        </style>
+        <div class="container-fluid">
+            <div class="row" style="padding: 0 8px;">
+<!--------------------------------- 公告 ---------------------->
+                <div class="col-xs-12 announcement">
+                    <span class="announcement-tetil" style="float: left;">
+                        <i class="iconfont icon-gonggao"></i>
+                        {$market.annoce}:
+                    </span>
+                    <span class="announcement-text">
+
+                        <div class="swiper-container js-swiper-container-enroll swiper-container-vertical" style="display: inline-block;">
+                            <div class="swiper-wrapper">
+                            {list action=module module=help catid=9 num=1 order=inputtime_desc}
+                                <div class="swiper-slide" style="text-align: left;-webkit-justify-content:flex-start;justify-content:flex-start;align-items: center;">
+                                    <a href="{$t.url}" target="_blank" class="enroll-item" style="color: white;font-size: 16px;float: left;height: 50px;line-height: 50px;">
+                                        {$t.title}
+                                    </a>
+                                </div>
+                              {/list}
+                            </div>
+                        </div>
+
+
+                    		<!--{list action=module module=help catid=9 num=1 order=inputtime_desc}
+                            <a href="{$t.url}" style="color: #FFFFFF;" >
+                                {$t.title}
+                            </a>
+                        	{/list}-->
+                    </span>
+                    <button class="iconfont icon-guanbi announcement-btn"></button>
+                </div>
+
+
+                <div class="col-xs-12 quotes">
+ <!-------------------------------- 左悬浮窗 ------------------------>
+                        <div class="quotes-window">
+                            <div class="coin-list">
+                                <div class="quotes-window-header">
+                                   {if !$USERNAME}
+                                  <!--------- 未登录 ------->
+                                    <p class="clearfix">
+                                        <a href="/index.php?s=exc&c=userController&m=login">{$market.login}</a>
+                                        {$market.or}
+                                        <a href="/index.php?s=exc&c=userController&m=register">{$market.reg}</a>
+                                        {$market.begin}
+                                    </p>
+                                  {else}
+                                   <!--------- 已登录 -------->
+                                    <dl class="clearfix">
+                                    </dl>
+                                    {/if}
+                                </div>
+                                <div class="quotes-window-search-wrap clearfix">
+                                    <p class="quotes-search-tetil">{$market.market}</p>
+                                    <!--<div class="quotes-search-text">
+                                        <input type="text" name="" id="" value="" />
+                                        <i class="iconfont icon-shousuo"></i>
+                                    </div>
+                                    <div class="quotes-search-btn">
+                                        <i class="iconfont icon-qiehuan"></i>
+                                        CNY
+                                    </div>-->
+                                </div>
+                                <div class="quotes-window-nav-wrap">
+                                    <ul class="quotes-window-nav clearfix coin-tab">
+                                    <ul class="quotes-window-nav clearfix coin-tab">
+                                    		{loop $data.typeMap $key $value}
+                                        <li class="quotes-window-navbar">
+                                            <button {if $value == $data.tradeType['buyShortName']} class="active"{/if}>{$value}</button>
+                                        </li>
+                                        {/loop}
+                                    </ul>
+                                </div>
+    <!--------------------------------- 悬浮窗列表 ---------------------->
+
+                                <div class="quotes-window-list-wrap">
+                                    <div class="quotes-list-header-wrap clearfix">
+                                        <div class="quotes-list-header">
+                                            <span>{$market.coin}</span>
+                                            <!--<i>
+                                                <b class="iconfont icon-gao"></b>
+                                                <b class="iconfont icon-di-copy"></b>
+                                            </i>-->
+                                        </div>
+                                        <div class="quotes-list-header">
+                                            <span>{$market.newPrice}</span>
+                                            <!--<i>
+                                                <b class="iconfont icon-gao"></b>
+                                                <b class="iconfont icon-di-copy"></b>
+                                            </i>-->
+                                        </div>
+                                        <div class="quotes-list-header">
+                                            <span>{$market.zf}</span>
+                                            <!--<i>
+                                                <b class="iconfont icon-gao"></b>
+                                                <b class="iconfont icon-di-copy"></b>
+                                            </i>-->
+                                        </div>
+                                    </div>
+                                <!----------- 主区列表 ----------->
+                                		{loop $data.typeMap $index $type}
+									
+                                    <div class="quotes-tabel-wrap coin-list-item"  {if $index != $data.tradeType['type']} style="display:none;" {/if}>
+                                    		{loop $data.blockMap $i $t}
+                                        <table border="" cellspacing="" cellpadding="" class="quotes-tabel coin-list">
+                                           <!--<thead>-->
+                                               <!--<th colspan="3" style="text-align: left;color: #3473C9;" class="" >{$t}</th>-->
+                                           <!--</thead>-->
+                                           		{loop $data.tradeTypeListMap[$i][$index] $k $trade}
+                                                    <tr data-symbol="{$trade['sellShortName']}_{$trade['buyShortName']}" data-symbol-id="{$trade['id']}" type="{$trade['type']}" symbol="{$trade['id']}" class="{$trade['sellShortName']}_{$trade['buyShortName']} &nbsp;{$trade['sellShortName']}{$trade['buyShortName']}" data-status="{$trade['isShare']}">
+                                                        <td class="quotes-item-box-wrap">
+                                                           <span class="trade-symbol">
+                                                           {strtoupper($trade['sellShortName'])}
+                                                           </span>
+                                                        </td>
+                                                        <td class="trade-price trade-price{$trade['id']}" data-symbol_id="{$trade['id']}" data-blocktype="{$trade['tradeBlock']}" type="{$trade['type']}">000.00</td>
+                                                        <td class="trade-rate trade-rate{$trade['id']} success" data-symbol_id="{$trade['id']}">+0.00%</td>
+                                                    </tr>
+                                               {/loop}
+
+                                        </table>
+                                        {/loop}
+                                    </div>
+                                    {/loop}
+
+                                </div>
+                            </div>
+                            <div class="coin-introduce" style="margin-top: 20px;color: white;display: none">
+                                <div class="introduce-window-header white">{$market.coinBasics}</div>
+                                {if $data.coinInfo['nameZh']}
+                                <h2 class="introduce-coin-name white">
+                                		{if $data.coinInfo['nameZh']}
+                                		{$data.ccoinInfo['nameZh']}
+                                		{else}
+                                		-
+                                		{/if}
+                                </h2>
+                                <p class="introduce-coin-detail dark">
+                                    {if $data.coinInfo['info']}
+	                                {$data.coinInfo['info']}
+	                                {else}
+	                                -
+	                                {/if}
+                                </p>
+                                {/if}
+                                <div class="introduce-other">
+                                    <div class="introduce-item">
+                                        <span class="introduce-item-name">
+                                           {$market.coinIssueTime}
+                                        </span>
+                                        <span class="introduce-item-value">
+                                            {if $data.coinInfo['gmtRelease']}
+			                                {$data.coinInfo['gmtRelease']}
+			                                {else}
+			                                -
+			                                {/if}
+                                        </span>
+                                    </div>
+
+                                    <div class="introduce-item">
+                                        <span class="introduce-item-name">
+                                             {$market.coinPrice}
+                                        </span>
+                                        <span class="introduce-item-value">
+                                            {if $data.coinInfo['price']}
+			                                {$data.coinInfo['price']}
+			                                {else}
+			                                -
+			                                {/if}
+                                        </span>
+                                    </div>
+
+                                    <div class="introduce-item">
+                                        <span class="introduce-item-name">
+                                             {$market.coinCirculation}
+                                        </span>
+                                        <span class="introduce-item-value">
+                                            {if $data.coinInfo['circulation']}
+			                                {$data.coinInfo['circulation']}
+			                                {else}
+			                                -
+			                                {/if}
+                                        </span>
+                                    </div>
+
+                                    <div class="introduce-item">
+                                        <span class="introduce-item-name">
+                                           {$market.coinTotalAmount}
+                                        </span>
+                                        <span class="introduce-item-value">
+                                            {if $data.coinInfo['total']}
+			                                {$data.coinInfo['total']}
+			                                {else}
+			                                -
+			                                {/if}
+                                        </span>
+                                    </div>
+
+                                    <div class="introduce-item">
+                                        <span class="introduce-item-name">
+                                            {$market.coinBlockExplorer}
+                                        </span>
+                                        <span class="introduce-item-value">
+                                            <a target="_blank" style="width:180px;display:inline-block;overflow: hidden; text-overflow:ellipsis; white-space: nowrap;" href="{$data.coinInfo['linkBlock']}">
+                                            		{if $data.coinInfo['linkBlock']}
+				                                {$data.coinInfo['linkBlock']}
+				                                {else}
+				                                -
+				                                {/if}
+                                            </a>
+                                        </span>
+                                    </div>
+
+                                    <div class="introduce-item">
+                                        <span class="introduce-item-name">
+                                             {$market.coinOfficialWebsite}
+                                        </span>
+                                        <span class="introduce-item-value">
+                                            <a target="_blank" style="width:180px;display:inline-block;overflow: hidden; text-overflow:ellipsis; white-space: nowrap;" href="{$data.coinInfo['linkWebsite']}">
+                                            		{if $data.coinInfo['linkWebsite']}
+				                                {$data.coinInfo['linkWebsite']}
+				                                {else}
+				                                -
+				                                {/if}
+                                           </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+<!---------------------------------- 主体内容 ------------------------>
+
+                        <div class="quotes-data">
+                            <div class="quotes-data-kgraph-wrap">
+                                <div class="clearfix quotes-kgraph-header quotes-header">
+                                    <button class="iconfont icon-xia1 left"></button>
+                                    <h2 class="left quotes-header-tetil">
+                                        <span id="tip-sell-buy">{strtoupper($data.tradeType['sellShortName'])}/{strtoupper($data.tradeType['buyShortName'])}</span>
+                                        <span id="tip-price"></span>
+                                    </h2>
+                                    <p class="left quotes-header-text">
+                                        ≈
+                                        <span id="tip-cny"></span>
+                                        <span id="zf">{$market.zf}<strong class="success">+0.85%</strong></span>
+                                        <span id="open">{$market.open}&nbsp;0.00</span>
+                                        <span id="high">{$market.high} 18000.00</span>
+                                        <span id="low">{$market.low}17150.00</span>
+                                        <span id="vol">24H{$market.volume} 8306 BTC</span>
+                                    </p>
+                                </div>
+
+                         <!------------- k线图 ------------------->
+
+                                <div class="quotes-data-kgraph" >
+                                    <div class="quotes-data-list chart-panel">
+                                        <ul class="col-xs-12 clearfix" style="color: white;">
+                                            <li>1min</li>
+                                            <li>5min</li>
+                                            <li class="active">15min</li>
+                                            <li>30min</li>
+                                            <li>60min</li>
+                                            <li>1day</li>
+                                            <li>1week</li>
+                                            <li>1month</li>
+                                        </ul>
+                                    </div>
+                                    <div style="height: 720px;padding:30px 0;">
+                                        <div id="chart-box" class="kline" >
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <!------------------- 交易区 ---------------->
+
+                            <div class="clearfix quotes-transaction">
+                                <div class="left quotes-transaction-area">
+                                    <div class="clearfix quotes-transaction-header">
+                                        <h2>{$market.money}</h2>
+                                        <a href="/index.php?s=help&c=show&id=13">{$market.fee}</a>
+                                    </div>
+                                    <div class="clearfix quotes-transaction-box">
+
+                            <!-------------------- 登录后 ------------->
+
+                                        <div class="quotes-transaction-box-item">
+                                            <div class="sell-trade">
+                                                <div class="sell-tetil">
+                                                    <h2 style="color:#aaa; font-size:.14rem;">{$market.available}
+                                                        <span id="tradeBuyInt">0</span>
+                                                        <span id="tradeBuyDig">.0000</span>
+                                                        <span style="color:#fff;">{$data.tradeType['buyShortName']}</span>
+
+                                                    </h2>
+                                                    <a href="/index.php?s=exc&c=FinanceController">{$market.charge_money}</a>
+                                                </div>
+                                                <div class="sell-item">
+                                                    <h3 class="sell-item-tetil">
+                                                        {$market.buyPrice}
+                                                        <strong>
+                                                            {$market.bestBuyPrice}：
+                                                            <font><span id="best-buy"></span>{$data.tradeType['buyShortName']}</font>
+                                                        </strong>
+                                                    </h3>
+                                                    <div class="sell-item-text">
+                                                        <div class="sell-item-form">
+                                                            <input type="text" id="tradebuyprice"/>
+                                                        </div>
+                                                        <p id="tradebuyprice-cny">≈0.00 CNY</p>
+                                                    </div>
+                                                </div>
+                                                <div class="sell-item">
+                                                    <h3 class="sell-item-tetil">
+                                                        {$market.buyNumber}
+                                                    </h3>
+                                                    <div class="sell-item-form">
+                                                        <input type="text" id="tradebuyamount" />
+                                                    </div>
+                                                </div>
+                                                <div class="sell-item" style="padding: 0px; color: white;">
+                                                    <div class="slider sell-item-slider" id="buyslider" ></div>
+                                                </div>
+                                                <div class="sell-item">
+                                                    <div class="sell-item-num" style="color: white;" >
+                                                        {$market.tradeNumber} <span id="tradebuyTurnover">0.0000</span><span>{$data.tradeType['buyShortName']}</span>
+                                                        <p id="buy-errortips" class="error-tips" style="color:red;"> </p>
+                                                    </div>
+                                                </div>
+                                                <div class="sell-item">
+                                                    <div class="sell-item-btn">
+                                                        <button class="transaction-model-show" id="buybtn">{$market.buy}{$data.tradeType['sellShortName']}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                            <!-------------------- 未登录 ------------->
+
+                                        <div class="quotes-transaction-box-item">
+                                            <div class="sell-trade">
+                                                <div class="sell-tetil">
+                                                    <h2 style="color:#aaa;font-size:.14rem;">{$market.available}
+                                                        <span id="tradeCoinInt">0</span>
+                                                        <span id="tradeCoinDig">.0000</span>
+                                                        <span style="color:#fff;">{$data.tradeType['sellShortName']}</span>
+
+                                                    </h2>
+                                                    <a href="/index.php?s=exc&c=FinanceController">{$market.charge_money}</a>
+
+                                                </div>
+                                                <div class="sell-item">
+                                                    <h3 class="sell-item-tetil">
+                                                        {$market.sellPrice}
+                                                        <strong>
+                                                            {$market.bestSellPrice}：
+                                                            <font> <span id="best-sell"></span>{$data.tradeType['buyShortName']}</font>
+                                                        </strong>
+                                                    </h3>
+                                                    <div class="sell-item-text">
+                                                        <div class="sell-item-form">
+                                                            <input type="text" id="tradesellprice"/>
+                                                        </div>
+                                                        <p id="tradesellprice-cny">≈0.00 CNY</p>
+                                                    </div>
+                                                </div>
+                                                <div class="sell-item">
+                                                    <h3 class="sell-item-tetil">
+                                                        {$market.sellNumber}
+                                                    </h3>
+                                                    <div class="sell-item-form">
+                                                        <input type="text" name="tradesellamount" autocomplete="off" id="tradesellamount"/>
+                                                    </div>
+                                                </div>
+                                                <div class="sell-item" style="padding: 0px; color: white;">
+                                                    <div class="slider sell-item-slider" id="sellslider" ></div>
+                                                </div>
+                                                <div class="sell-item">
+                                                    <div class="sell-item-num" style="color:white;">
+                                                        {$market.tradeNumber} <span  id="tradesellTurnover">0.0000</span>{$data.tradeType['buyShortName']}
+                                                        <p id="sell-errortips" class="error-tips" style="color:red;"> </p>
+                                                    </div>
+                                                </div>
+                                                <div class="sell-item">
+                                                    <div class="sell-item-btn">
+                                                        <button style="background: #b34747;border-color: #b34747;;" class="transaction-model-show" id="sellbtn">{$market.sell}{$data.tradeType['sellShortName']}</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="left quotes-transaction-tabel-wrap">
+                                    <div class="quotes-transaction-tabel">
+                                        <div class="quotes-tabel-header">
+                                            <h2 id="header-text"></h2>
+                                        </div>
+
+                                <!------------  卖出的列表  ----------------->
+										<style type="text/css">
+											.js-click-sell span{
+												z-index: 10;
+												position: relative;
+											}
+											.js-click-sell b{
+												z-index: 1;
+											}
+											.js-click-buy span{
+												z-index: 10;
+												position: relative;
+											}
+											.js-click-buy b{
+												z-index: 1;
+											}
+										</style>
+                                        <div class="quotes-transaction-tabel-data">
+                                            <dl class="quotes-transaction-tabel-body">
+                                            	   <dt class="quotes-transaction-tabel-tetil">
+                                            	       <span class="tetil"></span>
+                                            	       <span class="price" id="inner-price">{$market.price}({$data.tradeType['buyShortName']})</span>
+                                            	       <span class="amount" id="inner-amount">{$market.number}({$data.tradeType['sellShortName']})</span>
+                                            	       <span id="inner-sum">{$market.accu}({$data.tradeType['buyShortName']})</span>
+                                            	   </dt>
+                                            	   <dd class="quotes-transaction-tabel-item cell">
+                                            	       <div class="inner js-click-sell">
+                                            	           <span class="color-sell">{$market.sells} 7</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                            	           <b class="color-sell-bg" style="width: 30%;"></b>
+                                            	       </div>
+                                            	   </dd>
+                                            	   <dd class="quotes-transaction-tabel-item cell">
+                                            	       <div class="inner js-click-sell">
+                                            	           <span class="color-sell">{$market.sells} 6</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                            	           <b class="color-sell-bg" style="width: 40%;"></b>
+                                            	       </div>
+                                            	   </dd>
+                                            	   <dd class="quotes-transaction-tabel-item cell">
+                                            	       <div class="inner js-click-sell">
+                                            	           <span class="color-sell">{$market.sells} 5</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                            	           <b class="color-sell-bg" style="width: 25%;"></b>
+                                            	       </div>
+                                            	   </dd>
+                                            	   <dd class="quotes-transaction-tabel-item cell">
+                                            	       <div class="inner js-click-sell">
+                                            	           <span class="color-sell">{$market.sells} 4</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                            	           <b class="color-sell-bg" style="width: 10%;"></b>
+                                            	       </div>
+                                            	   </dd>
+                                            	   <dd class="quotes-transaction-tabel-item cell">
+                                            	       <div class="inner js-click-sell">
+                                            	           <span class="color-sell">{$market.sells} 3</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                            	           <b class="color-sell-bg" style="width: 5%;"></b>
+                                            	       </div>
+                                            	   </dd>
+                                            	   <dd class="quotes-transaction-tabel-item cell">
+                                            	       <div class="inner js-click-sell">
+                                            	           <span class="color-sell">{$market.sells} 2</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                            	           <b class="color-sell-bg" style="width: 90%;"></b>
+                                            	       </div>
+                                            	   </dd>
+                                            	   <dd class="quotes-transaction-tabel-item cell">
+                                            	       <div class="inner js-click-sell">
+                                            	           <span class="color-sell">{$market.sells} 1</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                            	           <b class="color-sell-bg" style="width: 30%;"></b>
+                                            	       </div>
+                                            	   </dd>
+                                            </dl>
+
+                                   <!------------- 买入的列表 ------------->
+
+                                            <div class="quotes-transaction-tabel-box">
+                                                <dl class="quotes-transaction-tabel-body">
+                                                	   <dd class="quotes-transaction-tabel-item cell">
+                                                       <div class="inner js-click-buy">
+                                                           <span class="color-buy">{$market.buys} 1</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <b class="color-buy-bg" style="width: 30%;"></b>
+                                                       </div>
+                                                   </dd>
+                                                	   <dd class="quotes-transaction-tabel-item cell">
+                                                       <div class="inner js-click-buy">
+                                                           <span class="color-buy">{$market.buys} 2</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <b class="color-buy-bg" style="width: 30%;"></b>
+                                                       </div>
+                                                   </dd>
+                                                	   <dd class="quotes-transaction-tabel-item cell">
+                                                       <div class="inner js-click-buy">
+                                                           <span class="color-buy">{$market.buys} 3</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <b class="color-buy-bg" style="width: 30%;"></b>
+                                                       </div>
+                                                   </dd>
+                                                	   <dd class="quotes-transaction-tabel-item cell">
+                                                       <div class="inner js-click-buy">
+                                                           <span class="color-buy">{$market.buys} 4</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <b class="color-buy-bg" style="width: 30%;"></b>
+                                                       </div>
+                                                   </dd>
+                                                	   <dd class="quotes-transaction-tabel-item cell">
+                                                       <div class="inner js-click-buy">
+                                                           <span class="color-buy">{$market.buys} 5</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <b class="color-buy-bg" style="width: 30%;"></b>
+                                                       </div>
+                                                   </dd>
+                                                	   <dd class="quotes-transaction-tabel-item cell">
+                                                       <div class="inner js-click-buy">
+                                                           <span class="color-buy">{$market.buys} 6</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <b class="color-buy-bg" style="width: 30%;"></b>
+                                                       </div>
+                                                   </dd>
+                                                	   <dd class="quotes-transaction-tabel-item cell">
+                                                       <div class="inner js-click-buy">
+                                                           <span class="color-buy">{$market.buys} 7</span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <span></span>
+                                                           <b class="color-buy-bg" style="width: 30%;"></b>
+                                                       </div>
+                                                   </dd>
+                                                </dl>
+
+                                     <!--------------- 表格尾部 ------------->
+
+                                            </div>
+
+                                            <div class="clearfix quotes-transaction-footer">
+                                                <div class="quotes-transaction-nav">
+                                                </div>
+                                                <a href="/index.php?s=exc&c=TradeController&m=order&sb={$data.sb}&type={$data.type}&symbol={$data.symbol}&plat={$data.isPlatformStatus}" class="quotes-transaction-footer-btn">更多</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        <!----------------------- 当前委托及委托记录 ---------------->
+                        <!----------------------- 登录后显示 ---------------->
+
+                        <!----------------------- 当前委托 ------------------>
+
+                            <div class="clearfix quotes-transaction" id="ensureButton">
+                                <div class="clearfix  quotes-header quotes-intrust-header">
+                                    <button class="iconfont icon-xia1 left"></button>
+                                    <h2 class="left quotes-header-tetil quotes-sgraph-tetil">{$market.entrust}</h2>
+                                    <div class="quotes-header-nav-wrap">
+                                        <ul class="quotes-header-nav">
+                                        		<li class="quotes-header-navbar active encur-tab" data-id="ensure-all">
+                                                <button>{$market.all}</button>
+                                            </li>
+                                            <li class="quotes-header-navbar encur-tab" data-id="ensure-buy">
+                                                <button>{$market.buy}</button>
+                                            </li>
+                                            <li class="quotes-header-navbar encur-tab" data-id="ensure-sell">
+                                                <button>{$market.sell}</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                 </div>
+                                 <div class="quotes-intrust-wrap">
+                                     <div class="quotes-intrust">
+										 <table class="quotes-intrust-list ensure-table" id="ensure-all">
+                                             <thead>
+                                             <tr class="quotes-intrust-list-header">
+                                                 <th>{$market.time}</th>
+                                                 <th>{$market.trade}</th>
+                                                 <th>{$market.turn}</th>
+                                                 <th>{$market.price}（{$data.tradeType['buyShortName']}）</th>
+                                                 <th>{$market.number}（{$data.tradeType['sellShortName']}）</th>
+                                                 <th>{$market.enTotal}({$data.tradeType['buyShortName']})</th>
+                                                 <th>{$market.turnover}</th>
+                                                 <th>{$market.over}</th>
+                                                 <th>{$market.opera}</th>
+                                             </tr>
+                                             </thead>
+                                             <tbody id="ensure-all-data">
+                                             <!----------- 无记录 ------------>
+
+                                             </tbody>
+                                         </table>
+                                         <table class="quotes-intrust-list ensure-table" id="ensure-buy" style="display: none;">
+                                             <thead>
+                                                 <tr class="quotes-intrust-list-header">
+                                                     <th>{$market.time}</th>
+                                                     <th>{$market.trade}</th>
+                                                     <th>{$market.turn}</th>
+                                                     <th>{$market.price}({$data.tradeType['buyShortName']})</th>
+                                                     <th>{$market.number}({$data.tradeType['sellShortName']}）</th>
+                                                     <th>{$market.enTotal}({$data.tradeType['buyShortName']})</th>
+                                                     <th>{$market.turnover}</th>
+                                                     <th>{$market.over}</th>
+                                                     <th>{$market.opera}</th>
+                                                 </tr>
+                                             </thead>
+                                         	<tbody id="ensure-buy-data">
+                                         	   <!----------- 无记录 ------------>
+
+                                         	</tbody>
+                                         </table>
+
+                                         <table class="quotes-intrust-list ensure-table" id="ensure-sell" style="display: none;">
+                                             <thead>
+                                             <tr class="quotes-intrust-list-header">
+                                                 <th>{$market.time}</th>
+                                                 <th>{$market.trade}</th>
+                                                 <th>{$market.turn}</th>
+                                                 <th>{$market.price}（{$data.tradeType['buyShortName']}）</th>
+                                                 <th>{$market.number}（{$data.tradeType['sellShortName']}）</th>
+                                                 <th>{$market.enTotal}({$data.tradeType['buyShortName']})</th>
+                                                 <th>{$market.turnover}</th>
+                                                 <th>{$market.over}</th>
+                                                 <th>{$market.opera}</th>
+                                             </tr>
+                                             </thead>
+                                             <tbody id="ensure-sell-data">
+                                             <!----------- 无记录 ------------>
+
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                 </div>
+                            </div asid >
+
+
+                        <!------------------------ 委托记录 ------------------>
+
+                            <div class="clearfix quotes-transaction js-action-enhis">
+                                <div class="clearfix  quotes-header quotes-intrust-header">
+                                    <button class="iconfont icon-xia1 left"></button>
+                                    <h2 class="left quotes-header-tetil ">{$market.enHis}</h2>
+                                    <div class="quotes-header-nav-wrap">
+                                        <ul class="quotes-header-nav">
+                                        		<li class="quotes-header-navbar active enhis-tab" data-id="enhis-all">
+                                                <button>{$market.all}</button>
+                                            </li>
+                                            <li class="quotes-header-navbar enhis-tab" data-id="enhis-buy">
+                                                <button>{$market.buy}</button>
+                                            </li>
+                                            <li class="quotes-header-navbar enhis-tab" data-id="enhis-sell">
+                                                <button>{$market.sell}</button>
+                                            </li>
+                                            
+                                        </ul>
+                                    </div>
+                                 </div>
+                                 <div class="quotes-intrust-wrap">
+                                     <div class="quotes-intrust">
+                                     	 <table class="quotes-intrust-list enhis-table" id="enhis-all">
+                                             <thead>
+                                             <tr class="quotes-intrust-list-header">
+                                                 <th>{$market.time}</th>
+                                                 <th>{$market.trade}</th>
+                                                 <th>{$market.turn}</th>
+                                                 <th>{$market.price}</th>
+                                                 <th>{$market.number}</th>
+                                                 <th>{$market.enTotal}</th>
+                                                 <th>{$market.turnover}</th>
+                                                 <th>{$market.over}</th>
+                                                 <th>{$market.fees}</th>
+                                                 <th>{$market.opera}</th>
+                                             </tr>
+                                             </thead>
+                                             <tbody id="enhis-all-data">
+                                             <!----------- 无记录 ------------>
+
+                                             </tbody>
+                                         </table>
+                                         <table class="quotes-intrust-list enhis-table" id="enhis-buy" style="display: none;">
+                                             <thead>
+                                                <tr class="quotes-intrust-list-header">
+                                                    <th>{$market.time}</th>
+                                                    <th>{$market.trade}</th>
+                                                    <th>{$market.turn}</th>
+                                                    <th>{$market.price}（{$data.tradeType['buyShortName']}）</th>
+                                                    <th>{$market.number}（{$data.tradeType['sellShortName']}）</th>
+                                                    <th>{$market.enTotal}({$data.tradeType['buyShortName']})</th>
+                                                    <th>{$market.turnover}</th>
+                                                    <th>{$market.over}</th>
+                                                    <th>{$market.opera}</th>
+                                             </tr>
+                                             </thead>
+                                            <tbody id="enhis-buy-data">
+                                               <!----------- 无记录 ------------>
+
+                                            </tbody>
+                                         </table>
+
+                                         <table class="quotes-intrust-list enhis-table" id="enhis-sell" style="display: none;">
+                                             <thead>
+                                             <tr class="quotes-intrust-list-header">
+                                                 <th>{$market.time}</th>
+                                                 <th>{$market.trade}</th>
+                                                 <th>{$market.turn}</th>
+                                                 <th>{$market.price}（{$data.tradeType['buyShortName']}）</th>
+                                                 <th>{$market.number}（{$data.tradeType['sellShortName']}）</th>
+                                                 <th>{$market.enTotal}({$data.tradeType['buyShortName']})</th>
+                                                 <th>{$market.turnover}</th>
+                                                 <th>{$market.over}</th>
+                                                 <th>{$market.opera}</th>
+                                             </tr>
+                                             </thead>
+                                             <tbody id="enhis-sell-data">
+                                             <!----------- 无记录 ------------>
+
+                                             </tbody>
+                                         </table >
+                                     </div>
+                                 </div>
+                            </div>
+
+
+
+                        <!----------------------- 深度图及实时成交  ----------------->
+
+                            <div class="clearfix quotes-transaction">
+
+                                <!---------------- 深度图 -------------------->
+                                <div class="left quotes-sgraph">
+                                    <div class="clearfix  quotes-header quotes-sgraph-header">
+                                        <button class="iconfont icon-xia1 left"></button>
+                                        <h2 class="left quotes-header-tetil quotes-sgraph-tetil">{$market.deepth}</h2>
+                                    </div>
+                                    <div class="quotes-sgraph-box" >
+                                        <div id="depth-chart" style="width: 100%;height: 485px;">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                               <!-------------- 实时成交表 ----------------------->
+
+                               <div class="left quotes-deal-wrap">
+                                   <div class="quotes-deal">
+                                       <div class="clearfix  quotes-header quotes-deal-header">
+                                            <button class="iconfont icon-xia1 left"></button>
+                                            <h2 class="left quotes-header-tetil quotes-sgraph-tetil">{$market.intime}</h2>
+                                        </div>
+                                        <div class="quotes-deal-list-wrap">
+                                            <table class="quotes-deal-list" id="realTimeTrade">
+                                               <tr class="quotes-deal-item">
+                                                   <td>{$market.time}</td>
+                                                   <td>{$market.turn}</td>
+                                                   <td class="real-trade-price">{$market.price}({$data.tradeType['buyShortName']})</td>
+                                                   <td class="real-trade-mount">{$market.number}({$data.tradeType['sellShortName']})</td>
+                                               </tr>
+                                           </table>
+                                        </div>
+
+                                   </div>
+
+                               </div>
+
+                            </div>
+
+                        </div>
+                </div>
+
+            </div>
+        </div>
+        <!--交易密码-->
+        <div class="model" style="display: none;" id="tradepass">
+            <div class="model-body" style="background-color: #282B36;">
+                <div class="model-form-header clearfix" style="background-color: #22242E;">
+                    <div class="model-form-tetil">
+                        <h2 style="color: #FFFFFF;">{$market.tradePassword}</h2>
+                    </div>
+                    <div class="model-hide">
+                        <button class="iconfont icon-guanbi" style="color: #FFFFFF;"></button>
+                    </div>
+                </div>
+                <div class="model-form-body">
+                    <div class="model-form-item">
+                        <label for="">
+                            <input type="password" id="tradePwd" autocomplete="off" placeholder="{$market.enterPassword}"/>
+                        </label>
+                    </div>
+                    <div class="model-form-item">
+                        <span id="errortips"></span>
+                    </div>
+                    <div class="model-form-item">
+                        <button class="model-form-btn" id="modalbtn">{$market.submit}</button>
+                    </div>
+                </div>
+            </div>
+        </div>.
+        <!--委托历史详情-->
+        <div class="model" id="entrustsdetail">
+            <div class="model-body" style="background-color: #282B36;">
+                <div class="model-form-header clearfix" style="background-color: #22242E;">
+                    <div class="model-form-tetil">
+                        <h2 class="js-entrust-title" style="color: #FFFFFF;"></h2>
+                    </div>
+                    <div class="model-hide">
+                        <button class="iconfont icon-guanbi" style="color: #FFFFFF;"></button>
+                    </div>
+                </div>
+                <div class="model-form-body js-entrust-body" style="padding: 20px 20px;">
+
+                </div>
+            </div>
+        </div>
+        <!--委托历史详情结束-->
+
+        <input type="hidden" id="sellShortName" value="{$data.tradeType['sellShortName']}">
+        <input type="hidden" id="cnyDigit" value="{$data.cnyDigit}">
+        <input type="hidden" id="coinDigit" value="{$data.coinDigit}">
+        <input type="hidden" id="buyShortName" value="{$data.tradeType['buyShortName']}">
+        <input type="hidden" id="hide-symbol" value="{strtolower($data.tradeType['sellShortName'])}_{strtolower($data.tradeType['buyShortName'])}">
+        <input type="hidden" id="symbol" value="{$data.tradeType['id']}">
+        {if $data['login']}
+         <input type="hidden" id="tradePassword" value="{$data.tradePassword ? 'true' :''}">
+        <input type="hidden" id="isopen" value="{$data.needTradePasswd ? 'true':'false'}">
+         <input type="hidden" id="isTelephoneBind" value="{$data.isTelephoneBind ? 'true':'false'}">
+        {/if}
+        <input type="hidden" id="isPlatformStatus" value="{$data.isPlatformStatus ? 'true':'false'}">
+        <input type="hidden" id="tradePrice" value="{$data.tradeType['priceOffset']}">
+        <input type="hidden" id="tradeAmount" value="{$data.tradeType['amountOffset']}">
+
+        <input type="hidden" id="login" value="{$data['login'] ? 'true':'false'}">
+        <input type="hidden" id="tradeType" value="">
+        <input type="hidden" id="tradeBuyCoin" value="0">
+        <input type="hidden" id="tradeSellCoin" value="0">
+
+        {template "footer.html" }
+
+
+        <script type="text/javascript">
+            $(".area-btns-item a").on({
+                click:function(){
+                    $(".area-btns-item a").removeClass("active");
+                    $(this).addClass("active");
+                }
+            })
+        </script>
+
+        <script src="{HOME_THEME_PATH}exc/js/comm/exchangeRate.js" type="text/javascript" charset="utf-8"></script>
+        <!--<script src="{HOME_THEME_PATH}exc/js/custom.js" type="text/javascript" charset="utf-8"></script>-->
+        <!--<script src="{HOME_THEME_PATH}exc/js/plugin/layer/layer.js" type="text/javascript" charset="utf-8"></script>-->
+        <!--<script src="{HOME_THEME_PATH}exc/js/comm/util.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/comm/comm.js" type="text/javascript" charset="utf-8"></script>-->
+        <script src="{HOME_THEME_PATH}exc/font/iconfont.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/plugin/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/plugin/pako.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/slide.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/jquery-ui-slider-pips.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/plugin/swiper/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+	    <!--[if lt IE 9]>对不起，浏览器版本太低~！<![endif]-->
+      
+        <script src="{HOME_THEME_PATH}exc/js/markt/HandleMarket.js?v=1.2" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/markt/trademarket2.js" type="text/javascript" charset="utf-8"></script>
+
+        <script type="text/javascript">
+        	       $(".quotes-search-btn").on({
+        	           click:function(){
+        	               if($(this).hasClass("active")){
+        	                   $(this).removeClass("active");
+        	                   $(this).css("color","#474A59");
+        	               }else{
+        	                   $(this).addClass("active");
+        	                   $(this).css("color","#E64021");
+        	               }
+        	           }
+        	       })
+
+
+
+        	       $(".quotes-list-header").on({
+        	           click:function(){
+        	               $(this).siblings(".quotes-list-header").children("i").removeClass();
+        	               var _data = $(this).children("i");
+        	               if(_data.hasClass("quotes-list-header-dase")){
+        	                   _data.removeClass("quotes-list-header-dase").addClass("quotes-list-header-ase");
+        	               }else if(_data.hasClass("quotes-list-header-ase")){
+        	                   _data.addClass("quotes-list-header-dase").removeClass("quotes-list-header-ase");
+        	               }else{
+        	                   _data.addClass("quotes-list-header-dase");
+        	               }
+        	           }
+        	       })
+
+
+        </script>
+        <script type="text/javascript">
+            $(".slider").slider({
+                    min: 0,
+                    max: 100,
+                    step: 20,
+                    orientation: "horizontal",
+                    range: "min",
+                    change: _slider_data
+                }).slider("pips");;
+
+            function _slider_data(){
+                console.log('343');
+                var _left = $(this).slider("value");
+                var tag = $(this).attr('id')=='buyslider' ? 0:1;
+                trade.onPortion(_left, tag);
+                $(this).siblings(".sell-item-tetil").children("span").html(_left + "%")
+            }
+            $('.js-click-sell span:not(.color-sell)').click(function() {
+            	// alert($(this).text());
+				$('#tradebuyprice').val($(this).text());
+			})
+			$('.js-click-buy span:not(.color-sell)').click(function() {
+				$('#tradesellprice').val($(this).text());
+			})
+
+			//公告轮播
+              var swiper_enroll = new Swiper('.js-swiper-container-enroll', {
+                  direction: 'vertical',
+                  loop: true,
+                  autoplay: {
+                      delay:2000,
+                  },
+                  autoplayDisableOnInteraction: false,
+              })
+        </script>
+	</body>
+</html>

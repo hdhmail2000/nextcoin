@@ -1,0 +1,149 @@
+{template "nheader.html"}
+<script type="text/javascript">
+$(function() {
+    // 错误提示
+	{if $error}
+	dr_tips('{$error.msg}', 3, '{intval($error.status)}');
+	{/if}
+    // 生成静态文件
+	{if $create}
+    $.ajax({
+        type: "GET",
+        async: false,
+        url:"{$create}",
+        dataType: "jsonp",
+        success: function(json){ },
+        error: function(){ }
+    });
+    $.ajax({
+        type: "GET",
+        async: false,
+        url:"index.php?s={APP_DIR}&c=category&m=create_html&id={$catid}",
+        dataType: "jsonp",
+        success: function(json){ },
+        error: function(){ }
+    });
+	{/if}
+    // 加载草稿
+    $("#dr_cgbox").mouseover(function(){
+        $(".dr_cgbox").show();
+    }).mouseout(function(){
+        $(".dr_cgbox").hide();
+    });
+    $(".dr_cgbox_select").click(function(){
+        var did = $(this).attr("did");
+        var islock = $(this).attr("islock");
+        if (did != undefined && islock == "0") {
+            window.location.href = '{$draft_url}&did='+did;
+        }
+
+    });
+    // 自动保存草稿
+    {if $did}
+    setInterval("dr_save_draft_data()", 5000);
+    {/if}
+	//
+	{if $data.syncatid}
+		$("#dr_syncat_num").html("{php echo substr_count($data.syncatid, '|')}");
+		$("#dr_syncat_text").show();
+	{/if}
+});
+</script>
+<form class="form-horizontal" action="" method="post" id="myform" name="myform">
+    <input name="page" id="page" type="hidden" value="{$page}" />
+    <input name="action" id="dr_action" type="hidden" value="back" />    <input name="dr_id" id="dr_id" name="dr_id" type="hidden" value="{$data.id}" />
+    <input name="dr_module" id="dr_module" type="hidden" value="{APP_DIR}" />
+    <div class="page-bar">
+        <ul class="page-breadcrumb mylink">
+            {$menu.link}
+        </ul>
+        <ul class="page-breadcrumb myname">
+            {$menu.name}
+        </ul>
+        <div class="page-toolbar">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false" data-hover="dropdown"> {fc_lang('操作菜单')}
+                    <i class="fa fa-angle-down"></i>
+                </button>
+                <ul class="dropdown-menu pull-right" role="menu">
+                    {loop $menu.quick $t}
+                    <li>
+                        <a href="{$t.url}">{$t.icon} {$t.name}</a>
+                    </li>
+                    {/loop}
+                    <li class="divider"> </li>
+                    <li>
+                        <a href="javascript:window.location.reload();">
+                            <i class="icon-refresh"></i> {fc_lang('刷新页面')}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:20px;margin-bottom: 50px;">
+        <div class="col-md-9">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <span class="caption-subject font-green sbold uppercase">{fc_lang('截止时间')}</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{fc_lang('创世挖矿')}：</label>
+                            <div class="col-md-9">
+                                <label>
+                                	<select class="form-control" name="data[status]" {if $data.status == 2 || $data.status == 3}disabled="disabled"{/if}>
+                                		<option {if $data.status == 1}selected{/if} value="1">{fc_lang('尚未开始')}</option>
+                                		<option {if $data.status == 2}selected{/if} value="2">{fc_lang('开始')}</option>
+                                		<option {if $data.status == 3}selected{/if} value="2">{fc_lang('已结束')}</option>
+                                	</select>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        {if $data.status > 1}
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{fc_lang('开始时间')}：</label>
+                            <div class="col-md-9">
+                                <label>
+                                	<input class="form-control" type="text" disabled="disabled" value="{date('Y-m-d H:i:s',$data.time)}" style="width:200px;">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">{fc_lang('截止时间')}：</label>
+                            <div class="col-md-9">
+                                <label>
+                                	<input class="form-control" type="text" disabled="disabled" value="{date('Y-m-d H:i:s',$data.endtime)}" style="width:200px;">
+                                </label>
+                            </div>
+                        </div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="myfooter">
+        <div class="row">
+            <div class="portlet-body form">
+                <div class="form-body">
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn green"> <i class="fa fa-save"></i> {fc_lang('保存并返回')}</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{template footer.html}

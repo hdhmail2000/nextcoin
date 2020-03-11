@@ -1,0 +1,77 @@
+{template "header.html" }
+{template "top.html" }
+        <div class=""   style="text-align: center;">
+            <div class="row loging-body"    >
+                <div class="">
+                    <div class="loging-body-box">
+                        <h2 class="loging-body-tetil">{$vail.first_find}</h2>
+                        <div class="form-wrap">
+                            <div class="form">
+
+                                <div class="form-item reset-phone" style="position: relative;display: none;">
+                                    <div id="form-site" class="form-site clearfix" data-select="86">
+                                        <span class="iconfont icon-shouji"></span>
+                                        <p id="site">中国86</p>
+
+                                    </div>
+                                    <div class="form-site-list">
+                                        <ul>
+											{loop $areaCodes $item}
+                                            <li class="form-site-item" code="{$item.value}">{$item.key} &nbsp;{$item.value}</li>
+											{/loop}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-item">
+                                    <span class="iconfont icon-zhuanghao"></span>
+                                    <label for="">
+                                        <input type="text"  id="reset-email" value="" placeholder="{$vail.first_place1}"/>
+                                    </label>
+                                </div>
+
+                                <!--<div class="form-item">
+                                    <label for="">
+                                        <select  id="reset-idcard" style="color: #000000;">
+                                            <option value="1">{$vail.first-idcard}</option>
+                                        </select>
+                                    </label>
+                                </div>-->
+                                <!--<input type="hidden" value="1" id="reset-idcard" />-->
+                                <!--<div class="form-item">-->
+                                    <!--<span class="iconfont icon-zhengjian"></span>-->
+                                    <!--<label for="">-->
+                                        <!--<input type="text" id="reset-idcardno" value="" placeholder="{$vail.first_idcard}"/>-->
+                                    <!--</label>-->
+                                <!--</div>-->
+                                <div class="form-item form-item-box clearfix">
+                                    <span class="iconfont icon-yanzhengma"></span>
+                                    <label for="">
+                                        <input type="text" id="reset-imgcode" value="" placeholder="{$vail.first_place3}"/>
+                                    </label>
+                                    <a href="###" class="form-item-img">
+                                        <img id="btn-imgcode" src="/index.php?s=exc&c=userController&m=getVailImg" alt="" />
+                                    </a>
+                                </div>
+
+                                <div class="form-item form-item-box clearfix reset-phone" style="display: none;">
+                                    <span class="iconfont icon-shoujiyanzheng"></span>
+                                    <label for="">
+                                        <input type="text"  id="reset-msgcode" value="" />
+                                    </label>
+                                    <button  id="reset-sendmessage" data-msg-type="109"  data-tipsid="register-phone-areacode" class="form-item-btn  btn-sendphonecode">{$vail.first_getCode}</button>
+                                </div>
+
+                            <div class="form-btn">
+                                <a href="javascript:void(0);" id="btn-email-next">{$vail.first_next}</a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <script src="{HOME_THEME_PATH}exc/js/user/reset.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/comm/msg.js" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }

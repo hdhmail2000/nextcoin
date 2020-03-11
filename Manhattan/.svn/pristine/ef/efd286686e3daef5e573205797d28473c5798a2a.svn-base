@@ -1,0 +1,211 @@
+//
+//  XHHTradReleaseView.m
+//  FuturePurse
+//
+//  Created by Apple on 2018/7/30.
+//  Copyright © 2018年 jbtm. All rights reserved.
+//
+
+#import "XHHTradReleaseView.h"
+#import "XHHTradReleaseViewCell.h"
+#import "XHHC2CMyReleaseModel.h"
+#import "XHHTradSellBuyDetailController.h"
+
+static NSString *cellIndienfiter = @"XHHTradReleaseViewCell";
+#define SYSTEM_VERSION_GRETER_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+
+#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+
+@interface XHHTradReleaseView ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
+
+@end
+
+@implementation XHHTradReleaseView
+
+-(instancetype)init{
+    self = [super init];
+    if (self) {
+        [self zh_setupUI];
+        
+        [self configSwipeButtons];
+    }
+    return self;
+}
+
+-(void)zh_setupUI{
+    [self addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self);
+    }];
+}
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.rowHeight = 100;
+        _tableView.showsVerticalScrollIndicator = NO;
+        [_tableView setSeparatorColor:LineCorlor];
+        [_tableView setTableFooterView:[[UIView alloc] initWithFrame:CGRectZero]];
+        [_tableView setBackgroundColor:[UIColor clearColor]];
+        [_tableView registerNib:[UINib nibWithNibName:@"XHHTradReleaseViewCell" bundle:nil] forCellReuseIdentifier:cellIndienfiter];
+    }
+    return _tableView;
+}
+-(NSMutableArray *)dataArray{
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.dataArray.count;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    XHHTradReleaseViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndienfiter];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.backgroundColor = [UIColor clearColor];
+    XHHC2CMyReleaseModel *model = self.dataArray[indexPath.row];
+    [cell reloadCellWithModel:model];
+    return cell;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    XHHC2CMyReleaseModel *model = self.dataArray[indexPath.row];
+    XHHTradSellBuyDetailController *vc = [[XHHTradSellBuyDetailController alloc] init];
+    if (ChZ_StringIsEmpty(model.deal_type))
+    {
+        if ([model.deal_type isEqualToString:@"1"]) {
+            vc.tradType = C2CTradTypeSell;
+        }
+        if ([model.deal_type isEqualToString:@"2"]) {
+            vc.tradType = C2CTradTypeBuy;
+        }
+    }
+    vc.orderId = model.fid;
+    [[ChZUtil getCurrentVC].navigationController pushViewController:vc animated:YES];
+}
+
+//侧滑允许编辑cell
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath{
+    return YES;
+}
+//执行删除操作
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"删除删除删除删除删除删除删除删除删除");
+}
+//侧滑出现的文字
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return @"下线";
+}
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // 添加一个删除按钮
+    UITableViewRowAction *deleteRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除"handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        NSLog(@"点击了删除");
+        XHHC2CMyReleaseModel *model = self.dataArray[indexPath.row];
+        if([model.status isEqualToString:@"10"])
+        {
+            ChZ_MBError(@"不可重复下线")
+        }else
+        {
+            if (self.downLineIdBlock)
+            {
+                self.downLineIdBlock(model.fid);
+            }
+        }
+    }];
+    deleteRowAction.backgroundColor = bgColor;
+    // 将设置好的按钮放到数组中返回
+    return @[deleteRowAction];
+}
+-(void)tableView:(UITableView*)tableView willBeginEditingRowAtIndexPath:(NSIndexPath*)indexPath{
+    
+    [self configSwipeButtons];
+    
+}
+- (void)configSwipeButtons
+
+{
+    
+     // 获取选项按钮的reference
+    
+    if (SYSTEM_VERSION_GRETER_THAN(@"11.0"))
+    {
+            
+   // iOS 11层级 : UITableView -> UISwipeActionPullView
+        for (UIView *subview in self.tableView.subviews) {
+                    
+                    //这里写大于等于2是因为我这里需要两个action
+            if ([subview isKindOfClass:NSClassFromString(@"UISwipeActionPullView")])
+                {
+                    
+                    for(UIView *sview in subview.subviews)
+                    {
+                        if([sview isKindOfClass:NSClassFromString(@"UISwipeActionStandardButton")])
+                        {
+                            
+                            UIView *confirmView=sview;
+                            UIImageView *img = [[UIImageView alloc] init];
+                            img.image = [UIImage imageNamed:@"trad_c2c_samllBuybgimage"];
+                            [confirmView addSubview:img];
+                            [img mas_makeConstraints:^(MASConstraintMaker *make) {
+                                make.left.top.bottom.equalTo(confirmView);
+                                make.width.mas_equalTo(80);
+                            }];
+                            UILabel *lb = [UILabel newSingleFrame:CGRectZero title:@"下线" fontS:14.0 color:[UIColor colorWithHexString:@"FFFFFF"]];
+                            [confirmView addSubview:lb];
+                            [lb mas_makeConstraints:^(MASConstraintMaker *make) {
+                                make.center.equalTo(img);
+                            }];
+                        }
+                    }
+                }
+            
+        }
+            
+    }
+    
+    else{
+            
+// // iOS 8-10层级: UITableView -> UITableViewCell -> UITableViewCellDeleteConfirmationView
+//
+//XHHTradReleaseViewCell *tableCell = [self.contentTableView cellForRowAtIndexPath:self.indexPath];
+//
+//    for(UIView*subviewintableCell.subviews)
+//
+//      {
+//
+//         if ([subview isKindOfClass:NSClassFromString(@"UITableViewCellDeleteConfirmationView")] && [subview.subviews count] >= 2)
+//
+//         {
+//
+//                                            UIButton*deleteButton = subview.subviews[0];
+//
+//             [deleteButtonsetImage:[UIImage imageNamed:@"PlayView_Share"] forState:UIControlStateNormal];
+//
+//             UIButton*readButton = subview.subviews[1];
+//
+//                                            [readButtonsetImage:[UIImage imageNamed:@"PlayView_Delete"] forState:UIControlStateNormal];
+//
+//          }
+//
+//      }
+//
+    }
+    
+}
+
+/*
+// Only override drawRect: if you perform custom drawing.
+// An empty implementation adversely affects performance during animation.
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+}
+*/
+
+@end

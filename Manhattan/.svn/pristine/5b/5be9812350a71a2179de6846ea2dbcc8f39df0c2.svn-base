@@ -1,0 +1,94 @@
+//
+//  XHHAddAreaController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/17.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHAddAreaController.h"
+#import "XHHPublicNavView.h"
+#import "ChZScanQRController.h"
+#import "XHHChoosePayTypeController.h"
+@interface XHHAddAreaController ()<XHHPublicNavViewProtocol>
+@property (weak, nonatomic) IBOutlet UITextField *moneyText;
+@property (weak, nonatomic) IBOutlet UITextField *nameText;
+@property (weak, nonatomic) IBOutlet UITextField *areaText;
+@property (weak, nonatomic) IBOutlet UIButton *chooseButton;
+@property (strong, nonatomic) IBOutlet UIView *contentView;
+@property (nonatomic , strong) XHHPublicNavView           *navView;
+@end
+
+@implementation XHHAddAreaController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self zh_setupUI];
+    // Do any additional setup after loading the view from its nib.
+}
+
+-(void)zh_setupUI{
+    CGFloat navHeight = ChZ_IsiPhoneX ? 24 : 0;
+    
+    [self.view addSubview:self.navView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.right.equalTo(self.view);
+        make.height.mas_equalTo(navHeight +64);
+    }];
+    [self.view addSubview:self.contentView];
+    [self.contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.view);
+        make.top.equalTo(self.navView.mas_bottom);
+    }];
+    
+    [_moneyText configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [_nameText configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [_areaText configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+-(XHHPublicNavView *)navView{
+    if (!_navView) {
+        _navView = [[[NSBundle mainBundle] loadNibNamed:@"XHHPublicNavView" owner:nil options:nil] lastObject];
+        [_navView setLeftButtonTitle:@"创建新地址" image:@"public_nav_leftBack"];
+        [_navView setrightButtonTitles:nil images:@[@"mine_wallet_sao"]];
+        _navView.rightOneWithd.constant = 44;
+        _navView.delegete = self;
+    }
+    return _navView;
+}
+-(void)rightButtonActionIndex:(NSInteger)index{
+    ChZScanQRController *vc = [ChZScanQRController initWithStoryboard:@"Scan"];;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+- (IBAction)chooseAction:(id)sender {
+    XHHChoosePayTypeController *vc = [[XHHChoosePayTypeController alloc] init];
+    @weakify(self);
+    vc.choosePayTypeBlock = ^(XHHPayTypeModel *model) {
+        @strongify(self);
+        [self.chooseButton setTitle:@" ETC" forState:UIControlStateNormal];
+        [self.chooseButton setImage:[UIImage imageNamed:@"mine_wallet_eth"] forState:UIControlStateNormal];
+        self.moneyText.placeholder = @"";
+    };
+    [self.navigationController pushViewController:vc animated:YES];
+    
+    
+}
+- (IBAction)keepAction:(id)sender {
+}
+
+@end

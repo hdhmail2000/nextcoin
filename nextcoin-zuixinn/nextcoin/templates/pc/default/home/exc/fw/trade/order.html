@@ -1,0 +1,80 @@
+{template "header.html" }
+{template "top.html" }
+        <style type="text/css">
+        	       .order-breadcrumb{
+        	           background: transparent;
+        	       }
+        	       .breadcrumb>li>a{
+        	           color: #CAD7E8;
+        	       }
+        	       #buy-data .dt span{
+        	           color: #CAD7E8;
+        	       }
+        	       .breadcrumb > li{
+        	           text-shadow:none;
+        	       }
+        	       .breadcrumb>li+li:before{
+        	           padding: 0 5px;
+                    color:  #CAD7E8;
+                    content: ">";
+        	       }
+        	       .order-tetil {
+				    padding: 30px 0;
+				    font-size: .2rem;
+				    color: #FFFFFF;
+				    font-weight: 500;
+				}
+				.order-list .order-list-tetil span {
+				    color: #FFFFFF; 
+				    font-size: .14rem;
+				}
+				.order-list .order-list-item span {
+				    color: #FFFFFF;
+				    font-size: .14rem;
+				}
+        </style>
+        <div class="container">
+            <div class="row order">
+                <div class="col-xs-12">
+                    <ol class="breadcrumb order-breadcrumb">
+                        <li>
+                            <a href="/index.php?s=exc&c=TradeController">{$market.markets}</a>
+                        </li>
+                        <li class="active">{$market.order_bs}</li>
+                    </ol>
+                </div>
+                <div class="col-xs-12 order-data" style="min-height: 600px;margin-bottom: 200px;">
+
+<!------------------------------ 买盘 ------------------------->
+
+                    <div class="col-xs-6 order-box">
+                        <h2 class="order-tetil">{$market.order_buy}</h2>
+                        <dl class="quotes-transaction-tabel-body order-list" id="buy-data">
+
+                        </dl>
+                    </div>
+
+
+<!----------------------- 卖盘 ------------------------>
+
+                    <div class="col-xs-6 order-box">
+                        <h2 class="order-tetil">{$market.order_sell}</h2>
+                        <dl class="quotes-transaction-tabel-body order-list" id="sell-data">
+
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="buy-symbol" value="{strtoupper($data.symbols[1])}">
+        <input type="hidden" id="sell-symbol" value="{strtoupper($data.symbols[0])}">
+        <input type="hidden" id="symbol" value="{$data.symbol}">
+        <input type="hidden" id="isplat" value="{$data.plat}">
+        	
+        	
+     <script src="{HOME_THEME_PATH}exc/js/plugin/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+     <script src="{HOME_THEME_PATH}exc/js/comm/util.js?v=2" type="text/javascript" charset="utf-8"></script>
+    <script src="{HOME_THEME_PATH}exc/js/plugin/pako.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{HOME_THEME_PATH}exc/js/markt/order.js"></script>
+    
+{template "footer.html" }

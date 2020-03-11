@@ -1,0 +1,77 @@
+//
+//  TLAliyunOSS.m
+//  tonglian
+//
+//  Created by Howe on 2018/6/29.
+//  Copyright © 2018年 Howe. All rights reserved.
+//
+
+#import "TLAliyunOSS.h"
+
+@interface TLAliyunOSS()
+@property (nonatomic , strong) OSSClient *ossClient;
+@end
+
+@implementation TLAliyunOSS
+
+SingletonM(TLAliyunOSS)
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self _setupData];
+    }
+    return self;
+}
+
+- (void)_setupData
+{
+    OSSPlainTextAKSKPairCredentialProvider *credentiall = [[OSSPlainTextAKSKPairCredentialProvider alloc]init];
+    credentiall.accessKey = kv_OSS_AccessKey;
+    credentiall.secretKey = kv_OSS_SecretKey;
+    OSSClient *ossClient = [[OSSClient alloc]initWithEndpoint:kv_OSS_EndPoint credentialProvider:credentiall clientConfiguration:[self ossConfigration]];
+    self.ossClient = ossClient;
+}
+
+- (OSSClientConfiguration *)ossConfigration
+{
+    OSSClientConfiguration *config = [[OSSClientConfiguration alloc]init];
+    config.maxRetryCount = 3;
+    config.timeoutIntervalForRequest = 30;
+    config.timeoutIntervalForResource = 24 * 60 * 60;
+    return config;
+}
+
+- (void)updateData:(NSData *)data
+      suffixString:(NSString *)suffix
+     progressBlock:(OSSNetworkingUploadProgressBlock)progressBlock
+         callBlock:(UpdateLoadBlock)callBlock
+{
+    NSString *name = [NSString stringWithFormat:@"xxcoin/upload/auth/%@.%@",[NSUUID UUID].UUIDString,suffix];
+    OSSPutObjectRequest *request = [[OSSPutObjectRequest alloc]init];
+    request.bucketName = kv_OSS_BucketName;
+    request.objectKey = name;
+    request.uploadingData = data;
+    request.uploadProgress = progressBlock;
+    OSSTask *pushTask = [self.ossClient putObject:request];
+    [pushTask continueWithBlock:^id _Nullable(OSSTask * _Nonnull task)
+     {
+         if (task.error != nil)
+         {
+             if (callBlock != nil)
+             {
+                 callBlock(task.error,task.error.localizedDescription);
+             }
+         }else
+         {
+             NSString *fileName = [NSString stringWithFormat:@"%@%@",kv_OSS_URL,name];
+             callBlock(task.error,fileName);
+         }
+         return nil;
+     }];
+    
+}
+
+
+@end

@@ -1,0 +1,139 @@
+.formWrapLR .loginReg-form {
+    width: 330px;
+    position: static !important;
+    display: inline-block;
+}
+.loginReg-form h3.LRtitle {
+    font-size: 16px;
+    color: #666;
+    text-align: center;
+    font-weight: normal;
+    position: relative;
+}
+.importantInfo {
+    margin-top: 24px;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    padding-top: 22px;
+}
+.importantInfo p {
+    font-size: 12px;
+    color: #333;
+    line-height: 100%;
+    margin-left: -4px;
+    white-space: nowrap;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+.importantInfo p .iconfont {
+    font-size: 16px;
+    color: #ff0000;
+    vertical-align: text-top;
+}
+.loginReg-form .Validform_checktip {
+    height: auto;
+    line-height: 1.2;
+    font-size: 14px;
+    color: #ff0000;
+    width: 330px;
+    word-break: break-word;
+    white-space: normal;
+    text-align: left;
+    padding: 10px 0;
+}
+.loginReg-form .filed {
+    margin-bottom: 12px;
+}
+.loginReg-form .ipt {
+    display: inline-block;
+    width: 278px;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 10px 0 40px;
+    background-color: #fff!important;
+    background-position: 11px 13px;
+    background-repeat: no-repeat!important;
+    border: 1px solid #d4d4d4;
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    box-sizing: initial;
+}
+.ipt.pwd {
+    background-image: url(../img/pic_pwd.png);
+    background-position: 11px 10px;
+}
+.ipt.filltel{
+    background: url(../img/shouji.png);
+    background-size: 22px;
+    background-position: 8px 8px;
+}
+.ipt.fillemail {
+    background-image: url(../img/pic_fillemail.png)!important;
+    background-position: 9px 14px;
+}
+.btn:disabled {
+    cursor: default;
+}
+.btn-block {
+    padding: 9px 0;
+    width: 100%;
+    text-align: center;
+}
+.btn-orange {
+    background: #e8b342!important;
+    border-color: #e8b342!important;
+    color: #fff!important;
+}
+.btn-orange:disabled, .btn-orange:disabled:hover, .btn-disabled {
+    background: #ddd!important;
+    border-color: #ddd!important;
+    cursor: not-allowed;
+    color: #eee;
+}
+.loginReg-form .btn {
+    height: 42px;
+    padding: 0;
+    font-size: 16px;
+    color: #fff;
+}
+.loginReg-form .filed .btn:disabled {
+    background: #c2c2c2!important;
+    border-color: #c2c2c2!important;
+}
+.f-cb:after, .f-cbli li:after {
+    display: block;
+    clear: both;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    content: ".";
+}
+.yellow {
+    color: #e8b342!important;
+}
+.loginReg-form .field {
+    margin-bottom: 12px;
+}
+.ipt.ref {
+    background-image: url(../img/agent.png);
+    background-position: 7px 7px;
+}
+.aggreement {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin: -2px 0;
+    text-align: left!important;
+    cursor: pointer;
+}
+.aggreement a {
+    color: #e8b342;
+}

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="XHHWalletHeadView">
+            <rect key="frame" x="0.0" y="0.0" width="370" height="162"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mine_wallet_headImage" translatesAutoresizingMaskIntoConstraints="NO" id="hfy-pu-o60">
+                    <rect key="frame" x="16" y="16" width="338" height="130"/>
+                </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TQ7-XH-Sr9">
+                    <rect key="frame" x="16" y="52" width="338" height="74"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="总资产折合   RMB" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PFq-jM-Tje">
+                            <rect key="frame" x="105" y="0.0" width="128.5" height="19.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <color key="textColor" red="0.95686274510000002" green="0.95686274510000002" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="----" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KoJ-bl-JAT">
+                            <rect key="frame" x="139.5" y="29.5" width="60" height="41"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="34"/>
+                            <color key="textColor" red="0.95686274510000002" green="0.95686274510000002" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="PFq-jM-Tje" firstAttribute="centerX" secondItem="TQ7-XH-Sr9" secondAttribute="centerX" id="JL0-Hr-XXk"/>
+                        <constraint firstItem="KoJ-bl-JAT" firstAttribute="top" secondItem="PFq-jM-Tje" secondAttribute="bottom" constant="10" id="SoD-mu-ey5"/>
+                        <constraint firstItem="KoJ-bl-JAT" firstAttribute="centerX" secondItem="TQ7-XH-Sr9" secondAttribute="centerX" id="qKn-AU-S74"/>
+                        <constraint firstItem="PFq-jM-Tje" firstAttribute="top" secondItem="TQ7-XH-Sr9" secondAttribute="top" id="vWj-lv-18L"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="hfy-pu-o60" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="CXH-ax-RtG"/>
+                <constraint firstItem="TQ7-XH-Sr9" firstAttribute="bottom" secondItem="hfy-pu-o60" secondAttribute="bottom" constant="-20" id="HHS-Br-2Cq"/>
+                <constraint firstItem="hfy-pu-o60" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="LMt-M1-nWu"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="hfy-pu-o60" secondAttribute="bottom" constant="16" id="NFe-lf-77U"/>
+                <constraint firstItem="TQ7-XH-Sr9" firstAttribute="leading" secondItem="hfy-pu-o60" secondAttribute="leading" id="Ndp-WW-1cl"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="hfy-pu-o60" secondAttribute="trailing" constant="16" id="c5k-30-kEn"/>
+                <constraint firstItem="TQ7-XH-Sr9" firstAttribute="trailing" secondItem="hfy-pu-o60" secondAttribute="trailing" id="iTs-fF-qGL"/>
+                <constraint firstItem="TQ7-XH-Sr9" firstAttribute="top" secondItem="hfy-pu-o60" secondAttribute="top" constant="36" id="kaH-qL-E5G"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="moneyLable" destination="KoJ-bl-JAT" id="Mpf-Ya-Nsb"/>
+            </connections>
+            <point key="canvasLocation" x="-122" y="-126"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="mine_wallet_headImage" width="344" height="142"/>
+    </resources>
+</document>

@@ -1,0 +1,103 @@
+//
+//  MiningViewController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/8/14.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "MiningViewController.h"
+#import "XHHMiningHeadView.h"
+#import "MiningHomeCell.h"
+#import "XHHMiningAreaController.h"
+static NSString *cellIndifier = @"MiningHomeCell";
+@interface MiningViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (nonatomic , strong) UITableView *tableView;
+
+@property (nonatomic , strong) NSArray *dataArray;
+
+@property (nonatomic , strong) XHHMiningHeadView *headView;
+
+@end
+
+@implementation MiningViewController
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"BEGINSCROLLOW" object:nil];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.noHiddenNav = YES;
+    CGFloat bottomHeight = ChZ_IsiPhoneX ? 34 : 0;
+    
+    [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view).insets(UIEdgeInsetsMake(0, 0, 50+bottomHeight, 0));
+    }];
+    
+}
+-(UITableView *)tableView{
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        [_tableView setTableHeaderView:self.headView];
+        [_tableView setSeparatorColor:[UIColor colorWithHexString:@"4B4B80"]];
+        [_tableView setBackgroundColor:[UIColor clearColor]];
+        [_tableView registerNib:[UINib nibWithNibName:@"MiningHomeCell" bundle:nil] forCellReuseIdentifier:cellIndifier];
+    }
+    return _tableView;
+}
+- (void)viewDidLayoutSubviews{
+    self.headView.frame = CGRectMake(0, 0, ChZ_WIDTH, ChZ_WIDTH*(100 + ChZ_WIDTH)/ChZ_WIDTH);
+}
+-(XHHMiningHeadView *)headView{
+    if (!_headView) {
+        _headView = [[[NSBundle mainBundle] loadNibNamed:@"XHHMiningHeadView" owner:nil options:nil] lastObject];
+    }
+    return _headView;
+}
+#pragma tableView delegate
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return 10;
+}
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    MiningHomeCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndifier];
+    [cell reloadCellWithDic:nil row:indexPath.row];
+    return cell;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 0)
+    {
+        return 90;
+    }else{
+        return 50;
+    }
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    XHHMiningAreaController *vc = [[XHHMiningAreaController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

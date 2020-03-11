@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="18dp">
+
+    <ImageView
+        android:id="@+id/header_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="142dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_wallet_header" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="总资产折合"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSize14" />
+
+            <TextView
+                android:id="@+id/unit_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:alpha="0.4"
+                android:text="RMB"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSize14" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/money_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="24dp"
+            android:textStyle="bold"
+            tools:text="21982.130000" />
+    </LinearLayout>
+
+</RelativeLayout>

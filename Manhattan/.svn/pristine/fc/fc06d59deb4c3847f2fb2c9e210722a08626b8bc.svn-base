@@ -1,0 +1,163 @@
+//
+//  XHHMineUpdatepswViewController.m
+//  Manhattan
+//
+//  Created by Apple on 2018/9/15.
+//  Copyright © 2018年 Apple. All rights reserved.
+//
+
+#import "XHHMineUpdatepswViewController.h"
+#import "XHHMineFrogetPswViewController.h"
+@interface XHHMineUpdatepswViewController ()
+@property (weak, nonatomic) IBOutlet UILabel *titleLable;
+
+@property (weak, nonatomic) IBOutlet UILabel *alertLable;
+@property (weak, nonatomic) IBOutlet UITextField *currTextFeild;
+@property (weak, nonatomic) IBOutlet UITextField *nPswTextFeild;
+@property (weak, nonatomic) IBOutlet UITextField *sureTextFeild;
+
+
+@property (weak, nonatomic) IBOutlet UIButton *sureButton;
+
+@property (nonatomic , strong) NSString * idCode;
+@property (nonatomic , strong) NSString * gooleCode;
+@end
+
+@implementation XHHMineUpdatepswViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self showAlertTitle];
+    
+    self.idCode = @"";
+    self.gooleCode = @"";
+    
+    
+    [self.currTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [self.nPswTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    [self.sureTextFeild configPlaceholderWithFont:[UIFont systemFontOfSize:16.0] textColor:PlaceholderColor];
+    // Do any additional setup after loading the view.
+}
+- (IBAction)back:(id)sender {
+    [self pop];
+}
+-(void)showAlertTitle{
+    NSString *username = [NSString chz_getObjForKey:kv_LOGIN_USERNAME];
+    if (ChZ_StringIsEmpty(username))
+    {
+        if (username.length == 11)
+        {
+            self.alertLable.text = [NSString stringWithFormat:@"修改账户 +86 %@****%@的支付密码",[username substringToIndex:3],[username substringFromIndex:7]];
+        }
+    }
+}
+- (IBAction)sureAction:(id)sender {
+    if ([self.currTextFeild.text isEqualToString:self.nPswTextFeild.text]) {
+        ChZ_MBError(@"新密码不能与旧密码一致");
+        return;
+    }
+    if (![self.nPswTextFeild.text isEqualToString:self.sureTextFeild.text]) {
+        ChZ_MBError(@"密码不一致");
+        return;
+    }
+    if (self.nPswTextFeild.text.length < 6) {
+        ChZ_MBError(@"新密码必须大于6位");
+        return;
+    }
+    [self requestUpdatePassWordOlderPassWord:self.currTextFeild.text
+                                        nPsw:self.nPswTextFeild.text
+                                     msgCode:nil
+                                  googleCode:nil
+                                  cardNumber:nil
+                                        type:@"1"];
+}
+- (IBAction)frogetPswAction:(id)sender {
+    XHHMineFrogetPswViewController *vc = [XHHMineFrogetPswViewController initWithStoryboard:@"MineStroy"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma --更改交易密码
+-(void)requestUpdatePassWordOlderPassWord:(NSString *)oldePsw
+                                     nPsw:(NSString *)npsw
+                                  msgCode:(NSString *)msgCode
+                               googleCode:(NSString *)gooleCode
+                               cardNumber:(NSString *)cardNumber
+                                     type:(NSString *)type{
+    ChZ_MBMsg(nil)
+    @weakify(self);
+    [XHHSafeCenterRequest requestUpdatePassword:oldePsw
+                                       password:npsw
+                                        msgCode:msgCode
+                                     googleCode:gooleCode
+                                     cardNumber:cardNumber
+                                           type:type
+                                   successBlock:^(id dataSource)
+     {
+         @strongify(self);
+         ChZ_MBDismssSuccess(dataSource);
+         [self popToVCClassName:@"XHHSafeCenterController"];
+     } errorBlock:^(int code, NSString *error)
+     {
+         @strongify(self);
+         if(![error containsString:@"谷歌"] && ![error containsString:@"身份证"]){
+             ChZ_MBDismssError(error)
+         }else{
+             [self editAgeActionWithAlert:error];
+         }
+     }];
+}
+-(void)editAgeActionWithAlert:(NSString *)alertString{
+    
+    NSString *aleString = @"";
+    if ([alertString containsString:@"谷歌"]) {
+        aleString = @"请输入谷歌验证码";
+    }else{
+        aleString = @"请输入身份证号码";
+    }
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:aleString message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = aleString;
+        textField.keyboardType = UIKeyboardTypeNumberPad;
+    }];
+    
+    UIAlertAction *actionCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction *actionSure =  [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        UITextField *txtField = alertController.textFields.firstObject;
+        if ([alertString containsString:@"谷歌"]) {
+            self.gooleCode = txtField.text;
+        }else{
+            self.idCode = txtField.text;
+        }
+        [self requestUpdatePassWordOlderPassWord:self.currTextFeild.text
+                                            nPsw:self.nPswTextFeild.text
+                                         msgCode:nil
+                                      googleCode:self.gooleCode
+                                      cardNumber:self.idCode
+                                            type:@"1"];
+    }];
+    
+    [alertController addAction:actionCancel];
+    [alertController addAction:actionSure];
+    [self presentViewController:alertController animated:YES completion:nil];
+    
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+@end

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:background="@drawable/shape_message_dialog_bg"
+        android:divider="@drawable/shape_recycler_view_divider_gray"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/bank_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="银行卡"
+            android:textColor="@color/colorBlueText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/alipay_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="支付宝"
+            android:textColor="@color/colorBlueText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/wechat_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="微信"
+            android:textColor="@color/colorBlueText"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/cancel_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_message_dialog_bg"
+        android:gravity="center"
+        android:text="取消"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:textColor="@color/colorBlueText"
+        android:textSize="14sp" />
+</LinearLayout>

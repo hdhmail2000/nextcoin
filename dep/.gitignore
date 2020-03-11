@@ -1,0 +1,25 @@
+*/__pycache__/
+.cache/
+tests/*/__pycache__/
+*/*~
+*.#*
+*#
+*~
+/build
+/dist
+/electrumx.egg-info
+
+# tmp
+.DS_Store
+.idea
+
+log/*
+test*
+
+# ruby
+.ruby-version
+deposit.iml
+*.iml
+
+.rbenv/
+*.rbenv/

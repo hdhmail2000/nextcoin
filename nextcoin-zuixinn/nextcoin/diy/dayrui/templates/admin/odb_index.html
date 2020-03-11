@@ -1,0 +1,170 @@
+{template nheader.html}
+<script type="application/javascript">
+    $(function(){
+        dr_set_value({intval(SYS_CACHE_TYPE)});
+    });
+    function dr_set_value(i) {
+        $('.dvalue').hide();
+        $('.dr_html_'+i).show();
+        $('#dtype').val(i);
+    }
+    function dr_test() {
+        $.get("{dr_url('api/testcache')}",{type: $('#dtype').val()}, function(data){
+            alert(data);
+            $("#ftptest").val('{fc_lang('测试')}');
+        })
+    }
+</script>
+<form class="form-horizontal" action="" method="post" id="myform" name="myform">
+	<input id="dtype" value="0" type="hidden">
+	<div class="page-bar">
+		<ul class="page-breadcrumb mylink">
+			{$menu.link}
+		</ul>
+		<ul class="page-breadcrumb myname">
+			{$menu.name}
+		</ul>
+		<div class="page-toolbar">
+			<div class="btn-group pull-right">
+				<button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown" aria-expanded="false" data-hover="dropdown"> {fc_lang('操作菜单')}
+					<i class="fa fa-angle-down"></i>
+				</button>
+				<ul class="dropdown-menu pull-right" role="menu">
+					{loop $menu.quick $t}
+					<li>
+						<a href="{$t.url}">{$t.icon} {$t.name}</a>
+					</li>
+					{/loop}
+					<li class="divider"> </li>
+					<li>
+						<a href="javascript:window.location.reload();">
+							<i class="icon-refresh"></i> {fc_lang('刷新页面')}</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<h3 class="page-title">
+		<small></small>
+	</h3>
+	<div class="portlet light bordered myfbody">
+
+		<div class="portlet-title">
+			<div class="caption">
+				<span class="caption-subject font-green sbold uppercase">{fc_lang('缓存设置')}</span>
+			</div>
+		</div>
+		<div class="portlet-body">
+
+			<div class="row">
+				<div class="portlet-body form">
+
+					<div class="form-body">
+						<div class="form-group">
+							<label class="col-md-2 control-label">{fc_lang('缓存功能')}：</label>
+							<div class="col-md-9">
+								<input type="checkbox" name="sys[SYS_AUTO_CACHE]" value="TRUE" {if SYS_AUTO_CACHE}checked{/if} data-on-text="{fc_lang('开启')}" data-off-text="{fc_lang('关闭')}" data-on-color="success" data-off-color="danger" class="make-switch" data-size="small">
+								<span class="help-block">{fc_lang('关闭缓存将会大大降低系统运行效率')}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-2 control-label">{fc_lang('缓存方式')}：</label>
+							<div class="col-md-9">
+								<div class="radio-list">
+									{loop $type $i $name}
+									<label class="radio-inline"><input onclick="dr_set_value({$i})" {if $i==SYS_CACHE_TYPE}checked{/if} name="sys[SYS_CACHE_TYPE]" type="radio" value="{$i}" /> {$name}</label>
+									{/loop}
+								</div>
+							</div>
+						</div>
+						<div class="form-group dvalue dr_html_0">
+							<label class="col-md-2 control-label">{fc_lang('文件缓存目录')}：</label>
+							<div class="col-md-9">
+								<div class="form-control-static" style="color:green">/cache/file/</div>
+							</div>
+						</div>
+
+						<div class="form-group dvalue dr_html_1">
+							<label class="col-md-2 control-label">{fc_lang('Memcached 缓存')}：</label>
+							<div class="col-md-9">
+								{if $is_memcached}
+								<div class="form-control-static" style="color:blue">{fc_lang('服务器只支持Memcached缓存，请修改config/memcached.php配置参数')}</div>
+								{else}
+								<div class="form-control-static" style="color:red">{fc_lang('当前服务器没有安装Memcached缓存组件')}</div>
+								{/if}
+							</div>
+						</div>
+
+						<div class="form-group dvalue dr_html_2">
+							<label class="col-md-2 control-label">{fc_lang('Redis 缓存')}：</label>
+							<div class="col-md-9">
+								{if $is_redis}
+								<div class="form-control-static" style="color:blue">{fc_lang('服务器只支持Redis缓存，请修改config/redis.php配置参数')}</div>
+								{else}
+								<div class="form-control-static" style="color:red">{fc_lang('当前服务器没有安装Redis缓存组件')}</div>
+								{/if}
+							</div>
+						</div>
+
+						<div class="form-group dvalue dr_html_3">
+							<label class="col-md-2 control-label">{fc_lang('WinCache 缓存')}：</label>
+							<div class="col-md-9">
+								{if $is_wincache}
+								<div class="form-control-static" style="color:blue">{fc_lang('服务器只支持WinCache缓存')}</div>
+								{else}
+								<div class="form-control-static" style="color:red">{fc_lang('当前服务器没有安装WinCache缓存组件')}</div>
+								{/if}
+							</div>
+						</div>
+
+						<div class="form-group dvalue dr_html_4">
+							<label class="col-md-2 control-label">{fc_lang('APC 缓存')}：</label>
+							<div class="col-md-9">
+								{if $is_apc}
+								<div class="form-control-static" style="color:blue">{fc_lang('服务器只支持APC缓存')}</div>
+								{else}
+								<div class="form-control-static" style="color:red">{fc_lang('当前服务器没有安装APC缓存组件')}</div>
+								{/if}
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-2 control-label">{fc_lang('opcache 加速')}：</label>
+							<div class="col-md-9">
+								{if $is_opcache}
+								<div class="form-control-static" style="color:red">{fc_lang('当前服务器没有安装opcache组件')}</div>
+								{else}
+								<div class="form-control-static" style="color:green">{fc_lang('opcache组件正常运行中')}</div>
+								{/if}
+							</div>
+						</div>
+
+
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="myfooter">
+		<div class="row">
+			<div class="portlet-body form">
+				<div class="form-body">
+					<div class="form-actions">
+						<div class="row">
+							<div class="col-md-12 text-center">
+								<button type="submit" class="btn green"> <i class="fa fa-save"></i> {fc_lang('保存')}</button>
+								<button type="button" onclick="dr_test()" class="btn red"> <i class="fa fa-edit"></i> {fc_lang('测试')}</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+{template "nfooter.html"}

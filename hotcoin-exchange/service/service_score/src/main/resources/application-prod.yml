@@ -1,0 +1,56 @@
+spring:
+  datasource:
+    name: mydb
+    type: com.alibaba.druid.pool.DruidDataSource
+    url:
+    username:
+    password:
+    driver-class-name: com.mysql.jdbc.Driver
+    initialSize: 10
+    minIdle: 10
+    maxActive: 50
+    defaultAutoCommit: false
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+
+redis:
+  host:
+  port: 6379
+  password:
+  timeout: 5000
+  pool:
+    minIdle: 50
+    maxIdle: 50
+    maxTotal: 200
+    maxWaitMillis: 5000
+    testWhileIdle: true
+    testOnBorrow: true
+    testOnReturn: true
+
+aliyun:
+  mq:
+    accessKey:
+    secretKey:
+    onsAddr:
+    topic:
+      entrust_state:
+      user_action:
+      admin_action:
+      validate:
+      score:
+    pid:
+      entrustState:
+      validate:
+      score:
+      userAction:
+      adminAction:
+    cid:
+      entrustState:
+      validate:
+      score:
+      userAction:
+      adminAction:

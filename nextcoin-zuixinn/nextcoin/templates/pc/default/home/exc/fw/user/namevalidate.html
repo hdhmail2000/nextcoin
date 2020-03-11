@@ -1,0 +1,492 @@
+{template "header.html" }
+{template "top.html" }
+		<div class="container" style="min-height: 800px;">
+            <div class="row">
+                <div class="col-xs-12 bind-header">
+                    <div class="col-xs-12 bind-header-tetil">
+                        <h2>{$user.security_realName}</h2>
+                    </div>
+                    <div class="col-xs-12 bind-header-nav">
+                        <ol class="breadcrumb">
+                          <li><a href="/index.php?s=exc&c=securityController">{$user.account_security}</a></li>
+                          <li class="active">{$user.security_realName}</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-xs-12 bind-form-wrap">
+                    <div class="col-xs-12 bind-form-header">
+                        <h3>{$user.security_realName}<strong>{$user.security_realHint}</strong></h3>
+                    </div>
+                    <div class="col-xs-12 bind-form">
+                        <div class="clearfix">
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_name}</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="text"  id="bindrealinfo-realname" value=""/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_site}</span>
+                                </p>
+                                <div class="col-xs-12 bind-select">
+                                    		
+                               	<select class="clearfix menu-text" style="width: 100%;" id="bindrealinfo-address">
+                                    <option value="940">阿布哈兹(Abkhazia)</option>
+                                    <option value="93">阿富汗(Afghanistan)</option>
+                                    <option value="355">阿尔巴尼亚(Albania)</option>
+                                    <option value="213">阿尔及利亚(Algeria)</option>
+                                    <option value="1">美国(America)</option>
+                                    <option value="376">安道尔(Andorra)</option>
+                                    <option value="244">安哥拉(Angola)</option>
+                                    <option value="1264">安圭拉岛(Anguilla)</option>
+                                    <option value="1268">安提瓜(Antigua)</option>
+                                    <option value="54">阿根廷(Argentina)</option>
+                                    <option value="374">亚美尼亚(Armenia)</option>
+                                    <option value="297">阿鲁巴(Aruba)</option>
+                                    <option value="61">澳大利亚(Australia)</option>
+                                    <option value="43">奥地利(Austria)</option>
+                                    <option value="994">阿塞拜疆(Azerbaijan)</option>
+                                    <option value="973">巴林(Bahrain)</option>
+                                    <option value="880">孟加拉国(Bangladesh)</option>
+                                    <option value="1246">巴巴多斯(Barbados)</option>
+                                    <option value="375">白俄罗斯(Belarus)</option>
+                                    <option value="32">比利时(Belgium)</option>
+                                    <option value="501">伯利兹(Belize)</option>
+                                    <option value="229">贝宁(Benin)</option>
+                                    <option value="1441">百慕大(Bermuda)</option>
+                                    <option value="975">不丹(Bhutan)</option>
+                                    <option value="591">玻利维亚(Bolivia)</option>
+                                    <option value="267">博茨瓦纳(Botswana)</option>
+                                    <option value="55">巴西(Brazil)</option>
+                                    <option value="673">文莱(Brunei Darussalam)</option>
+                                    <option value="359">保加利亚(Bulgaria)</option>
+                                    <option value="226">布基纳法索(Burkina Faso)</option>
+                                    <option value="95">缅甸(Burma)</option>
+                                    <option value="257">布隆迪(Burundi)</option>
+                                    <option value="855">柬埔寨(Cambodia)</option>
+                                    <option value="237">喀麦隆(Cameroon)</option>
+                                    <option value="1">加拿大(Canada)</option>
+                                    <option value="238">佛得角(Cape Verde)</option>
+                                    <option value="1345">开曼群岛(Cayman Islands)</option>
+                                    <option value="235">乍得(Chad)</option>
+                                    <option value="56">智利(Chile)</option>
+                                    <option value="86" selected="selected">中国大陆(China)</option>
+                                    <option value="57">哥伦比亚(Colombia)</option>
+                                    <option value="269">科摩罗和马约特(Comoros)</option>
+                                    <option value="682">库克群岛(Cook Islands)</option>
+                                    <option value="506">哥斯达黎加(Costa Rica)</option>
+                                    <option value="385">克罗地亚(Croatia)</option>
+                                    <option value="53">古巴(Cuba)</option>
+                                    <option value="357">塞浦路斯(Cyprus)</option>
+                                    <option value="420">捷克共和国(Czech Republic)</option>
+                                    <option value="45">丹麦(Denmark)</option>
+                                    <option value="253">吉布提(Djibouti)</option>
+                                    <option value="1767">多米尼克(Dominica)</option>
+                                    <option value="593">厄瓜多尔(Ecuador)</option>
+                                    <option value="20">埃及(Egypt)</option>
+                                    <option value="503">萨尔瓦多(El Salvador)</option>
+                                    <option value="291">厄立特里亚(Eritrea)</option>
+                                    <option value="372">爱沙尼亚(Estonia)</option>
+                                    <option value="251">埃塞俄比亚(Ethiopia)</option>
+                                    <option value="298">法罗群岛(Faroe Islands)</option>
+                                    <option value="679">斐济(Fiji)</option>
+                                    <option value="358">芬兰(Finland)</option>
+                                    <option value="33">法国(France)</option>
+                                    <option value="241">加蓬(Gabon)</option>
+                                    <option value="995">格鲁吉亚(Georgia)</option>
+                                    <option value="49">德国(Germany)</option>
+                                    <option value="233">加纳(Ghana)</option>
+                                    <option value="350">直布罗陀(Gibraltar)</option>
+                                    <option value="30">希腊(Greece)</option>
+                                    <option value="299">格陵兰(Greenland)</option>
+                                    <option value="1473">格林纳达(Grenada)</option>
+                                    <option value="502">危地马拉(Guatemala)</option>
+                                    <option value="224">几内亚(Guinea)</option>
+                                    <option value="245">几内亚比绍(Guinea-Bissau)</option>
+                                    <option value="592">圭亚那(Guyana)</option>
+                                    <option value="509">海地(Haiti)</option>
+                                    <option value="504">洪都拉斯(Honduras)</option>
+                                    <option value="852">香港(Hong Kong)</option>
+                                    <option value="36">匈牙利(Hungary)</option>
+                                    <option value="354">冰岛(Iceland)</option>
+                                    <option value="91">印度(India)</option>
+                                    <option value="62">印度尼西亚(Indonesia)</option>
+                                    <option value="98">伊朗(Iran)</option>
+                                    <option value="964">伊拉克(Iraq)</option>
+                                    <option value="353">爱尔兰(Ireland)</option>
+                                    <option value="972">以色列(Israel)</option>
+                                    <option value="39">意大利(Italy)</option>
+                                    <option value="1876">牙买加(Jamaica)</option>
+                                    <option value="81">日本(Japan)</option>
+                                    <option value="962">约旦(Jordan)</option>
+                                    <option value="254">肯尼亚(Kenya)</option>
+                                    <option value="850">北韓(Korea, North)</option>
+                                    <option value="82">南韓(Korea, South)</option>
+                                    <option value="965">科威特(Kuwait)</option>
+                                    <option value="996">吉尔吉斯斯坦(Kyrgyzstan)</option>
+                                    <option value="856">老挝(Laos)</option>
+                                    <option value="371">拉脱维亚(Latvia)</option>
+                                    <option value="961">黎巴嫩(Lebanon)</option>
+                                    <option value="266">莱索托(Lesotho)</option>
+                                    <option value="231">利比里亚(Liberia)</option>
+                                    <option value="218">利比亚(Libya)</option>
+                                    <option value="423">列支敦士登(Liechtenstein)</option>
+                                    <option value="370">立陶宛(Lithuania)</option>
+                                    <option value="352">卢森堡(Luxembourg)</option>
+                                    <option value="853">澳门(Macao)</option>
+                                    <option value="261">马达加斯加(Madagascar)</option>
+                                    <option value="265">马拉维(Malawi)</option>
+                                    <option value="60">马来西亚(Malaysia)</option>
+                                    <option value="960">马尔代夫(Maldives)</option>
+                                    <option value="223">马里(Mali)</option>
+                                    <option value="356">马耳他(Malta)</option>
+                                    <option value="596">马提尼克岛(Martinique)</option>
+                                    <option value="222">毛里塔尼亚(Mauritania)</option>
+                                    <option value="230">毛里求斯(Mauritius)</option>
+                                    <option value="52">墨西哥(Mexico)</option>
+                                    <option value="373">摩尔多瓦(Moldova)</option>
+                                    <option value="377">摩纳哥(Monaco)</option>
+                                    <option value="976">蒙古(Mongolia)</option>
+                                    <option value="1664">蒙特塞拉特(Montserrat)</option>
+                                    <option value="212">摩洛哥(Morocco)</option>
+                                    <option value="258">莫桑比克(Mozambique)</option>
+                                    <option value="264">纳米比亚(Namibia)</option>
+                                    <option value="674">瑙鲁(Nauru)</option>
+                                    <option value="977">尼泊尔(Nepal)</option>
+                                    <option value="31">荷兰(Netherlands)</option>
+                                    <option value="687">新喀里多尼亚(New Caledonia)</option>
+                                    <option value="64">新西兰(New Zealand)</option>
+                                    <option value="505">尼加拉瓜(Nicaragua)</option>
+                                    <option value="227">尼日尔(Niger)</option>
+                                    <option value="234">尼日利亚(Nigeria)</option>
+                                    <option value="47">挪威(Norway)</option>
+                                    <option value="968">阿曼(Oman)</option>
+                                    <option value="92">巴基斯坦(Pakistan)</option>
+                                    <option value="680">帕劳(Palau)</option>
+                                    <option value="507">巴拿马(Panama)</option>
+                                    <option value="595">巴拉圭(Paraguay)</option>
+                                    <option value="51">秘鲁(Peru)</option>
+                                    <option value="63">菲律宾(Philippines)</option>
+                                    <option value="48">波兰(Poland)</option>
+                                    <option value="351">葡萄牙(Portugal)</option>
+                                    <option value="974">卡塔尔(Qatar)</option>
+                                    <option value="262">留尼汪(Reunion)</option>
+                                    <option value="40">罗马尼亚(Romania)</option>
+                                    <option value="7">俄罗斯(Russia)、哈萨克斯坦</option>
+                                    <option value="250">卢旺达(Rwanda)</option>
+                                    <option value="1758">圣卢西亚(Saint Lucia)</option>
+                                    <option value="685">萨摩亚(Samoa)</option>
+                                    <option value="378">圣马力诺(San Marino)</option>
+                                    <option value="966">沙特阿拉伯(Saudi Arabia)</option>
+                                    <option value="221">塞内加尔(Senegal)</option>
+                                    <option value="248">塞舌尔(Seychelles)</option>
+                                    <option value="232">塞拉利昂(Sierra Leone)</option>
+                                    <option value="65">新加坡(Singapore)</option>
+                                    <option value="421">斯洛伐克(Slovakia)</option>
+                                    <option value="386">斯洛文尼亚(Slovenia)</option>
+                                    <option value="677">所罗门群岛(Solomon Islands)</option>
+                                    <option value="252">索马里(Somalia)</option>
+                                    <option value="27">南非(South Africa)</option>
+                                    <option value="34">西班牙(Spain)</option>
+                                    <option value="94">斯里兰卡(Sri Lanka)</option>
+                                    <option value="249">苏丹(Sudan)</option>
+                                    <option value="597">苏里南(Suriname)</option>
+                                    <option value="268">斯威士兰(Swaziland)</option>
+                                    <option value="46">瑞典(Sweden)</option>
+                                    <option value="41">瑞士(Switzerland)</option>
+                                    <option value="963">叙利亚(Syria)</option>
+                                    <option value="886">台灣(Taiwan)</option>
+                                    <option value="992">塔吉克斯坦(Tajikistan)</option>
+                                    <option value="255">坦桑尼亚(Tanzania)</option>
+                                    <option value="66">泰国(Thailand)</option>
+                                    <option value="1242">巴哈马(The Bahamas)</option>
+                                    <option value="220">冈比亚(The Gambia)</option>
+                                    <option value="228">多哥(Togo)</option>
+                                    <option value="676">汤加(Tonga)</option>
+                                    <option value="216">突尼斯(Tunisia)</option>
+                                    <option value="90">土耳其(Turkey)</option>
+                                    <option value="993">土库曼斯坦(Turkmenistan)</option>
+                                    <option value="256">乌干达(Uganda)</option>
+                                    <option value="380">乌克兰(Ukraine)</option>
+                                    <option value="44">英国(United Kingdom)</option>
+                                    <option value="598">乌拉圭(Uruguay)</option>
+                                    <option value="998">乌兹别克斯坦(Uzbekistan)</option>
+                                    <option value="678">瓦努阿图(Vanuatu)</option>
+                                    <option value="58">委内瑞拉(Venezuela)</option>
+                                    <option value="84">越南(Vietnam)</option>
+                                    <option value="967">也门(Yemen)</option>
+                                    <option value="260">赞比亚(Zambia)</option>
+                                    <option value="263">津巴布韦(Zimbabwe)</option>
+                                </select>
+                                    <!--<div class="menu">
+                                    		
+                                        <div class="clearfix menu-text">
+                                            <span>China</span>
+                                            <i class="iconfont icon-xia"></i>
+                                        </div>
+                                        
+                                        <div class="menu-list">
+                                            <div class="menu-item">China</div>
+                                            <div class="menu-item">usa</div>
+                                            <div class="menu-item">China</div>
+                                            <div class="menu-item">China</div>
+                                        </div>
+                                    </div>-->
+                                </div>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_realType}</span>
+                                </p>
+                                <div class="col-xs-12 bind-select">
+                                		<select class="clearfix menu-text" style="width: 100%;" id="bindrealinfo-identitytype">
+	                                    <option value="0">身份证</option>
+	                                    <option value="1">护照</option>
+	                                    <option value="2">通行证</option>
+	                                </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <p class="col-xs-12 bind-form-text">
+                                    <span class="text-left">{$user.security_cardChar}</span>
+                                </p>
+                                <label for="" class="col-xs-12 bind-form-input">
+                                    <input type="text"  id="bindrealinfo-identityno" value=""/>
+                                </label>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <div class="col-xs-6 upload-box">
+                                    <div class="col-xs-12 upload-img">
+                                        <img src="{HOME_THEME_PATH}exc/img/demo_19.png" alt="" id="myImg1" onclick="upload(this)"/>
+                                        <input type="file" class="img-file" name="" id="" value="" onchange="file1(event,this)" />
+                                        <input type="hidden" id="idCardZmImgURL" value="" name="idCardZmImgURL"/>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 upload-box">
+                                    <div class="col-xs-12 upload-img">
+                                        <img src="{HOME_THEME_PATH}exc/img/demo_20.png" alt="" id="myImg2" onclick="upload(this)"/>
+                                        <input type="file" class="img-file" name="" id="" value="" onchange="file2(event,this)" />
+                                        <input type="hidden" id="idCardFmImgURL" value="" name="idCardFmImgURL"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <div class="col-xs-6 upload-box">
+                                    <div class="col-xs-12 upload-img">
+                                        <img src="{HOME_THEME_PATH}exc/img/demo_21.png" alt="" id="myImg3" onclick="upload(this)"/>
+                                        <input type="file" class="img-file" name="" id="" value="" onchange="file3(event,this)" />
+                                        <input type="hidden" id="idCardScImgURL" value="" name="idCardScImgURL"/>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 upload-box">
+                                    <div class="col-xs-12 upload-img">
+                                        <img src="{HOME_THEME_PATH}exc/img/demo_22.png" alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 bind-form-chk">
+                                <input type="checkbox" name="" id="bindrealinfo-ckinfo" value="" />
+                                <span>{$user.security_promise}</span>
+                            </div>
+                            <div class="col-xs-12 bind-form-item">
+                                <button class="bind-form-btn" id="bindrealinfo-Btn">{$user.security_submit}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<script type="text/javascript">
+			function upload(_this){
+                $(_this).siblings().click();
+            }
+            
+            function file1(e,obj){
+             	loadingmsg = layer.open({
+					type: 3,
+					content: '' //这里content是一个普通的String
+				});
+                for (var i = 0; i < e.target.files.length; i++) {
+                    var file = e.target.files.item(i);
+                    if (!(/^image\/.*$/i.test(file.type))) {
+                        continue; //不是图片 就跳出这一次循环
+                    }
+                    //实例化FileReader API
+                    var freader = new FileReader();
+                    freader.readAsDataURL(file);
+                    freader.onload = function(e) {
+                        $("#myImg1").attr("src",e.target.result);
+                    };
+                }
+                
+                var url = '/index.php?s=exc&c=UploadController&m=upload';
+				var files = obj.files[0];
+				if(typeof FileReader == 'undefined') {
+					alert('对不起，你的浏览器不支持filereader');
+				}
+				if(!/image\/\w+/.test(files.type)) {
+					alert("请确保文件类型为图像类型");
+					return false;
+				}
+				
+				var fd = new FormData();
+				fd.append('trackdata', files);
+				$.ajaxSetup({
+				    headers: {
+				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    }
+				});
+				$.ajax({
+					type: 'POST',
+					url: url,
+					data: fd,
+					// 告诉jQuery不要去处理发送的数据
+					processData: false,
+					// 告诉jQuery不要去设置Content-Type请求头
+					contentType: false,
+					beforeSend: function() {
+						
+					},
+					//dataType: 'json',
+					success: function(res) {
+						layer.close(loadingmsg);
+						if ('404' != res) {
+							layer.msg('上传成功');
+							$("#idCardZmImgURL").val(res);
+						}
+					}
+				});
+				$('obj').val('');
+                
+             }
+             
+             function file2(e,obj){
+             	loadingmsg = layer.open({
+					type: 3,
+					content: '' //这里content是一个普通的String
+				});
+                for (var i = 0; i < e.target.files.length; i++) {
+                    var file = e.target.files.item(i);
+                    if (!(/^image\/.*$/i.test(file.type))) {
+                        continue; //不是图片 就跳出这一次循环
+                    }
+                    //实例化FileReader API
+                    var freader = new FileReader();
+                    freader.readAsDataURL(file);
+                    freader.onload = function(e) {
+                        $("#myImg2").attr("src",e.target.result);
+                    };
+                }
+                
+                var url = '/index.php?s=exc&c=UploadController&m=upload';
+				
+				var files = obj.files[0];
+				if(typeof FileReader == 'undefined') {
+					alert('对不起，你的浏览器不支持filereader');
+				}
+				if(!/image\/\w+/.test(files.type)) {
+					alert("请确保文件类型为图像类型");
+					return false;
+				}
+				
+				var fd = new FormData();
+				fd.append('trackdata', files);
+				$.ajaxSetup({
+				    headers: {
+				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    }
+				});
+				$.ajax({
+					type: 'POST',
+					url: url,
+					data: fd,
+					// 告诉jQuery不要去处理发送的数据
+					processData: false,
+					// 告诉jQuery不要去设置Content-Type请求头
+					contentType: false,
+					beforeSend: function() {
+						
+					},
+					//dataType: 'json',
+					success: function(res) {
+						layer.close(loadingmsg);
+						if ('404' != res) {
+							layer.msg('上传成功');
+							$("#idCardFmImgURL").val(res);
+						}
+					}
+				});
+				$('obj').val('');
+                
+             }
+             
+             function file3(e,obj){
+             	loadingmsg = layer.open({
+					type: 3,
+					content: '' //这里content是一个普通的String
+				});
+                for (var i = 0; i < e.target.files.length; i++) {
+                    var file = e.target.files.item(i);
+                    if (!(/^image\/.*$/i.test(file.type))) {
+                        continue; //不是图片 就跳出这一次循环
+                    }
+                    //实例化FileReader API
+                    var freader = new FileReader();
+                    freader.readAsDataURL(file);
+                    freader.onload = function(e) {
+                        $("#myImg3").attr("src",e.target.result);
+                    };
+                }
+                
+                var url = '/index.php?s=exc&c=UploadController&m=upload';
+				
+				var files = obj.files[0];
+				if(typeof FileReader == 'undefined') {
+					alert('对不起，你的浏览器不支持filereader');
+				}
+				if(!/image\/\w+/.test(files.type)) {
+					alert("请确保文件类型为图像类型");
+					return false;
+				}
+				
+				var fd = new FormData();
+				fd.append('trackdata', files);
+				$.ajaxSetup({
+				    headers: {
+				        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				    }
+				});
+				$.ajax({
+					type: 'POST',
+					url: url,
+					data: fd,
+					// 告诉jQuery不要去处理发送的数据
+					processData: false,
+					// 告诉jQuery不要去设置Content-Type请求头
+					contentType: false,
+					beforeSend: function() {
+						
+					},
+					//dataType: 'json',
+					success: function(res) {
+						layer.close(loadingmsg);
+						if ('404' != res) {
+							layer.msg('上传成功');
+							$("#idCardScImgURL").val(res);
+						}
+					}
+				});
+				$('obj').val('');
+                
+             }
+             
+            
+		</script>
+<script src="{HOME_THEME_PATH}exc/js/plugin/jquery.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="{HOME_THEME_PATH}exc/js/user/user.security.js" type="text/javascript" charset="utf-8"></script>
+<script src="{HOME_THEME_PATH}exc/js/comm/msg.js" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }
+

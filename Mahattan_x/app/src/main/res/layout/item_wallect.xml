@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginBottom="12dp"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:background="@drawable/shape_wallet_item_bg">
+
+    <com.ifenduo.common.view.CircleImageView
+        android:id="@+id/coin_image_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        tools:src="@drawable/image_test_eth" />
+
+    <TextView
+        android:id="@+id/name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/coin_image_view"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/textSize16"
+        android:textStyle="bold"
+        tools:text="ETH" />
+
+    <TextView
+        android:id="@+id/price_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/coin_image_view"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_toRightOf="@id/name_text_view"
+        android:gravity="right"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/textSize16"
+        android:textStyle="bold"
+        tools:text="ETH" />
+
+    <TextView
+        android:id="@+id/rmb_price_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/coin_image_view"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_toRightOf="@id/name_text_view"
+        android:gravity="right"
+        android:textColor="@color/colorGrayText"
+        android:textSize="@dimen/textSize10"
+        tools:text="≈  ¥12555.122255" />
+</RelativeLayout>

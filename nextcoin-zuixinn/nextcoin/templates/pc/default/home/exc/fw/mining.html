@@ -1,0 +1,87 @@
+{template "header.html" }
+{template "top.html" }
+        <div class="container" style="min-height: 800px;padding-bottom: 60px;">
+            <div class="row">
+                <div class="col-xs-12 bind-header">
+                    <div class="col-xs-12 bind-header-tetil">
+                        <h2>{$head.mining_detail}</h2>
+                    </div>
+                    <div class="col-xs-12 bind-header-nav">
+                        <ol class="breadcrumb">
+                          <li><a href="/index.php?s=exc&c=financeController">{$head.mining_detail}</a></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 calendar">
+
+                    <div class="col-xs-12 calenda-table-wrap">
+                        <table class="col-xs-12  calenda-table">
+                                <tr class=" calenda-table-header">
+                                	<th>{$head.mining_coin}</th>
+                                    <th>{$head.mining_num}</th>
+                                    <th>{$head.mining_note}</th>
+                                    <th>{$head.mining_time}</th>
+                                </tr>
+                                {if $list}
+                                {loop $list $t}
+                                <tr class=" calenda-table-item">
+                                	<td>CC</td>
+                                	<td>{$t.value}</td>
+                                	<td>{$t.note}</td>
+                                	<td>{date('Y-m-d H:i',$t.inputtime)}</td>
+                                </tr>
+                                {/loop}
+                                {/if}
+                        </table>
+                    </div>
+                    <div id="pagination" class="pagination-wrap col-xs-12 center-list-btn" style="margin-top: 0px;padding-top: 0;padding-bottom: 0;">
+                                    <nav aria-label="Page navigation" class="pagination" id="logingPage">
+                                        <ul id="pages">
+                                        	{$pages}	
+                                        </ul>
+                                    </nav>
+                        	</div>
+                </div>
+            </div>
+        </div>
+
+		<script src="{HOME_THEME_PATH}exc/js/bootstrap-datetimepicker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+//          $(".form_datetime").datetimepicker({format: 'yyyy-mm-dd',minView:2,autoclose: true});
+
+
+            $(".calendar-header-nav button").on({
+                click:function(){
+                    $(".calendar-header-nav button").removeClass("active");
+                    $(this).addClass("active");
+                }
+            })
+            
+            $("#type1").click(function(){
+            		$("#recordType").val(1);
+            });
+            
+            $("#type2").click(function(){
+            		$("#recordType").val(2);
+            });
+            
+            $.getUrlParam = function (name) {
+		           var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		           var r = window.location.search.substr(1).match(reg);
+		             if (r != null) return unescape(r[2]); return null;
+			}
+	        	var begindate = $.getUrlParam('begindate');
+	        	if(begindate !== "" || begindate!=="null" || begindate!==null  || begindate!== undefined){
+	        		$("#begindate").val(begindate);
+	        	}
+	        	var enddate = $.getUrlParam('enddate');
+	        	if('' != enddate || 'null' != enddate || null != enddate || undefined != enddate || 'undefined' != enddate){
+	        		$("#enddate").val(enddate);
+	        	}
+            
+        </script>
+        <script src="{HOME_THEME_PATH}exc/js/plugin/layer/bitDate.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="{HOME_THEME_PATH}exc/js/plugin/layer/skin/bitdate/bitDate.css">
+        <script src="{HOME_THEME_PATH}exc/js/finance/account.record.js" type="text/javascript" charset="utf-8"></script>
+{template "footer.html" }

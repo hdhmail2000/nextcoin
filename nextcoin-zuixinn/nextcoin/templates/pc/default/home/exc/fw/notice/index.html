@@ -1,0 +1,61 @@
+{template "header.html" }
+{template "top.html" }
+<div class="container-fluid news">
+            <div class="row news-banner">
+                <div class="col-xs-12 news-banner-img" style="height: 250px">
+                    <!-- <img src=" {{asset('img/banner_02.jpg}" alt="" /> -->
+                </div>
+            </div>
+            <div class="container news-data">
+                <div class="row">
+                    <div class="col-xs-12 news-data-box">
+                        <h2 class="col-xs-12 news-data-tetil">{$news.dynamic}</h2>
+                        <div class="col-xs-12 news-data-body">
+                            <div class="col-xs-3 news-data-nav-wrap">
+                                <ul class="news-data-nav">
+                                		{list action=category module=news}
+                                		<li class="news-data-navbar">
+                                        <a href="/index.php?s=exc&c=ArticleController&id={$t.id}"  {if $t.id == $_GET['id']} class="active" {/if}>{$t.name}</a>
+                                    </li>
+                                		{/list}
+                                </ul>
+                            </div>
+                            <div class="col-xs-9 news-list-wrap">
+<!---------------------------------------- 新闻列表 -------------------------------->
+                                <div class="col-xs-12 ">
+                                		{list action=module module=news catid=$_GET['id']}
+                                    <div class="col-xs-6 news-list-item-wrap">
+                                        <a href="/index.php?s=exc&c=ArticleController&m=detail&id={$t.id}" class="col-xs-12 news-item news-item-box news-list-item">
+                                            <!--<div class="news-item-img">
+                                                <img src="{{$new['findeximg']}}" alt="" />
+                                            </div>-->
+                                            <div class="clearfix news-item-content">
+                                                <div class="col-xs-2 news-item-time">
+                                                    <h2>{date('d',intval(strtotime($t.inputtime)))}</h2>
+                                                    <p>{date('Y-m',intval(strtotime($t.inputtime)))}</p>
+                                                </div>
+                                                <div class="col-xs-10 news-item-text">
+                                                    <h3>{$t.title}</h3>
+                                                    <p>{$t.description}</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    {/list}
+                                </div>
+
+
+<!---------------------------------------- 分页 ------------------------------------>
+
+                                <div class="col-xs-12 pag">
+                                    <ul class="pag-nav">
+                                    	{$data.pagin}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{template "footer.html" }

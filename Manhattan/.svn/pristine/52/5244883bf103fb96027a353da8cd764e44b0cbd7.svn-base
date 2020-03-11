@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ChZOrderDetailBottomView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="88"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="YaK-P2-klT">
+                    <rect key="frame" x="16" y="20" width="344" height="48"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ion-8Q-UdB">
+                            <rect key="frame" x="0.0" y="0.0" width="162" height="48"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <state key="normal" title="确定买入" backgroundImage="trad_c2c_samllBuybgimage">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="handleAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="tqv-By-cN2"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nDD-cP-tFH">
+                            <rect key="frame" x="182" y="0.0" width="162" height="48"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                            <state key="normal" title="申诉" backgroundImage="trad_c2c_smallSellbgimage">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </state>
+                            <connections>
+                                <action selector="complaintAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="Jtk-Vi-axr"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" red="0.1019607843" green="0.08235294118" blue="0.37647058820000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="YaK-P2-klT" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="20" id="An2-UL-z0A"/>
+                <constraint firstAttribute="bottom" secondItem="YaK-P2-klT" secondAttribute="bottom" constant="20" id="Se6-3c-pTN"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="YaK-P2-klT" secondAttribute="trailing" constant="15" id="WPR-Uq-tgL"/>
+                <constraint firstItem="YaK-P2-klT" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="X4v-BA-jJw"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="complaintBtn" destination="nDD-cP-tFH" id="scK-JM-lEU"/>
+                <outlet property="handleBtn" destination="Ion-8Q-UdB" id="kWF-uh-Che"/>
+            </connections>
+            <point key="canvasLocation" x="1.5" y="482.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="trad_c2c_samllBuybgimage" width="80" height="34"/>
+        <image name="trad_c2c_smallSellbgimage" width="80" height="34"/>
+    </resources>
+</document>

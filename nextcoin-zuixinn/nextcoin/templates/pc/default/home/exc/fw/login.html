@@ -1,0 +1,65 @@
+{template "header.html" }
+{template "top.html" }
+	    <!--[if lt IE 9]>对不起，浏览器版本太低~！<![endif]-->
+	    <div class="container-fluid loging"  style="text-align: center;">
+	        <div class=" loging-body">
+                <div class="">
+                    <div class="loging-body-box">
+                        <h2 class="loging-body-tetil" style="color:white;">{$login.welcome}</h2>
+                        <div class="form-wrap">
+                            <form class="form">
+                                {csrf_field()}
+                                <div class="form-item">
+                                    <span class="iconfont icon-zhuanghao"></span>
+                                    <label for="">
+                                        <input type="text" id="login-account" value="" placeholder="{$login.phone}" autocomplete="off"/>
+                                    </label>
+                                </div>
+                                <div class="form-item">
+                                    <span class="iconfont icon-mima"></span>
+                                    <label for="">
+                                        <input type="text" id="login-password" value="" placeholder="{$login.password}"/>
+                                    </label>
+                                </div>
+
+                                <div class="clearfix form-box">
+                                    <div class="left form-search">
+                                        <label>
+                                            <input type="checkbox" id="remember" value="" />
+                                            {$login.remember}
+                                        </label>
+                                    </div>
+                                    <div class="right back-psd-btn">
+                                        <a href="/index.php?s=exc&c=userController&m=resetEmail">{$login.forget}</a>
+                                    </div>
+                                </div>
+
+                            </form>
+                            <div class="form-btn">
+                                <a href="javascript:void(0)" id="login-submit">{$login.login}</a>
+                            </div>
+                            <div class="form-hint">
+                                <p>{$login.account}<a href="/index.php?s=exc&c=userController&m=register">{$login.reg}</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+	        </div>
+	    </div>
+        <input type="hidden" id="forwardUrl" value="">
+        <script src="{HOME_THEME_PATH}exc/js/custom.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/plugin/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/comm/util.js" type="text/javascript" charset="utf-8"></script>
+        <script src="{HOME_THEME_PATH}exc/js/comm/comm.js" type="text/javascript" charset="utf-8"></script>
+        {if !isset($_COOKIE['oex_lan']) || $_COOKIE['oex_lan'] =='zh_TW'}
+            <script src="{HOME_THEME_PATH}exc/js/language/language_zh_TW.js" type="text/javascript" charset="utf-8"></script>
+        {else}
+            <script src="{HOME_THEME_PATH}exc/js/language/language_en_US.js" type="text/javascript" charset="utf-8"></script>
+        {/if}
+        <script src="{HOME_THEME_PATH}exc/js/user/login.js" type="text/javascript" charset="utf-8"></script>
+        <script>
+			setTimeout(function removeReadonly(){
+		        $("#login-password").attr('type','password');
+		    },20);
+        </script>
+{template "footer.html" }

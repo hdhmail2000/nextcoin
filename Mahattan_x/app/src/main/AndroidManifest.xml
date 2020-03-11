@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.ifenduo.mahattan_x">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:name=".MHXApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+
+        <provider
+            android:name=".BuglyFileProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="name,authorities,exported,grantUriPermissions">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/bugly_provider_paths"
+                tools:replace="name,resource" />
+        </provider>
+
+        <activity
+            android:name="com.tencent.bugly.beta.ui.BetaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|locale"
+            android:theme="@android:style/Theme.Translucent" />
+
+        <activity android:name=".controller.home.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- 登录 -->
+        <activity
+            android:name=".controller.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!-- 注册 -->
+        <activity
+            android:name=".controller.login.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--忘记密码-->
+        <activity
+            android:name=".controller.login.ForgetPasswordActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--实名认证-->
+        <activity
+            android:name=".controller.me.VerifiedActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--实名认证上传-->
+        <activity
+            android:name=".controller.me.VerifyUploadImageActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--实名认证成功-->
+        <activity
+            android:name=".controller.me.VerifiedSuccessActivity"
+            android:screenOrientation="portrait" />
+        <!--首页-->
+        <activity
+            android:name=".controller.home.HomeActivity"
+            android:screenOrientation="portrait" />
+        <!--安全中心-->
+        <activity
+            android:name=".controller.me.SafeCenterActivity"
+            android:screenOrientation="portrait" />
+        <!--重置登录密码-->
+        <activity
+            android:name=".controller.me.SetPsdActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--设置交易密码第一步-->
+        <activity
+            android:name=".controller.me.SetTransactionPsdStep1Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--设置交易密码第二步-->
+        <activity
+            android:name=".controller.me.SetTransactionPsdStep2Activity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--重置交易密码-->
+        <activity
+            android:name=".controller.me.ReSetTransactionPsdActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--找回交易密码-->
+        <activity
+            android:name=".controller.me.FindTransactionPsdActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:taskAffinity="com.ifenduo.mahattan_x.FindTransactionPsd"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--编辑资料-->
+        <activity
+            android:name=".controller.me.MeActivity"
+            android:screenOrientation="portrait" />
+        <!--帮助中心-->
+        <activity
+            android:name=".controller.me.HelpCenterActivity"
+            android:screenOrientation="portrait" />
+        <!--关于我们-->
+        <activity
+            android:name=".controller.me.AboutActivity"
+            android:screenOrientation="portrait" />
+        <!--设置-->
+        <activity
+            android:name=".controller.me.SettingActivity"
+            android:screenOrientation="portrait" />
+        <!--钱包-->
+        <activity
+            android:name=".controller.wallet.WalletActivity"
+            android:screenOrientation="portrait" />
+        <!--钱包添加币种-->
+        <activity
+            android:name=".controller.wallet.AddCoinActivity"
+            android:screenOrientation="portrait" />
+        <!--扫一扫-->
+        <activity
+            android:name=".controller.wallet.ScanActivity"
+            android:screenOrientation="portrait" />
+        <!--钱包详情-->
+        <activity
+            android:name=".controller.wallet.WalletCoinDetailActivity"
+            android:screenOrientation="portrait" />
+        <!--钱包-转入-->
+        <activity
+            android:name=".controller.wallet.ChargeMoneyActivity"
+            android:screenOrientation="portrait" />
+        <!--创建新地址-->
+        <activity
+            android:name=".controller.me.AddAddressActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--地址簿-->
+        <activity
+            android:name=".controller.me.WithDrawPlaceActivity"
+            android:screenOrientation="portrait" />
+        <!--转出币-->
+        <activity
+            android:name=".controller.wallet.WithDrawMoneyActivity"
+            android:screenOrientation="portrait" />
+        <!--算力任务-->
+        <activity
+            android:name=".controller.mine.TaskActivity"
+            android:screenOrientation="portrait" />
+        <!--开矿区-->
+        <activity
+            android:name=".controller.mine.MineAreaActivity"
+            android:screenOrientation="portrait" />
+        <!--挖矿 转出-->
+        <activity
+            android:name=".controller.mine.TransferOutActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--挖矿 转入-->
+        <activity
+            android:name=".controller.mine.TransferActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--交易中心详情-->
+        <activity
+            android:name=".controller.transaction.TransactionDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--C2C主页面-->
+        <activity
+            android:name=".controller.c2c.C2CActivity"
+            android:screenOrientation="portrait" />
+        <!--c2c发布-->
+        <activity
+            android:name=".controller.c2c.C2CReleaseActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--c2c买入-->
+        <activity
+            android:name=".controller.c2c.C2CBuyActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--c2c我的订单列表-->
+        <activity
+            android:name=".controller.c2c.C2CMyOrderListActivity"
+            android:screenOrientation="portrait" />
+        <!--c2c卖出-->
+        <activity
+            android:name=".controller.c2c.C2CSellActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--c2c订单详情-->
+        <activity
+            android:name=".controller.c2c.C2COrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <!--c2c订单列表-->
+        <activity
+            android:name=".controller.c2c.C2CReleaseDetailActivity"
+            android:screenOrientation="portrait" />
+        <!--C2C选择币种-->
+        <activity
+            android:name=".controller.c2c.ChooseCoinActivity"
+            android:screenOrientation="portrait" />
+        <!--C2C收款/支付方式-->
+        <activity
+            android:name=".controller.c2c.PayTypeActivity"
+            android:screenOrientation="portrait" />
+        <!--C2C申诉-->
+        <activity
+            android:name=".controller.c2c.ApplyActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--C2C收款账号-->
+        <activity
+            android:name=".controller.c2c.AccountActivity"
+            android:screenOrientation="portrait" />
+        <!--C2C添加银行卡-->
+        <activity
+            android:name=".controller.c2c.AddBankCardActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--C2C绑定支付宝账号-->
+        <activity
+            android:name=".controller.c2c.AddAlipayActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--C2C绑定微信账号-->
+        <activity
+            android:name=".controller.c2c.AddWechatActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--帮助中心网页-->
+        <activity
+            android:name=".controller.me.WebViewActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--帮助中心详情-->
+        <activity
+            android:name=".controller.me.HelpCenterDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <!--C2C折线图-->
+        <activity
+            android:name=".controller.c2c.LineChartActivity"
+            android:screenOrientation="landscape" />
+        <!--个人中心分享-->
+        <activity
+            android:name=".controller.me.ShareActivity"
+            android:screenOrientation="portrait" />
+        <!--绑定谷歌验证码-->
+        <activity
+            android:name=".controller.me.BindGoogleCodeActivity"
+            android:screenOrientation="portrait" />
+        <!--绑定谷歌验证码-->
+        <activity
+            android:name=".controller.me.VerifyGoogleCodeActivity"
+            android:screenOrientation="portrait" />
+
+
+    </application>
+
+</manifest>
