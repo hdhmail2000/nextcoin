@@ -55,7 +55,7 @@
 		<druid.version>1.0.29</druid.version>
 
 		<!-- Shiro -->
-		<shiro.version>1.2.4</shiro.version>
+		<shiro.version>1.5.1</shiro.version>
 
 		<!-- Third Party -->
 		<quartz.version>2.2.1</quartz.version>
